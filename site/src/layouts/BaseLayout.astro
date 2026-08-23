@@ -17,7 +17,7 @@ const { locale, title, description, pathname, alternates = true } = Astro.props
 const pageTitle = title
   ? `${title} | AnyTTY`
   : locale === 'en' ? 'AnyTTY - Persistent terminals across machines and screens' : 'AnyTTY - 一个工作台，管理每台机器上的持久终端'
-const docsPath = localizedPath(locale, '/docs/quick-start')
+const docsPath = localizedPath(locale, '/docs/overview')
 const homePath = localizedPath(locale)
 const alternate = !alternates
   ? localizedPath(locale === 'en' ? 'zh-CN' : 'en')
@@ -29,14 +29,14 @@ const labels = locale === 'en'
       features: 'Product', screens: 'Clients', docs: 'Docs', download: 'Download', cloud: 'Cloud', language: '中文',
       skip: 'Skip to content', nav: 'Primary navigation', menuTitle: 'Explore AnyTTY',
       menuDescription: 'An open-source, cross-platform terminal multiplexer for persistent sessions across machines.',
-      footer: 'Open-source terminals that keep running, so you can come back anytime.', privacy: 'Privacy', terms: 'Terms', security: 'Security', close: 'Close menu',
+      footer: 'Open-source terminals that keep running, so you can come back anytime.', faq: 'FAQ', privacy: 'Privacy', terms: 'Terms', security: 'Security', close: 'Close menu',
       theme: 'Toggle theme',
     }
   : {
       features: '产品', screens: '客户端', docs: '文档', download: '下载', cloud: 'Cloud', language: 'English',
       skip: '跳到正文', nav: '主导航', menuTitle: '浏览 AnyTTY',
       menuDescription: '开源跨平台终端复用器，在不同机器之间维护持久会话。',
-      footer: '终端一直跑着，随时回来接管的开源工具。', privacy: '隐私政策', terms: '服务条款', security: '安全', close: '关闭菜单',
+      footer: '终端一直跑着，随时回来接管的开源工具。', faq: '常见问题', privacy: '隐私政策', terms: '服务条款', security: '安全', close: '关闭菜单',
       theme: '切换主题',
     }
 
@@ -137,6 +137,7 @@ const releaseUrl = 'https://github.com/anytty/anytty-site/releases/tag/v0.0.1-be
             <Mail className="size-4" aria-hidden="true" />
             support@anytty.com
           </a>
+          <a class="transition-colors hover:text-zinc-100" href={sitePath(localizedPath(locale, '/docs/faq'))}>{labels.faq}</a>
           <a class="transition-colors hover:text-zinc-100" href={sitePath(localizedPath(locale, '/privacy'))}>{labels.privacy}</a>
           <a class="transition-colors hover:text-zinc-100" href={sitePath(localizedPath(locale, '/terms'))}>{labels.terms}</a>
           <a class="transition-colors hover:text-zinc-100" href="https://github.com/anytty/anytty-site/blob/main/LICENSE">Apache-2.0</a>

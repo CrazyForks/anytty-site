@@ -1,0 +1,79 @@
+---
+title: Install, upgrade, and uninstall
+description: Install AnyTTY on desktop and mobile, validate the daemon, and handle Beta upgrades or removal.
+---
+
+import DocFigure from '@/components/doc-figure.astro'
+
+# Install, upgrade, and uninstall
+
+Official releases currently provide desktop archives for macOS, Linux, and Windows on x64 and arm64. Verify the version and checksum before starting the daemon.
+
+## Desktop installation
+
+macOS or Linux:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/anytty/anytty/main/install.sh | sh
+```
+
+Windows PowerShell:
+
+```powershell
+Invoke-WebRequest https://raw.githubusercontent.com/anytty/anytty/main/install.ps1 -OutFile install.ps1
+.\install.ps1
+```
+
+The installers select the platform archive and verify SHA-256. For manual installation, download the matching asset and checksum from the [GitHub Releases](https://github.com/anytty/anytty/releases) page, verify it, and place `anytty` on `PATH`.
+
+<DocFigure
+  placeholder="Needed: a clean desktop installation and version-check screenshot"
+  assetName="/assets/docs/install-desktop.webp"
+  caption="Capture with a fresh test account and remove user paths, hostnames, and shell history."
+/>
+
+## Mobile clients
+
+- Android is available as a Beta APK. The current release APK is unsigned, so inspect the source and release checksum before sideloading.
+- iOS and iPadOS source can be built with Xcode; public package and store distribution are still in progress. Minimum supported iOS is 15.
+
+Mobile installation alone does not grant access. Pair every app explicitly with the target daemon.
+
+## First start
+
+```sh
+anytty --version
+anytty config validate
+anytty daemon start
+anytty daemon status
+```
+
+If startup fails, run `anytty daemon doctor` and inspect `anytty daemon logs --lines 100`. Run the daemon as the current user; root is not required for normal use.
+
+## Upgrade
+
+1. Finish or checkpoint work that cannot be recreated.
+2. Record `anytty --version` and read the target release notes and changelog.
+3. Back up non-sensitive configuration. Treat endpoint metadata and history as sensitive.
+4. Stop the current daemon, install the new binary, then start it again.
+5. Run `config validate`, `daemon doctor`, `daemon status`, and key `endpoint test` checks.
+
+Beta releases may change CLI, protocol, config, or storage formats. Old history formats may be removed instead of migrated.
+
+## Downgrade and migration
+
+Do not assume a newer configuration or history store can be opened by an older Beta. Prefer reinstalling the target version, re-pairing clients, and migrating only documented compatible settings. Protected credential material should not be copied as ordinary files between devices.
+
+## Uninstall
+
+Stop the user service first, remove the binary and service registration, then decide separately whether to retain configuration, endpoint registry, logs, clipboard history, and terminal history. Locate the actual paths with:
+
+```sh
+anytty config paths
+```
+
+Deleting history or protected credentials is irreversible and can remove the only remaining access for a client. Review each resolved path instead of deleting a broad user directory.
+
+## Build from source
+
+Desktop builds require Go 1.26.5, Node.js 24, and npm. Android additionally requires Java 21 and the Android SDK; iOS requires macOS and Xcode. See [Build and contribute](../build-contribute/) for repository checks.

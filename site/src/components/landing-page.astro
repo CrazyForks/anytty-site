@@ -4,6 +4,7 @@ import {
   ArrowRight,
   Check,
   CheckCircle2,
+  ChevronDown,
   Cloud,
   Database,
   HardDrive,
@@ -126,6 +127,17 @@ const copy = {
       ['Native Windows support (no WSL)', true, false, false, true],
       ['Optional managed NAT traversal', true, false, false, false],
     ],
+    faqEyebrow: 'Frequently asked questions', faqTitle: 'A few answers before you start.',
+    faqLead: 'The daemon owns the work; clients decide where you see and control it. These are the boundaries people ask about most often.',
+    faqCta: 'Read all frequently asked questions',
+    faqs: [
+      ['Does closing the TUI stop my task?', 'No. Closing the TUI, app, or a panel removes a client view. The process keeps running on the daemon until you explicitly kill it.'],
+      ['Is AnyTTY Cloud required?', 'No. Local, SSH, and Direct routes work independently. Cloud adds managed discovery, P2P negotiation, and Relay fallback for hard-to-reach machines.'],
+      ['Does AnyTTY need an AI task\'s PID tree?', 'No. An independent terminal is the observable task unit. Its name, tags, launch command, state, exit code, Live screen, and history are enough to manage it.'],
+      ['Can several clients view one terminal?', 'Yes. Several views can follow it, while one resize owner determines PTY dimensions so a desktop and phone do not compete over rows and columns.'],
+      ['Can a Relay read terminal or file content?', 'The Relay forwards protected traffic and has no daemon terminal or file authority. The service still processes metadata needed to establish and operate connections.'],
+      ['Is terminal history a backup?', 'No. It is bounded operational context. Keep application logs, artifacts, and checkpoints for work that must be preserved independently.'],
+    ],
     installEyebrow: 'Beta 0.0.1', installTitle: 'Install it. Start with one TTY.',
     installLead: 'Grab the desktop build for macOS, Linux, or Windows. The Android Beta APK is on GitHub Releases; the App Store and Google Play versions are still in review.',
     docs: 'Read the documentation', releases: 'Open GitHub Releases',
@@ -236,6 +248,17 @@ const copy = {
       ['Windows 原生支持（无需 WSL）', true, false, false, true],
       ['可选托管 NAT 穿透', true, false, false, false],
     ],
+    faqEyebrow: '常见问题', faqTitle: '开始之前，先把几个边界说清楚。',
+    faqLead: 'daemon 负责持有任务，客户端负责让你查看和操作。下面是大家最常问的几个问题。',
+    faqCta: '查看全部常见问题',
+    faqs: [
+      ['关闭 TUI 会停止任务吗？', '不会。关闭 TUI、App 或 panel 只会移除客户端视图；进程继续运行在 daemon 上，直到你明确执行 kill。'],
+      ['必须使用 AnyTTY Cloud 吗？', '不需要。Local、SSH 和 Direct route 都能独立使用。Cloud 为不好直连的机器增加托管发现、P2P 协商和 Relay 兜底。'],
+      ['AnyTTY 需要读取 AI task 的 PID 树吗？', '不需要。一个独立 terminal 就是可观察 task；名称、标签、启动命令、状态、退出码、Live 画面和 history 已足够管理。'],
+      ['多个客户端能同时查看一个 terminal 吗？', '可以。多个 view 可以同时跟随，其中一个 resize owner 决定 PTY 尺寸，避免电脑和手机反复争抢行列数。'],
+      ['Relay 能读取 terminal 或文件吗？', 'Relay 转发受保护流量，不拥有 daemon 的 terminal 或 file authority；服务仍会处理建立和运营连接所需的 metadata。'],
+      ['history 是备份吗？', '不是。它是有保留边界的运行上下文。必须独立保存的工作仍要使用应用自己的日志、产物和 checkpoint。'],
+    ],
     installEyebrow: 'Beta 0.0.1', installTitle: '先装起来，跑一条 TTY 试试。',
     installLead: 'macOS、Linux 和 Windows 都有安装包。Android Beta APK 放在 GitHub Releases；App Store 和 Google Play 版本还在审核。',
     docs: '阅读文档', releases: '查看 GitHub Releases',
@@ -251,8 +274,9 @@ const copy = {
 } as const
 
 const t = copy[locale]
-const docsPath = sitePath(localizedPath(locale, '/docs/quick-start'))
+const docsPath = sitePath(localizedPath(locale, '/docs/overview'))
 const cloudDocsPath = sitePath(localizedPath(locale, '/docs/cloud'))
+const faqPath = sitePath(localizedPath(locale, '/docs/faq'))
 const releaseUrl = 'https://github.com/anytty/anytty-site/releases/tag/v0.0.1-beta.0'
 const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
 ---
@@ -702,6 +726,35 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
               ))}
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="scroll-mt-20 border-y border-[var(--line-soft)] bg-zinc-950/30 py-20 sm:py-24 lg:py-28" aria-labelledby="faq-title">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="px-2 sm:px-4 lg:px-8">
+        <div class="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+          <div>
+            <Badge variant="secondary" className="border-0 bg-[var(--chip)] font-mono text-[11px] font-normal text-zinc-200">{t.faqEyebrow}</Badge>
+            <h2 id="faq-title" class="mt-5 text-3xl font-medium leading-tight sm:text-4xl">{t.faqTitle}</h2>
+            <p class="mt-5 max-w-xl text-base font-normal leading-7 text-zinc-400">{t.faqLead}</p>
+            <a class={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'mt-7 h-11 border-[var(--line-strong)] bg-[var(--chip-soft)] px-5 font-normal text-zinc-100 hover:bg-[var(--chip)] hover:text-zinc-100')} href={faqPath}>
+              {t.faqCta}<ArrowRight aria-hidden="true" />
+            </a>
+          </div>
+
+          <div class="border-y border-[var(--line)]">
+            {t.faqs.map(([question, answer]) => (
+              <details class="group border-b border-[var(--line)] last:border-b-0">
+                <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-[15px] font-medium text-foreground transition-colors hover:text-foreground focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring [&::-webkit-details-marker]:hidden">
+                  <span>{question}</span>
+                  <ChevronDown className="size-4 shrink-0 text-zinc-500 transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none" aria-hidden="true" />
+                </summary>
+                <p class="max-w-2xl pb-5 pr-8 text-sm font-normal leading-6 text-zinc-400">{answer}</p>
+              </details>
+            ))}
+          </div>
         </div>
       </div>
     </div>

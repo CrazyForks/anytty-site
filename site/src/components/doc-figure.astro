@@ -1,0 +1,43 @@
+---
+import { Camera } from 'lucide-react'
+
+import { sitePath } from '@/lib/site'
+import { cn } from '@/lib/utils'
+
+interface Props {
+  src?: string
+  alt?: string
+  caption: string
+  placeholder?: string
+  assetName?: string
+  width?: number
+  height?: number
+  portrait?: boolean
+  contain?: boolean
+}
+
+const { src, alt = '', caption, placeholder, assetName, width, height, portrait = false, contain = false } = Astro.props
+---
+
+<figure class={cn('not-prose my-8 overflow-hidden rounded-lg border border-[var(--line)] bg-card shadow-sm', portrait && 'mx-auto max-w-sm')}>
+  {src ? (
+    <img
+      class={cn('block w-full bg-zinc-950', contain ? 'object-contain' : 'object-cover')}
+      src={sitePath(src)}
+      alt={alt}
+      width={width}
+      height={height}
+      loading="lazy"
+      decoding="async"
+    />
+  ) : (
+    <div class={cn('grid place-items-center bg-secondary/40 px-6 text-center', portrait ? 'aspect-[9/16]' : 'aspect-[16/9]')}>
+      <div class="max-w-md">
+        <Camera className="mx-auto size-7 text-muted-foreground" aria-hidden="true" />
+        <p class="mt-4 text-sm font-medium text-foreground">{placeholder}</p>
+        {assetName && <p class="mt-2 font-mono text-[11px] text-muted-foreground">{assetName}</p>}
+      </div>
+    </div>
+  )}
+  <figcaption class="border-t border-[var(--line)] px-4 py-3 text-xs leading-5 text-muted-foreground">{caption}</figcaption>
+</figure>

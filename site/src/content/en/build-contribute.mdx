@@ -1,15 +1,19 @@
 ---
 title: Build and contribute
-description: Build AnyTTY clients, validate the public boundary, and contribute with the DCO.
+description: Build AnyTTY from source, run public repository checks, and contribute code or product documentation.
 ---
 
 # Build and contribute
 
-The public repository contains the client source and release materials. Contributions should keep protocols, generated code, tests, docs, and security assumptions aligned.
+Public client source is in [`anytty/anytty`](https://github.com/anytty/anytty). The website and these product docs are in [`anytty/anytty-site`](https://github.com/anytty/anytty-site). Cloud services, controllers, edges, deployment, and service integration tests are outside the public client repository.
 
-## Core checks
+## Build clients
+
+Desktop builds require Go 1.26.5, Node.js 24, and npm:
 
 ```sh
+git clone https://github.com/anytty/anytty.git
+cd anytty
 npm ci
 make build
 make test
@@ -17,24 +21,34 @@ make test-clients
 npm run public:check
 ```
 
-Android release checks additionally require Java 21 and an Android SDK; run `make test-android`. iOS requires macOS and Xcode; run `clients/mobile/ios/scripts/build-ios.sh`.
+Android release checks additionally require Java 21 and the Android SDK; run `make test-android`. iOS requires macOS and Xcode; run `clients/mobile/ios/scripts/build-ios.sh`.
 
-## Documentation site
+Tool versions and CI checks can move during Beta. Read the repository `AGENTS.md`, `CONTRIBUTING.md`, and current CI configuration before changing code.
+
+## Build the documentation site
 
 ```sh
+git clone https://github.com/anytty/anytty-site.git
+cd anytty-site
+npm ci
 npm run site:build
 npm run site:check
 npm run site:preview
 ```
 
-Astro prints the local preview URL when it starts; use its `/anytty-site/` path. GitHub Pages publishes the generated `site/dist` directory.
+Astro prints the local address. GitHub Pages uses the `/anytty-site/` base path. Product additions should update both locales, navigation, internal links, and mobile layout.
 
 ## Contribution contract
 
-- Open an issue before large protocol or trust-boundary changes.
-- Keep pull requests focused and include exact validation commands.
+- Open an issue before a large protocol or trust-boundary change.
+- Keep pull requests focused and list validation commands actually run.
 - Sign commits with `git commit -s` under the DCO.
+- Keep protocol, generated code, tests, user docs, and security assumptions aligned.
 - Update third-party notices when dependencies or bundled assets change.
-- Never contribute credentials, private service source, production configuration, or user data.
+- Never contribute credentials, private service source, production configuration, terminal/file content, or user data.
 
-Continue with the repository [contribution guide](https://github.com/anytty-site/anytty-site/blob/main/CONTRIBUTING.md), [code of conduct](https://github.com/anytty-site/anytty-site/blob/main/CODE_OF_CONDUCT.md), and [governance policy](https://github.com/anytty-site/anytty-site/blob/main/GOVERNANCE.md).
+Read the client repository [contribution guide](https://github.com/anytty/anytty/blob/main/CONTRIBUTING.md), [code of conduct](https://github.com/anytty/anytty/blob/main/CODE_OF_CONDUCT.md), [governance policy](https://github.com/anytty/anytty/blob/main/GOVERNANCE.md), and [security policy](https://github.com/anytty/anytty/blob/main/SECURITY.md).
+
+## Documentation and screenshots
+
+Use public source, current CLI help, and reproducible UI as product facts. Capture with synthetic endpoints and data, then inspect usernames, hostnames, addresses, claims, grants, paths, and terminal output. Keep an explicit asset placeholder when a real screen is unavailable; do not present a conceptual mock as a product screenshot.

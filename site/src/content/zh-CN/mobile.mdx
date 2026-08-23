@@ -1,0 +1,90 @@
+---
+title: 移动端与平板端
+description: 在 Android 与 iOS 上配对设备、接管终端、管理文件，并理解移动端重连和本地安全边界。
+---
+
+import DocFigure from '@/components/doc-figure.astro'
+
+# 移动端与平板端
+
+AnyTTY 移动 App 用于查看已配对设备上的终端、接管输入和管理文件。任务仍在 endpoint daemon 上运行；App 只保存当前设备需要的 endpoint 与凭据。
+
+## 获取 App
+
+Android Beta APK 可从 [GitHub Releases](https://github.com/anytty/anytty/releases) 获取。当前 APK 适合体验和评估，Google Play 版本仍以上架状态为准。
+
+iOS 客户端已经有公开源码并支持 iOS 15 及以上，但当前没有公开安装包。不要安装来源不明的重签名包，也不要把配对 claim 交给第三方代装服务。
+
+## 添加设备
+
+App 不会因为登录 Cloud 账号自动列出设备。添加 endpoint 必须由用户扫描目标 daemon 生成的二维码，或粘贴一次性 pairing URI。完整流程见[配对、授权与设备管理](../pairing/)。
+
+配对后，设备只保存在当前手机或平板上。换新设备时应重新配对；不再使用的旧设备要从 daemon 撤销 grant。
+
+## 设备与终端列表
+
+设备页显示当前手机保存的 endpoint 和连接 route。添加入口位于右上角；Cloud 登录本身不会把未配对 endpoint 自动加入这里。
+
+<DocFigure
+  src="/assets/docs/android-devices.webp"
+  alt="AnyTTY Android App 的设备列表"
+  caption="安卓模拟器实拍：设备列表只展示当前 App 已保存的 endpoint。"
+  width={1080}
+  height={2400}
+  portrait
+  contain
+/>
+
+进入 endpoint 后可以查看终端名称、工作目录、运行状态和近期活动。近期活动用于快速找到刚有输出或长时间没有更新的任务，不代表程序健康检查结果；需要精确状态时仍应查看终端输出或使用 CLI。
+
+## 触控终端与扩展键盘
+
+终端视图提供适合触控的扩展键，包括 `Esc`、`Tab`、`Ctrl`、`Alt`、方向键、`Home`、`End`、`PgUp`、`PgDn` 和删除键。组合键会按终端输入发送，不替代目标 shell 自己的快捷键。
+
+系统输入法负责普通文字输入。使用全角标点、候选词或组合输入时，如果目标程序只接受原始按键序列，应切换到兼容的键盘布局。终端工具栏可以打开文件、调整显示或进入更多操作。
+
+<DocFigure
+  src="/assets/product/mobile-terminal.webp"
+  alt="AnyTTY 手机 App 中的远程终端与扩展键盘"
+  caption="扩展键盘让手机上常用的控制键和导航键保持可达。"
+  width={480}
+  height={1068}
+  portrait
+/>
+
+## 前后台切换与断线重连
+
+App 进入后台、WebView 重载或网络变化时会取消旧请求。回到前台后，它使用本地 endpoint registry 和最后应用的 Live revision 恢复；如果 daemon 不再保留对应基线，则接收完整屏幕。
+
+重连不会重启 terminal。若长时间离线，先检查 endpoint 是否仍在线、grant 是否过期，再判断当前 route 是否可用。Cloud、SSH 或 Direct 的路径问题不会改变 daemon 中任务的生命周期。
+
+## 多设备接管
+
+同一个 terminal 可以被多个已授权客户端查看。每个客户端有自己的渲染节奏和历史视口；一个手机停在历史中，不会冻结电脑上的 Live，也不会让终端进程等待。
+
+输入所有权和终端尺寸可能影响交互式程序。多人或多设备同时操作前，应约定谁负责输入；发现画面尺寸不合适时，从当前主用客户端重新请求 resize。
+
+## 文件与预览
+
+终端工具栏可以从当前工作目录进入文件浏览器。App 支持浏览、选择、新建目录、重命名、移动、复制、删除、上传与下载；支持的类型可在应用内预览。详见[文件管理与在线预览](../files/)。
+
+## 平板分屏
+
+平板可以利用系统分屏同时运行 AnyTTY 与文档、聊天或另一个终端工具。AnyTTY 自身仍显示一个移动端会话；系统分屏不会把两个应用的权限或剪贴板历史合并。
+
+<DocFigure
+  src="/assets/product/pad-codex-opencode.webp"
+  alt="平板上下分屏运行两个终端任务"
+  caption="平板系统分屏适合一边观察任务、一边处理另一个工作流。"
+  width={1200}
+  height={1600}
+  portrait
+/>
+
+## 移动端安全
+
+- endpoint 凭据存放在平台保护存储，而不是普通 WebView storage。
+- iOS 使用 Keychain；可用时 SSH 签名密钥使用 Secure Enclave，模拟器回退到 Keychain。
+- Android 使用平台提供的受保护存储能力。
+- 配对二维码、终端画面、文件预览和通知都可能包含敏感信息，录屏或分享前必须脱敏。
+- 手机丢失时，应在 daemon 上执行 `anytty access list` 并撤销对应 grant，而不只是从 Cloud 账号移除 daemon。

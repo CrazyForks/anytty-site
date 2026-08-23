@@ -1,15 +1,19 @@
 ---
 title: 构建与贡献
-description: 构建 AnyTTY 客户端、验证公开边界并按 DCO 贡献。
+description: 从源码构建 AnyTTY，运行公开仓库检查，并按项目约定贡献代码或文档。
 ---
 
 # 构建与贡献
 
-公开仓库包含客户端源码与发布材料。贡献应同步维护协议、生成代码、测试、文档和安全假设。
+AnyTTY 客户端源码位于公开的 [`anytty/anytty`](https://github.com/anytty/anytty) 仓库；官网和本产品文档位于 [`anytty/anytty-site`](https://github.com/anytty/anytty-site)。Cloud 服务、controller、edge、部署和服务集成测试不属于公开客户端仓库。
 
-## 核心检查
+## 构建客户端
+
+桌面构建要求 Go 1.26.5、Node.js 24 和 npm：
 
 ```sh
+git clone https://github.com/anytty/anytty.git
+cd anytty
 npm ci
 make build
 make test
@@ -17,24 +21,34 @@ make test-clients
 npm run public:check
 ```
 
-Android release 检查还需要 Java 21 和 Android SDK，请执行 `make test-android`。iOS 需要 macOS 与 Xcode，执行 `clients/mobile/ios/scripts/build-ios.sh`。
+Android release 检查还需要 Java 21 和 Android SDK，执行 `make test-android`。iOS 需要 macOS 与 Xcode，执行 `clients/mobile/ios/scripts/build-ios.sh`。
 
-## 文档站
+仓库里的具体工具版本和 CI 命令可能随 Beta 更新；开始修改前应再阅读仓库根目录的 `AGENTS.md`、`CONTRIBUTING.md` 和 CI 配置。
+
+## 构建文档站
 
 ```sh
+git clone https://github.com/anytty/anytty-site.git
+cd anytty-site
+npm ci
 npm run site:build
 npm run site:check
 npm run site:preview
 ```
 
-Astro 启动时会打印本地预览地址，请使用其中的 `/anytty-site/` 路径。GitHub Pages 发布生成的 `site/dist` 目录。
+Astro 会打印本地地址；GitHub Pages 部署使用 `/anytty-site/` base path。新增产品能力时，应同时更新中文、英文导航与对应文章，并检查站内链接和移动端布局。
 
 ## 贡献约定
 
 - 大型协议或信任边界变更应先创建 issue。
-- pull request 保持单一范围并列出准确验证命令。
+- pull request 保持单一范围，并列出实际执行过的验证命令。
 - 使用 `git commit -s` 按 DCO 签署提交。
+- 协议、生成代码、测试、用户文档和安全假设必须同步更新。
 - 依赖或打包资产变化时更新第三方声明。
-- 不得贡献凭据、私有服务源码、生产配置或用户数据。
+- 不得贡献凭据、私有服务源码、生产配置、真实 terminal/file 内容或用户数据。
 
-继续阅读[贡献指南](https://github.com/anytty-site/anytty-site/blob/main/docs/zh-CN/CONTRIBUTING.md)、[行为准则](https://github.com/anytty-site/anytty-site/blob/main/docs/zh-CN/CODE_OF_CONDUCT.md)和[治理政策](https://github.com/anytty-site/anytty-site/blob/main/docs/zh-CN/GOVERNANCE.md)。
+继续阅读客户端仓库的[贡献指南](https://github.com/anytty/anytty/blob/main/docs/zh-CN/CONTRIBUTING.md)、[行为准则](https://github.com/anytty/anytty/blob/main/docs/zh-CN/CODE_OF_CONDUCT.md)、[治理政策](https://github.com/anytty/anytty/blob/main/docs/zh-CN/GOVERNANCE.md)和[安全政策](https://github.com/anytty/anytty/blob/main/docs/zh-CN/SECURITY.md)。
+
+## 文档与截图
+
+产品文档应以公开源码、当前 CLI `--help` 和可复现 UI 为事实来源。截图使用专门的测试 endpoint 和虚构数据，提交前检查主机名、用户名、IP、claim、grant、路径和终端输出。缺图时保留明确的素材路径与拍摄说明，不用概念图冒充真实产品界面。

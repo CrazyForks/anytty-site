@@ -1,0 +1,73 @@
+---
+title: 版本、支持与参与项目
+description: 了解 AnyTTY Beta 的稳定性边界、已知限制、升级信息和支持渠道。
+---
+
+# 版本、支持与参与项目
+
+AnyTTY 当前版本为 `v0.0.1-beta.0`。Beta 表示产品已经可以试用，但 CLI、配置 schema、协议、移动端打包和数据迁移仍可能变化；它不是长期支持版本，也没有默认 SLA。
+
+## 发布与升级信息
+
+升级前阅读公开仓库的 [CHANGELOG](https://github.com/anytty/anytty/blob/main/CHANGELOG.md) 和对应 GitHub Release，重点关注：
+
+- CLI 或配置字段变化
+- endpoint、pairing 和协议兼容性
+- history 或本地数据迁移说明
+- 移动端最低系统版本与安装方式
+- Cloud enrollment 或 route 行为变化
+
+先完成或暂停不可重建任务，备份非敏感配置，并记录当前 `anytty --version`。升级后执行 `config validate`、`daemon doctor`、`daemon status` 和关键 `endpoint test`。详细流程见[安装、升级与卸载](../install-upgrade/)。
+
+## 当前已知限制
+
+- Beta 版本之间不承诺 CLI、配置、协议或数据格式永久兼容。
+- 旧 history 格式可能不会迁移，升级后的 daemon 可以清理不支持的数据。
+- Android release APK 当前未签名，用户需要自行评估侧载风险。
+- iOS/iPadOS 客户端源码可构建，公开安装包和商店发布仍在准备中。
+- 系统包管理器分发仍在推进，官方 release 与安装脚本是当前主要渠道。
+- Cloud 登录不会自动把 daemon 同步到 App；每个客户端必须显式配对。
+- 仓库中的 shared browser build 是预览/测试入口，不是已经发布的 Web terminal 产品。
+- 降级和跨 Beta 数据迁移不保证无损；先阅读目标版本说明。
+- AnyTTY Cloud 的可用性与响应时间只有在另有书面约定时才构成 SLA。
+
+## 获取帮助
+
+公开问题优先使用客户端仓库：
+
+- [Bug report](https://github.com/anytty/anytty/issues/new?template=bug_report.yml)
+- [Feature request](https://github.com/anytty/anytty/issues/new?template=feature_request.yml)
+- [GitHub Discussions](https://github.com/anytty/anytty/discussions)（仓库启用后）
+
+Cloud 账号、账单或隐私请求使用官网列出的支持邮箱，不要在公开 issue 中提交账号信息。安全漏洞必须走私密渠道。
+
+## 提交高质量问题
+
+请提供版本、平台/架构、最小复现步骤、预期与实际结果、发生时间、相关 route 类型和已经执行的诊断。粘贴日志前先脱敏；不要上传 claim、grant、私钥、Cloud token、完整 endpoint registry、history、terminal 内容、文件内容或生产标识。
+
+CLI/daemon 问题通常附上这些输出就足够起步：
+
+```sh
+anytty --version
+anytty config validate
+anytty daemon doctor
+anytty daemon status
+```
+
+连接问题再补 `endpoint show` 和单条 `endpoint test` 的脱敏结果。
+
+## 隐私与安全报告
+
+安全漏洞请使用 [GitHub private vulnerability reporting](https://github.com/anytty/anytty/security/advisories/new)。提供受影响提交、前置条件、最小复现、实际影响和缓解建议，但只能使用新生成的测试身份与测试数据。
+
+隐私政策、数据权利和 Cloud 数据处理见[隐私政策](../../privacy/)；项目安全边界见[安全与隐私](../security/)。当前项目没有漏洞奖励或保证响应时间。
+
+## 参与项目
+
+可以贡献代码、测试、协议说明、翻译、文档和可复现的 UI 素材。客户端改动放在公开 `anytty` 仓库；官网产品文档放在 `anytty-site`。Cloud 服务实现不属于公开客户端仓库，也不能被 public source 反向依赖。
+
+开始前阅读[构建与贡献](../build-contribute/)以及公开仓库的贡献、治理、行为准则和安全政策。
+
+## 许可与商标
+
+源码使用仓库中声明的开源许可；发行包的第三方许可可用 `anytty licenses` 查看。项目名称与标识的使用还受公开仓库的[商标政策](https://github.com/anytty/anytty/blob/main/docs/zh-CN/TRADEMARKS.md)约束，开源许可不会自动授予商标使用权。

@@ -1,27 +1,81 @@
 ---
-title: File management
-description: Browse and transfer files through daemon-authorized roots.
+title: Files and preview
+description: Browse authorized daemon paths, transfer files with checksum verification, and preview supported formats on mobile.
 ---
 
-# File management
+import DocFigure from '@/components/doc-figure.astro'
 
-File access uses the same connection as your terminal, but it is a separate permission granted by the daemon.
+# Files and preview
 
-## CLI discovery
+File operations execute under the endpoint daemon's authority. A client needs both a grant with file capability and a path allowed by the daemon's local policy. Neither a route nor a Cloud plan can expand those permissions.
+
+## Browse and inspect
 
 ```sh
-anytty file --help
-anytty file roots
-anytty file list <root-and-path>
+anytty file list ENDPOINT PATH
+anytty file stat ENDPOINT PATH
+anytty file cat ENDPOINT PATH
 ```
 
-The current CLI exposes listing, upload, download, cancellation, and transfer inspection commands. Consult command help because syntax may change before the first release.
+Directory listing defaults to 200 entries per page. Use complete endpoint and path values in automation, and treat paths from logs or untrusted terminal output as untrusted input.
 
-## Safety properties
+<DocFigure
+  src="/assets/product/mobile-files.webp"
+  alt="AnyTTY mobile file browser"
+  caption="The browser displays only paths allowed by daemon policy and the current client grant."
+  width={480}
+  height={1068}
+  portrait
+  contain
+/>
 
-- Requests are resolved within daemon-configured file roots.
-- Having terminal access does not automatically give file access.
-- Transfers support cancellation and integrity checks.
-- Mobile credentials remain in native protected storage rather than WebView storage.
+## Create, copy, move, and remove
 
-> **Keep file roots narrow.** Only grant the smallest root and permission needed for the work. Treat downloaded terminal artifacts and logs as potentially sensitive user data.
+```sh
+anytty file mkdir ENDPOINT PATH
+anytty file copy ENDPOINT SOURCE DESTINATION
+anytty file move ENDPOINT SOURCE DESTINATION
+anytty file rename ENDPOINT PATH NAME
+anytty file remove ENDPOINT PATH
+```
+
+Confirm the endpoint and normalized full path before an overwrite, recursive operation, or removal. File deletion is unrelated to terminal record removal and can be irreversible.
+
+## Upload and download
+
+```sh
+anytty file upload ENDPOINT LOCAL_FILE REMOTE_PATH
+anytty file download ENDPOINT REMOTE_PATH LOCAL_FILE
+```
+
+Upload waits for checksum confirmation from the daemon. Download verifies the checksum before the result should be trusted. The default file operation timeout is two minutes; increase it explicitly for a healthy long transfer rather than disabling timeouts globally.
+
+Mobile uses native file selection, resumable download behavior, and SHA-256 verification. Interrupted transfers should be resumed or restarted through the client instead of assuming a partial file is complete.
+
+## Preview
+
+Mobile preview support includes text and markup, PDF and office documents, images, audio/video, and supported 3D model formats. Searchable document families include common text, CSV/TSV, PDF, Word, spreadsheet, presentation, OpenDocument, HTML/XML, and OFD types. Exact rendering depends on the platform and file content.
+
+<DocFigure
+  placeholder="Needed: mobile document and 3D preview using synthetic files"
+  assetName="/assets/docs/file-preview.webp"
+  caption="Use generated sample data and show both a document preview and a supported 3D model."
+  portrait
+/>
+
+Preview is a convenience, not a sandbox guarantee. Download unknown active content only to an environment where it can be handled safely.
+
+## Open from terminal context
+
+When a client offers an Open File action from a terminal working directory, the resolved path still passes through daemon file policy and grant checks. Terminal access does not imply file access.
+
+## Failures
+
+- Permission denied: inspect grant capability and daemon path policy.
+- Path not found: verify endpoint, operating-system path rules, and current working directory.
+- Target exists: review before enabling overwrite.
+- Checksum mismatch: treat the downloaded artifact as untrusted and retry.
+- Preview unsupported: use `stat`, download with verification, then open in a trusted local tool.
+- Transfer timeout: confirm progress and network health before increasing `file --timeout`.
+
+File roots, endpoint registry, logs, and history may disclose sensitive project structure. Redact them before sharing diagnostics.

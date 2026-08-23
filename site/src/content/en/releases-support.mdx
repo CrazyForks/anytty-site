@@ -1,0 +1,63 @@
+---
+title: Releases, support, and participation
+description: Understand AnyTTY Beta stability, known limitations, release information, and support channels.
+---
+
+# Releases, support, and participation
+
+The current AnyTTY release is `v0.0.1-beta.0`. Beta means the product is available for evaluation, while CLI, configuration, protocol, mobile packaging, and data migration may still change. It is not an LTS release and has no default SLA.
+
+## Release and upgrade information
+
+Before upgrading, read the public [CHANGELOG](https://github.com/anytty/anytty/blob/main/CHANGELOG.md) and matching GitHub Release. Check CLI and config changes, endpoint and pairing compatibility, storage migration notes, mobile minimum versions, and Cloud route changes.
+
+Finish or checkpoint irreplaceable work and record `anytty --version`. After upgrading, run `config validate`, `daemon doctor`, `daemon status`, and tests for critical endpoint routes. See [Install, upgrade, and uninstall](../install-upgrade/).
+
+## Known limitations
+
+- Compatibility of CLI, config, protocol, and data formats is not permanent across Beta releases.
+- Unsupported old history formats may be removed instead of migrated.
+- The current Android release APK is unsigned and must be evaluated before sideloading.
+- iOS/iPadOS is source-buildable, while public packages and store release remain in progress.
+- Package-manager distribution is still in progress; official releases and scripts are the primary desktop channel.
+- Cloud sign-in does not synchronize daemon access into the app; every client requires explicit pairing.
+- The shared browser build in the repository is a preview/test surface, not a released Web terminal.
+- Downgrade and cross-Beta data migration are not guaranteed to be lossless.
+- AnyTTY Cloud has no availability or response-time SLA unless separately agreed in writing.
+
+## Get help
+
+- [Bug report](https://github.com/anytty/anytty/issues/new?template=bug_report.yml)
+- [Feature request](https://github.com/anytty/anytty/issues/new?template=feature_request.yml)
+- [GitHub Discussions](https://github.com/anytty/anytty/discussions) when enabled for the repository
+
+Use the support address published on the site for Cloud account, billing, or privacy requests; do not post account data in public issues. Security vulnerabilities use the private channel below.
+
+## File a useful issue
+
+Include the version, platform and architecture, minimal steps, expected and actual behavior, event time, route type, exit status, and diagnostics already run. Redact claims, grants, private keys, Cloud tokens, endpoint registry data, addresses, hostnames, usernames, real paths, terminal output, file contents, and production identifiers.
+
+```sh
+anytty --version
+anytty config validate
+anytty daemon doctor
+anytty daemon status
+```
+
+For route problems, add redacted `endpoint show` and one `endpoint test` result.
+
+## Privacy and security reports
+
+Use [GitHub private vulnerability reporting](https://github.com/anytty/anytty/security/advisories/new) for vulnerabilities. Provide the affected commit, prerequisites, minimal reproduction, impact, and mitigation using only fresh test identities and data. There is currently no bug bounty or guaranteed response time.
+
+See the [privacy policy](../../privacy/) for Cloud data handling and [Security and privacy](../security/) for the product boundary.
+
+## Participate
+
+Contributions may include code, tests, protocol documentation, translations, product docs, and reproducible UI assets. Client changes belong in the public `anytty` repository; site docs belong in `anytty-site`. Public client source must not depend on private Cloud implementations.
+
+Start with [Build and contribute](../build-contribute/) and the repository contribution, governance, conduct, and security policies.
+
+## License and trademarks
+
+Source uses the licenses declared in its repositories, and a release can print bundled third-party licenses with `anytty licenses`. Use of the AnyTTY name and marks is separately covered by the public [trademark policy](https://github.com/anytty/anytty/blob/main/TRADEMARKS.md); an open-source license does not automatically grant trademark rights.

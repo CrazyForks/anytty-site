@@ -1,0 +1,166 @@
+---
+title: 配置与日常运维
+description: 管理 AnyTTY 配置、daemon 服务、日志、历史保留、备份和长期运行资源限制。
+---
+
+import DocFigure from '@/components/doc-figure.astro'
+import { sitePath } from '@/lib/site'
+
+# 配置与日常运维
+
+AnyTTY 以当前系统用户为运行边界。daemon、配置、日志和历史都使用用户目录，不需要为了普通使用把服务运行成 root 或系统级共享 daemon。
+
+## 找到实际路径
+
+不要根据文档硬猜路径，先让当前版本解析：
+
+```sh
+anytty config paths
+```
+
+它会显示配置文件、daemon socket、日志、history 和剪贴板历史的实际位置。默认遵循平台用户目录；在类 Unix 系统上通常使用 XDG config/state 目录。
+
+## 查看与修改配置
+
+```sh
+anytty config show
+anytty config show --effective
+anytty config get daemon.history.max_size_mb
+anytty config set daemon.history.max_size_mb 256
+anytty config unset daemon.history.max_age_days
+anytty config validate
+```
+
+`show` 读取源配置，`--effective` 同时展示默认值和环境变量覆盖。`set` 与 `unset` 原子更新一个受支持字段。手工编辑后先 `validate`，再重启 daemon；解析器遇到未知字段或非法范围会拒绝配置，不会静默忽略。
+
+完整模板见公开仓库的[中文注释版 `tui-v3.example.yaml`](https://github.com/anytty/anytty/blob/main/tui/docs/tui-v3.example.yaml)和[英文注释版 `tui-v3.example.en.yaml`](https://github.com/anytty/anytty/blob/main/tui/docs/tui-v3.example.en.yaml)。当前 schema `version` 为 `1`。
+
+## AnyTTY 推荐配置
+
+文档和产品截图使用 `coralline-candy` 配置：它以 `palette: builtin` 为基线，覆盖深色主题、candy header、footer、pane 操作和完整快捷键场景。我们把当前经过校验的版本作为推荐起点提供，但它不是写死在程序里的运行时默认值；不放置配置文件时，AnyTTY 仍使用源码中的内置默认值。
+
+<a href={sitePath('/config/tui-v3.yaml')} download>下载推荐的 <code>tui-v3.yaml</code></a>
+
+同一份配置也提供<a href={sitePath('/config/tui-v3.en.yaml')} download>英文注释版</a>。
+
+安装时先运行 `anytty config paths`，把下载文件保存到其中显示的 `Config` 路径，然后执行：
+
+```sh
+anytty config validate
+anytty daemon restart
+```
+
+配置中的图标和 Powerline 分隔符需要支持 Nerd Font glyph 的终端字体。若当前字体不支持，可以先改回普通字符，或从公开仓库的基础模板逐项启用。推荐配置显式声明了快捷键 scene；采用前应保留现有文件副本并检查自定义快捷键是否会被替换。
+
+核心主题片段如下，下载文件还包含完整 chrome、footer、picker 和快捷键配置：
+
+```yaml
+version: 1
+
+tui:
+  profile: coralline-candy
+  theme:
+    palette: builtin
+    mode: dark
+    primary: "#f0abfc"
+    secondary: "#3b2f63"
+    foreground: "#f8f4ff"
+    background: "#070611"
+    muted: "#9ca3c9"
+    success: "#86efac"
+    warning: "#fde68a"
+    danger: "#fb7185"
+    info: "#7dd3fc"
+```
+
+## daemon 生命周期
+
+```sh
+anytty daemon start
+anytty daemon status
+anytty daemon restart
+anytty daemon stop
+```
+
+这些命令管理当前用户服务。开发和排障时可以用 `anytty daemon run` 在前台运行，但不要同时启动后台实例。`daemon doctor` 检查运行目录、socket 和 ownership，适合安装后或权限异常时首先执行。
+
+Direct listener 可以通过 daemon 的 `--route HOST:PORT` 参数配置。通配 host 会启用已配对设备的 LAN discovery，也会扩大监听范围；只在理解网络边界时使用。
+
+## 日志
+
+```sh
+anytty daemon logs
+anytty daemon logs --lines 300
+anytty daemon logs --follow
+```
+
+日志应记录状态和错误，不应包含私钥、claim、grant、terminal 内容或文件内容。提交支持请求前仍需人工检查并删除用户名、主机名、设备 ID、指纹、地址和生产标识。
+
+<DocFigure
+  placeholder="待补：daemon status、doctor 与脱敏 logs 的运维检查截图"
+  assetName="/assets/docs/daemon-operations.webp"
+  caption="建议用全新测试用户和本地 endpoint 补拍，避免真实路径与身份信息。"
+/>
+
+## 输出缓冲
+
+默认值：
+
+| 配置 | 默认值 | 含义 |
+| --- | ---: | --- |
+| `daemon.output_buffer.capacity_bytes` | 32 MiB | 单个 terminal generation 的共享 PTY 缓冲 |
+| `daemon.output_buffer.resident_budget_bytes` | 512 MiB | 当前 daemon 所有 terminal 的共享 resident budget |
+| `daemon.output_buffer.overflow` | `block` | 缓冲满时等待 consumer，保留连续输出 |
+
+`drop` 模式不会等待，而是删除旧 payload 并产生显式 gap。它适合不能让输出源被 backpressure 影响的任务，但客户端和 history 会失去一段连续内容。修改前应在实际负载下测试。
+
+## history 保留
+
+| 配置 | 默认值 | 说明 |
+| --- | ---: | --- |
+| `daemon.history.max_size_mb` | 512 | 每个 terminal 的物理上限；`0` 表示不按大小限制 |
+| `daemon.history.max_age_days` | 0 | 不按日期删除 |
+| `daemon.history.compression` | `zstd` | 也支持 `s2`、`none` |
+| `daemon.history.compression_level` | `fast` | 也支持 `balanced`、`best` |
+
+立即执行保留策略：
+
+```sh
+anytty history prune
+```
+
+搜索或删除：
+
+```sh
+anytty history search TERMINAL PATTERN
+anytty history delete TERMINAL
+anytty history delete --all
+```
+
+`history delete` 不可恢复。历史没有固定行数上限，但受每终端物理上限、保存天数和可用磁盘限制。
+
+## TUI 偏好
+
+配置可以控制主题、host/builtin palette、chrome、panel 展示、模板、鼠标、破坏性操作确认、剪贴板历史、picker、终端 ownership 和完整快捷键 catalog。
+
+省略 `tui.shortcuts` 时使用内置快捷键；仅配置 action 文案会继承默认 bindings；一旦显式声明任一 scene，该 scene catalog 会替换默认 bindings。修改前保留可回退副本，避免把关键入口全部覆盖。
+
+## 备份与恢复
+
+AnyTTY 当前没有一键备份命令。按以下边界处理：
+
+- `tui-v3.yaml` 是普通偏好和 daemon 资源配置，可以在脱敏后备份。
+- `endpoints.yaml` 含 identity、route 和 credential reference，应按敏感配置保存。
+- 平台保护存储中的私钥与 credential 不应通过普通文件复制到另一台设备。
+- history 目录包含真实终端内容，只能在 daemon 停止后做一致性备份，并按敏感数据加密保存。
+- 新设备优先重新安装、重新配对，再迁移非敏感 TUI 偏好。
+
+恢复旧 Beta 数据前先核对版本和 changelog。旧 history 格式明确可能不会迁移，daemon 启动准备阶段可以清理不支持的旧格式。
+
+## 长期运行建议
+
+- 为 history 设置符合磁盘预算的大小或期限，不要依赖磁盘耗尽后再清理。
+- 用 `daemon status`、`terminal list` 和 `terminal events` 观察状态，不要把近期输出当成健康检查。
+- 对重要任务保留应用自身的输出、checkpoint 和备份；terminal history 不是业务备份系统。
+- 升级前完成或暂停不可重建任务，并验证 endpoint 和 grant。
+- 高输出负载调整 buffer 前同时考虑单 terminal 上限、daemon 总预算和活跃订阅者数。

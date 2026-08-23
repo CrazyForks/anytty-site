@@ -1,23 +1,123 @@
 ---
 title: AnyTTY Cloud
-description: 通过托管设备发现、P2P 协商和 Relay 兜底连接位于 NAT 或内网中的终端。
+description: 注册 daemon，使用托管发现、P2P 与 Relay，并管理 Cloud 套餐、用量、设备和账号。
 ---
+
+import DocFigure from '@/components/doc-figure.astro'
 
 # AnyTTY Cloud
 
-AnyTTY Cloud 是一项可选的托管连接服务，适合难以直接访问的终端，并可直接配合开源的 AnyTTY 客户端与 daemon 使用。
+AnyTTY Cloud 是可选的托管连接服务。它帮助客户端发现位于 NAT 或内网中的 daemon，优先协商 P2P 路径，并在无法直连时通过 Relay 转发加密流量。
 
-## Cloud 额外提供
+Cloud 只解决可达性。terminal、history、文件根目录、客户端 grant 和最终权限判断仍属于 endpoint daemon。
 
-- 托管设备发现
-- 网络条件允许时自动协商 P2P 连接
-- 无法直连时使用 Relay 兜底
-- 桌面端与移动端一致的连接体验
+## Cloud 增加了什么
 
-## 安全边界
+- 登录控制台并注册需要远程访问的 daemon。
+- 在客户端与 daemon 之间进行托管发现和连接协商。
+- 网络允许时建立直接 P2P 连接。
+- 无法直连时使用有配额的 Relay 兜底。
+- 在控制台查看 daemon 在线状态、Edge、订阅、订单和 Relay 用量。
 
-Cloud 帮助已经获得授权的客户端到达目标 daemon。终端与文件权限仍由 daemon 决定，远程流量经过身份验证和加密；Relay 只转发加密流量，不会获得终端或文件访问权限。
+Local、SSH 与 Direct 不需要 Cloud。即使 Relay 配额用完，这些路径和可用的 P2P 仍可继续工作。
 
-Cloud 不提供公共文件共享、网盘、开放代理、间谍软件或隐蔽监控服务，只用于连接用户已获授权并明确完成配对的 endpoint。
+## 注册 daemon
 
-如果希望自行管理网络连接，仍可继续使用 Local、SSH 和 Direct 连接。完整的用户信任模型见[安全边界](https://github.com/anytty/anytty-site/blob/main/docs/zh-CN/SECURITY_BOUNDARY.md)。
+1. 打开 [AnyTTY Cloud 控制台](https://cloud.anytty.com/login)并登录。
+2. 进入“设备”，选择“注册 daemon”。
+3. 输入仅用于识别的 daemon 名称，生成一次性接入命令。
+4. 在目标机器上运行该命令。
+5. 回到控制台，确认 daemon 显示在线并检查当前 Edge。
+
+CLI 的底层入口是：
+
+```sh
+anytty cloud enroll ENROLLMENT_CODE
+anytty cloud status
+```
+
+接入命令和 enrollment code 是短期敏感材料。只在目标机器上运行，不要保存到工单、聊天或 shell history。CLI 默认使用官方 `https://api.anytty.com` Controller；自托管覆盖参数面向明确控制该环境的部署者。
+
+<DocFigure
+  placeholder="待补：Cloud 控制台“设备”页与生成接入命令弹窗"
+  assetName="/assets/docs/cloud-enrollment.webp"
+  caption="请使用测试账号补拍，并隐藏邮箱、daemon ID、设备指纹、Edge 地址和完整接入命令。"
+/>
+
+## 配对客户端
+
+注册 daemon 不会让 TUI 或手机 App 自动得到 endpoint。每个客户端仍需扫描或导入目标 daemon 生成的一次性 pairing claim。App 不从 Cloud 账号同步设备列表。
+
+这一区分意味着：
+
+- Cloud 账号控制 daemon 注册、路由容量、用量与账单。
+- daemon grant 控制具体客户端能访问哪些 terminal 和文件。
+- 从控制台删除 daemon 不等于撤销此前签发的 Direct/SSH grant。
+- 从 daemon 撤销 grant 也不会自动取消 Cloud 订阅。
+
+## P2P 与 Relay
+
+连接时，Cloud 先完成 endpoint 发现和信令协商。网络条件允许时，客户端和 daemon 直接建立 P2P 数据路径；无法直连、策略允许且套餐有容量时，连接改用 Relay。
+
+Relay 转发经过身份验证和加密的终端与文件流量，不获得 terminal 或 file 权限。它仍可能处理建立服务所需的连接 metadata，例如设备标识、IP/网络信息、路由诊断、时间和用量。完整说明见[隐私政策](../../privacy/)。
+
+可以在客户端 endpoint policy 中固定 Cloud path，但通常保留自动选择：
+
+```sh
+anytty endpoint policy set workstation --route cloud --cloud-path auto
+```
+
+## daemon 状态与 Edge
+
+```sh
+anytty cloud status
+anytty cloud edge list
+anytty cloud edge reselect
+anytty cloud edge prefer EDGE_ID
+```
+
+Edge 列表会探测候选位置，并显示连接延迟、失败率、样本和负载等选择依据。优先 Edge 是偏好，不保证不受健康状态、容量或网络变化影响。
+
+不删除接入信息的临时停用：
+
+```sh
+anytty cloud disable
+anytty cloud enable
+```
+
+控制台还可以封禁、恢复或删除已注册 daemon，并要求填写操作原因。删除是 Cloud 注册生命周期操作，不会删除用户机器上的 AnyTTY、终端或历史。
+
+## 套餐与限制
+
+当前公开套餐按月显示，均包含托管发现、P2P 协商和 Relay 兜底。能力可能限制已注册 daemon 数、Relay 并发、周期流量、速率或区域。最新价格和权益以 [Cloud 价格页](../../cloud/#pricing)及结账页为准。
+
+当前落地页列出的套餐为：
+
+| 套餐 | 月价 | daemon | Relay 并发 | 周期流量 |
+| --- | ---: | ---: | ---: | ---: |
+| Cloud Free | 免费 | 2 | 1 | 200 MB |
+| Personal Pro | $9.90 | 10 | 3 | 20 GB |
+| Power User | $19.90 | 30 | 8 | 100 GB |
+
+Relay 用量页显示本计费周期出口流量、配额和剩余量，并在 50%、80% 和用尽时给出提示。超出 entitlement 时服务会限制相关能力，除非明确展示并由用户接受额外购买，否则不会自动收取超量费用。
+
+## 订阅、订单与账单
+
+订阅页显示当前套餐、计费周期、剩余 Relay 流量和并发使用情况。付费套餐通过结账页展示适用币种、税费和最终总额。历史订单和支付结果在“订单”页查看。
+
+自动续订可从订阅页进入账单门户取消。除非结账页另有说明，取消在当前付费周期结束时生效，期间仍可继续使用。退款或账单错误请联系 `support@anytty.com`。
+
+## 移除 daemon 与删除账号
+
+不再使用某台机器时，先在控制台删除其 daemon 注册，再在机器上停用 Cloud，并检查 daemon grant：
+
+```sh
+anytty cloud disable
+anytty access list
+```
+
+Cloud 控制台“账号与安全”支持永久删除账号，要求再次输入密码。删除后，账号资料、daemon 注册、订阅、订单、用量和登录凭据会被永久清除且无法恢复。删除前先导出需要保留的信息，并处理仍在机器上运行的终端与本地数据；Cloud 账号删除不会替你删除用户设备上的文件和 history。
+
+## 服务边界
+
+Cloud 不提供公共文件托管、网盘、开放代理、间谍软件或隐蔽监控服务，只允许连接用户拥有或已获授权使用并明确配对的 endpoint。可用性受网络、NAT、endpoint 在线状态、第三方基础设施、维护与套餐容量影响；除非另有书面协议，不承诺特定服务等级。

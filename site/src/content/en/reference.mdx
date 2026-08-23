@@ -1,0 +1,175 @@
+---
+title: Command and configuration reference
+description: Product-level index of the AnyTTY CLI, defaults, environment variables, ports, platforms, and terminology.
+---
+
+# Command and configuration reference
+
+This page is an index for the current Beta, not a substitute for help shipped with the binary. Run `anytty COMMAND --help` for exact flags, defaults, and examples. For automation, prefer available JSON or NDJSON output over parsing human text.
+
+## Top-level commands
+
+| Command | Purpose |
+| --- | --- |
+| `anytty` | open the TUI |
+| `access` | show daemon identity and inspect or revoke grants |
+| `attach` / `new` / `ls` / `kill` / `rm` | common terminal shortcuts |
+| `cloud` | manage Cloud enrollment and Edge selection |
+| `completion` | generate shell completion |
+| `config` | inspect, edit, and validate configuration |
+| `daemon` | manage the current-user daemon |
+| `endpoint` | manage endpoints, routes, and policy |
+| `file` | operate on an endpoint daemon file system |
+| `history` | search, prune, or delete local terminal history |
+| `licenses` | print bundled third-party licenses |
+| `pair` | create, inspect, or redeem a one-time claim |
+| `terminal` | complete terminal lifecycle and data operations |
+
+Common global flags include `--config`, `--log-file`, `--socket`, and `--timeout`.
+
+## Daemon and terminal
+
+`daemon`: `doctor`, `logs`, `restart`, `run`, `start`, `status`, `stop`.
+
+| `terminal` subcommand | Behavior |
+| --- | --- |
+| `create` | create a process with optional name, cwd, environment, size, tags, and attach |
+| `attach` | attach the TUI to an existing terminal |
+| `list` / `show` | read terminal metadata |
+| `rename` / `tag` | change organization metadata without changing stable ID |
+| `resize` | request an owner-authorized resize |
+| `send` | send literal text, named keys, hex bytes, or stdin |
+| `capture` | capture authoritative history or the latest native screen |
+| `stream` | stream exact live PTY bytes |
+| `events` / `wait` | observe events or wait for daemon-owned lifecycle state |
+| `kill` | stop the process while preserving record and history |
+| `restart` | restart from the daemon-owned process specification |
+| `remove` | remove an exited terminal record |
+
+## Endpoint, pair, and access
+
+`endpoint`: `add`, `disable`, `enable`, `list`, `policy`, `remove`, `route`, `set-default`, `share`, `show`, `test`, `update`. One endpoint may contain Local, SSH, Direct, or Cloud routes.
+
+`endpoint share` transfers portable routes and policy through a one-time TLS session. The default listener is `0.0.0.0:41130` with a 10-minute lifetime. It does not transfer a daemon grant.
+
+`pair`: `create`, `import`, `inspect`. `access`: `identity`, `list`, `revoke`. Pairing claims default to 10 minutes and grants to 2160 hours (90 days); confirm with the installed `pair create --help`.
+
+## File and history
+
+`file`: `cat`, `copy`, `download`, `list`, `mkdir`, `move`, `remove`, `rename`, `stat`, `upload`. The operation timeout defaults to two minutes and directory listing to 200 entries per page. Upload waits for daemon checksum confirmation; download verifies the checksum.
+
+`history`: `search`, `prune`, `delete`. Search supports literal text, glob, and RE2 regular expressions with context. Deletion is irreversible.
+
+## Cloud and configuration
+
+`cloud enroll` registers the current daemon identity; `status` shows runtime state; `disable` pauses without deleting enrollment; `enable` resumes; `edge` inspects or reselects the Edge. Enrollment is not client pairing.
+
+```sh
+anytty config paths
+anytty config show
+anytty config show --effective
+anytty config get KEY
+anytty config set KEY VALUE
+anytty config unset KEY
+anytty config validate
+```
+
+The current schema is `version: 1`. The complete field template is available with [English annotations as `tui-v3.example.en.yaml`](https://github.com/anytty/anytty/blob/main/tui/docs/tui-v3.example.en.yaml) and [Chinese annotations as `tui-v3.example.yaml`](https://github.com/anytty/anytty/blob/main/tui/docs/tui-v3.example.yaml).
+
+| Setting | Default |
+| --- | ---: |
+| `daemon.output_buffer.capacity_bytes` | 33554432 (32 MiB) |
+| `daemon.output_buffer.resident_budget_bytes` | 536870912 (512 MiB) |
+| `daemon.output_buffer.overflow` | `block` |
+| `daemon.history.max_size_mb` | 512 per terminal |
+| `daemon.history.max_age_days` | 0; no age deletion |
+| `daemon.history.compression` | `zstd` |
+| `daemon.history.compression_level` | `fast` |
+| `tui.theme.mode` | `dark` |
+| `tui.theme.palette` | `host` |
+| `tui.interaction.confirm_destructive` | `true` |
+| `tui.interaction.mouse` | `true` |
+| `tui.terminal.auto_take_owner` | `true` |
+
+## Common environment variables
+
+| Variable | Purpose |
+| --- | --- |
+| `ANYTTY_LOG_FILE` / `ANYTTY_LOG_LEVEL` / `ANYTTY_LOG_MAX_BYTES` | log path, level, and size |
+| `ANYTTY_OUTPUT_BUFFER_CAPACITY_BYTES` | per-terminal output capacity |
+| `ANYTTY_OUTPUT_RESIDENT_BUDGET_BYTES` | daemon-wide resident budget |
+| `ANYTTY_OUTPUT_BUFFER_OVERFLOW` | `block` or `drop` |
+| `ANYTTY_HISTORY_MAX_SIZE_MB` / `ANYTTY_HISTORY_MAX_AGE_DAYS` | history retention |
+| `ANYTTY_HISTORY_COMPRESSION` / `ANYTTY_HISTORY_COMPRESSION_LEVEL` | history encoding |
+| `ANYTTY_TUI_THEME_MODE` / `ANYTTY_TUI_THEME_PALETTE` | theme baseline |
+| `ANYTTY_TUI_CONFIRM_DESTRUCTIVE` | destructive-operation confirmation |
+| `ANYTTY_TUI_INTERACTION_MOUSE` | mouse interaction |
+| `ANYTTY_ALLOW_NESTED` | explicitly allow a nested TUI |
+
+Diagnostic, test, and Cloud-internal variables are not stable user interfaces.
+
+## Default global shortcuts
+
+| Shortcut | Entry |
+| --- | --- |
+| `Ctrl-P` | panels |
+| `Ctrl-R` | resize |
+| `Ctrl-G` | system |
+| `Ctrl-O` | floating panel |
+| `Ctrl-T` | tabs |
+| `Ctrl-W` | workspaces |
+| `Ctrl-F` | terminal picker |
+| `Ctrl-V` | copy/history |
+
+## Network defaults
+
+| Port | Use |
+| ---: | --- |
+| `41120` | Direct signaling; default remote loopback signaling for SSH |
+| `41121` | default remote loopback ICE-TCP for SSH |
+| `41130` | one-time TLS listener for `endpoint share` |
+
+All are configurable. The listening address determines exposure; only allow paths that are actually required.
+
+## Data paths and platforms
+
+Run `anytty config paths` for current config, socket, log, history, and clipboard-history paths. Endpoint commands resolve their registry separately and expose a `--registry` override. Do not hard-code `~/.config`. Private credential material belongs to protected platform storage.
+
+| Platform | Current status |
+| --- | --- |
+| macOS x64 / arm64 | Beta desktop build |
+| Linux x64 / arm64 | Beta desktop build |
+| Windows x64 / arm64 | Beta desktop build |
+| Android | Beta APK; current release APK unsigned |
+| iOS / iPadOS | source build; public package pending; iOS 15+ |
+
+## Status, exit codes, and log fields
+
+For automation, read `--json`, NDJSON, and terminal lifecycle fields. The current CLI exit classification is:
+
+| Exit | Meaning |
+| ---: | --- |
+| `0` | success |
+| `1` | otherwise unclassified failure |
+| `2` | argument, usage, or configuration input error |
+| `3` | endpoint, terminal, route, or configuration item not found |
+| `4` | state conflict or invalid request, such as a disabled endpoint or existing target |
+| `5` | authentication or authorization denied |
+| `6` | daemon, route, network, or service unavailable |
+| `7` | operation timed out or was canceled |
+
+Typed daemon protocol codes map into these shell exit codes. Do not make logic depend on mutable English error sentences.
+
+Daemon logs use structured text records with base fields including `time`, `level`, `msg`, and `pid`; individual operations may add contextual fields. The set can grow during Beta, so parsers should tolerate unknown fields. Use `ANYTTY_LOG_LEVEL` for level, `ANYTTY_LOG_MAX_BYTES` for rotation size, and `config paths` for the resolved file. Always redact before sharing.
+
+## Glossary
+
+- **daemon:** current-user authority for processes, history, files, identity, and grants.
+- **client:** CLI, TUI, or app using only its granted capabilities.
+- **terminal:** daemon-owned process session and stable record.
+- **endpoint:** local record for one daemon identity.
+- **route:** Local, SSH, Direct, or Cloud path to an endpoint.
+- **claim:** short-lived, one-time pairing material.
+- **grant:** authorization bound to one client identity.
+- **Live:** current native screen and PTY delivery, independent of frozen history.
+- **history:** authoritative terminal context on the daemon, not a business backup.

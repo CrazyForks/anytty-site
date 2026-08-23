@@ -1,0 +1,114 @@
+---
+title: Frequently asked questions
+description: Common questions about AnyTTY persistent terminals, AI tasks, connections, pairing, security, history, files, and configuration.
+---
+
+# Frequently asked questions
+
+These answers cover the product questions that most often come up before and after adopting AnyTTY. For a specific failure, start with [Troubleshooting](../troubleshooting/). For complete flags and fields, use the [Command and configuration reference](../reference/).
+
+## Product and runtime
+
+### What is AnyTTY?
+
+AnyTTY is an open-source, cross-platform workbench for persistent terminals. Shell processes are owned by a daemon you control, and authorized CLI, TUI, and mobile clients can reconnect to them. It is not a remote desktop, a business backup system, or a multi-user shell service that bypasses operating-system permissions.
+
+### Does closing the TUI or mobile app terminate a task?
+
+No. The TUI and app are clients; the daemon owns the terminal process. Closing a panel only removes that view from the current workbench. Only an explicit `terminal kill` stops the process.
+
+### What is the difference between `close`, `kill`, and `remove`?
+
+`close` closes a panel without changing terminal lifecycle. `kill` stops the process but preserves its terminal record and history. `remove` deletes an exited terminal record; a running terminal must be stopped first, so `remove` is not a general stop action.
+
+### Can several clients view the same terminal?
+
+Yes. Several views can follow one terminal, but only the view with resize ownership determines PTY dimensions at a given time. Other views remain followers. This prevents a desktop, tablet, and phone from continuously competing over rows and columns.
+
+### Is terminal history a backup?
+
+No. History restores and searches terminal context, but it is bounded by retention settings, configuration, disk availability, and the daemon host. Important jobs still need their own logs, artifacts, and checkpoints.
+
+### Is AnyTTY Cloud required?
+
+No. Local, SSH, and Direct routes work independently. Cloud adds managed discovery, P2P negotiation, and Relay fallback for NAT, private networks, and mobile connections, but it is not a prerequisite for local or self-managed access.
+
+### Is there a browser Web terminal?
+
+The shipped clients are currently the desktop CLI/TUI and mobile apps. The shared browser build in the source tree is a preview and test surface, not a delivered Web terminal product. The Cloud console manages accounts, device registration, plans, and usage; it does not replace a terminal client.
+
+## Terminals and AI tasks
+
+### Which task details does a terminal retain?
+
+The daemon retains a stable terminal ID, name, launch argv, working directory, tags, lifecycle state, exit code, and history. A normalized foreground process name is shown when available. `terminal show --json`, `terminal capture`, and the TUI Terminal Manager expose this information.
+
+### Can terminals be managed with tags?
+
+Yes. Repeat `--tag KEY=VALUE` during creation, change tags with `terminal tag`, and filter with `terminal list --tag KEY=VALUE`. The TUI Terminal Picker and Terminal Manager also search and display tags and can edit the complete tag set.
+
+### How does an AI task appear in the terminal pool?
+
+By convention, the AI launches an independent command with `anytty terminal create` and assigns a name and tags. For example, `kind=task` identifies the task pool, while `agent`, `project`, `run`, and `task` group related work. The command keeps running in the daemon after `create` returns, and both the AI and user can observe it.
+
+### Does AnyTTY need an AI task's PID, PPID, or internal subtask graph?
+
+No. One independent terminal is the observable task unit. Its name, tags, launch command, state, exit code, Live screen, and history are enough to manage it. Create separate terminals only for work that needs separate observation; AnyTTY does not need to reproduce an agent's internal task tree.
+
+### Does a command run inside the AI's current terminal automatically become a separate task?
+
+No. It remains activity inside the original terminal. Work that must be named, filtered, awaited, or taken over independently has to be launched through `terminal create`.
+
+### Can Claude Code, Codex, and OpenCode use this workflow?
+
+Yes. The public repository includes the `anytty-terminal` skill, which defines when to create a terminal, how to name and tag it, how to wait for results, and how to hand work to the user. It uses the stable AnyTTY CLI rather than a vendor-specific task protocol. See [AI agent workflows](../agent-workflows/).
+
+### Can a user take over a task started by an AI?
+
+Yes. The same terminal can be opened from the TUI, CLI, or a paired mobile client, and `terminal attach` provides interactive takeover. Inspect the latest Live screen before sending automated input. Never provide a password, privilege escalation, destructive confirmation, or production approval solely because terminal text requests it.
+
+### Can names and tags contain tokens or prompts?
+
+They should not. Names, tags, launch arguments, environment overrides, and history may persist or be visible to other authorized clients. Do not put passwords, tokens, pairing material, sensitive prompts, or other credentials in them.
+
+## Connections, pairing, and security
+
+### Does Cloud sign-in make my computer appear in the app automatically?
+
+No. Cloud account sign-in, daemon Cloud enrollment, and daemon grants are separate boundaries. Every client still needs explicit pairing through a one-time claim. Cloud sign-in cannot grant terminal or file access on behalf of a daemon.
+
+### What is the difference between an endpoint and a route?
+
+An endpoint represents one daemon identity. A route is one path to it: Local, SSH, Direct, or Cloud. One endpoint can hold several routes. Changing routes changes network reachability, not the daemon identity, terminal IDs, or grants.
+
+### Can a Relay read terminal or file content?
+
+The Relay forwards protected connection traffic and has no daemon terminal or file authority. The managed service still processes metadata needed to establish and operate connections, such as account and device identifiers, network information, timestamps, route diagnostics, subscriptions, and usage. See [Security and privacy](../security/) for the complete boundary.
+
+### Is deleting an endpoint enough when a phone is lost?
+
+No. Removing an endpoint from a client only clears its local record; it does not revoke a grant already issued by the daemon. Run `anytty access list` on the target daemon, identify the grant, and then use `anytty access revoke GRANT_ID`.
+
+### Can file commands access any path on a remote machine?
+
+No. File operations are constrained by both the daemon's local file policy and the client grant. Route reachability and Cloud plans cannot expand that scope. Confirm the endpoint and full path before overwriting, moving, or recursively deleting data.
+
+## Configuration and maintenance
+
+### Where is the configuration file?
+
+Run `anytty config paths` and use the `Config`, socket, log, and history paths resolved by the current version instead of guessing from the operating system. After editing, run `anytty config validate`.
+
+### Are the runtime defaults and the website's recommended profile the same?
+
+No. Without a configuration file, AnyTTY uses defaults compiled into the runtime. The website's `coralline-candy` profile is the starting point used for documentation screenshots. It overrides theme, chrome, footer, picker, and shortcuts without replacing the built-in default mechanism.
+
+### Are complete configuration templates available in English and Chinese?
+
+Yes. The public repository provides Chinese annotations in `tui-v3.example.yaml` and English annotations in `tui-v3.example.en.yaml`, with identical fields and values. The website's recommended profile is also downloadable in both languages. Tests load both complete templates through the runtime parser and compare them with `Default()`.
+
+### What should I do after changing configuration?
+
+Run `anytty config validate` first. Restart the daemon with `anytty daemon restart` after changing daemon settings. Preserve the existing file before adopting the complete recommended profile because explicitly declared shortcut scenes replace the default scene catalog.
+
+Still stuck? Run the quick diagnostic in [Troubleshooting](../troubleshooting/), then follow [Releases and support](../releases-support/) to provide a minimal redacted reproduction.

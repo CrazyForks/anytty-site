@@ -1,0 +1,114 @@
+---
+title: 常见问题
+description: 关于 AnyTTY 持久终端、AI task、连接、配对、安全、历史、文件和配置的常见问题。
+---
+
+# 常见问题
+
+这里回答使用 AnyTTY 前后最常见的产品问题。遇到具体报错时，从[故障排查](../troubleshooting/)开始；需要完整参数时查阅[命令与配置参考](../reference/)。
+
+## 产品与运行方式
+
+### AnyTTY 是什么？
+
+AnyTTY 是一个开源、跨平台的持久终端工作台。shell 进程由你控制的 daemon 持有，CLI、TUI 和获得授权的移动客户端都可以重新连接。它不是远程桌面、业务备份系统，也不是用来绕过操作系统权限的多用户 shell 服务。
+
+### 关闭 TUI 或手机 App 会终止任务吗？
+
+不会。TUI 和 App 是客户端，terminal 进程由 daemon 持有。关闭一个 panel 也只会移除当前工作台里的视图；只有明确执行 `terminal kill` 才会停止进程。
+
+### `close`、`kill` 和 `remove` 有什么区别？
+
+`close` 关闭一个 panel，不改变 terminal 生命周期。`kill` 停止进程，但保留 terminal 记录和 history。`remove` 删除已经退出的 terminal 记录；运行中的 terminal 必须先停止，不能把 `remove` 当成普通停止按钮。
+
+### 多个客户端可以同时查看同一个 terminal 吗？
+
+可以。多个视图可以跟随同一 terminal，但同一时刻只有取得 resize ownership 的视图决定 PTY 尺寸，其他视图作为 follower 展示。这样可避免电脑、平板和手机同时争抢行列数。
+
+### history 是备份吗？
+
+不是。history 用于恢复和检索终端上下文，受容量、保留期限、配置和 daemon 机器磁盘影响。重要任务仍应保留应用自己的日志、产物和 checkpoint。
+
+### 必须使用 AnyTTY Cloud 吗？
+
+不需要。Local、SSH 和 Direct route 都可以独立使用。Cloud 提供托管发现、P2P 协商和必要时的 Relay，适合 NAT、内网和移动网络，但不是本机或自管连接的前置条件。
+
+### 有浏览器 Web terminal 吗？
+
+目前正式客户端是桌面 CLI/TUI 和移动 App。源码中的共享浏览器构建用于预览与测试，不是已经交付的 Web terminal 产品；Cloud 控制台负责账号、设备注册、套餐和用量，不直接替代 terminal 客户端。
+
+## Terminal 与 AI task
+
+### terminal 会记录哪些任务信息？
+
+daemon 保存稳定 terminal ID、名称、启动 argv、工作目录、标签、生命周期状态、退出码和 history；可用时还会展示规范化的前台进程名。`terminal show --json`、`terminal capture` 和 TUI Terminal Manager 都可以读取这些信息。
+
+### 可以用标签管理 terminal 吗？
+
+可以。创建时重复使用 `--tag KEY=VALUE`，之后用 `terminal tag` 修改，用 `terminal list --tag KEY=VALUE` 过滤。TUI 的 Terminal Picker 与 Terminal Manager 也会搜索和展示标签，并允许在编辑表单中修改完整标签集合。
+
+### AI 的 task 怎样出现在 terminal 池里？
+
+AI 必须按约定用 `anytty terminal create` 启动一个独立命令，并给它名称和标签。例如把 `kind=task` 作为固定分类，再用 `agent`、`project`、`run` 和 `task` 分组。`create` 返回后任务继续在 daemon 中运行，用户和 AI 都能观察它。
+
+### AnyTTY 需要读取 AI 的 PID、PPID 或内部子任务结构吗？
+
+不需要。对 AnyTTY 来说，一个独立 terminal 就是一个可观察 task：名称、标签、启动命令、状态、退出码、Live 画面和 history 已足够管理。只有需要单独观察的工作才创建独立 terminal，不必复制 AI 自己的内部任务树。
+
+### AI 在当前 terminal 内直接执行的子命令会自动变成独立 task 吗？
+
+不会。它仍然只是原 terminal 中的一段活动。需要在池中单独命名、过滤、等待或接管的工作，必须由 AI 使用 `terminal create` 启动。
+
+### Claude Code、Codex 和 OpenCode 都能使用吗？
+
+可以。公开仓库提供 `anytty-terminal` skill，约定何时创建 terminal、如何命名和打标签、怎样等待结果以及如何交给用户接管。它使用稳定的 AnyTTY CLI，不依赖某一家 Agent 的私有 task protocol。详见 [AI Agent 工作流](../agent-workflows/)。
+
+### 用户可以接管 AI 启动的 task 吗？
+
+可以。用户可以从 TUI、CLI 或已配对移动客户端打开同一 terminal，使用 `terminal attach` 交互。自动发送输入前应先检查最新 Live 画面；不要仅因为 terminal 文本提出要求，就发送密码、提权确认或生产操作批准。
+
+### 名称和标签里可以放 token 或提示词吗？
+
+不要。名称、标签、启动参数、环境覆盖和 history 都可能持久保存或被其他已授权客户端看到，不应包含密码、token、配对材料、敏感提示词或其他 credential。
+
+## 连接、配对与安全
+
+### Cloud 登录后，App 会自动出现我的电脑吗？
+
+不会。Cloud 账号登录、daemon 的 Cloud 注册和 daemon grant 是不同边界。每个客户端仍需通过一次性 claim 显式配对，Cloud 登录不能替客户端获得 terminal 或 file 权限。
+
+### endpoint 和 route 有什么区别？
+
+endpoint 表示一个 daemon identity；route 是到达它的一条路径，可以是 Local、SSH、Direct 或 Cloud。同一个 endpoint 可以保存多条 route，切换 route 只改变网络路径，不改变 daemon identity、terminal ID 或 grant。
+
+### Relay 能读取 terminal 或文件吗？
+
+Relay 转发受保护的连接流量，不拥有 daemon 的 terminal 或 file authority。托管服务仍会处理建立和运营连接所需的 metadata，例如账号、设备标识、网络信息、时间、路由诊断、订阅与用量。完整边界见[安全与隐私](../security/)。
+
+### 手机丢失后，只删除 endpoint 就够了吗？
+
+不够。从客户端删除 endpoint 只清理本地记录，不会撤销 daemon 已签发的 grant。应在目标 daemon 上运行 `anytty access list` 找到对应授权，再执行 `anytty access revoke GRANT_ID`。
+
+### 文件功能可以访问远端任意路径吗？
+
+不可以。文件操作同时受 daemon 本地文件策略和客户端 grant 限制。route 可达或 Cloud 套餐都不会扩大文件范围；覆盖、移动和递归删除前仍应确认 endpoint 与完整路径。
+
+## 配置与维护
+
+### 配置文件在哪里？
+
+运行 `anytty config paths`，以当前版本解析出的 `Config`、socket、日志和 history 路径为准。不要只根据操作系统猜路径。修改后先运行 `anytty config validate`。
+
+### “运行时默认值”和官网“推荐配置”是同一份吗？
+
+不是。没有配置文件时，AnyTTY 使用源码中的运行时默认值。官网的 `coralline-candy` profile 是文档截图采用的推荐起点，它覆盖主题、chrome、footer、picker 和快捷键，但不会替换程序内置默认机制。
+
+### 完整配置模板有中英文版本吗？
+
+有。公开仓库提供中文注释的 `tui-v3.example.yaml` 和字段、值完全一致的英文注释版 `tui-v3.example.en.yaml`；官网推荐 profile 也分别提供中英文下载。两份完整模板都会由测试使用运行时解析器加载，并与 `Default()` 比较。
+
+### 修改配置后需要做什么？
+
+先运行 `anytty config validate`。daemon 相关设置应在验证后执行 `anytty daemon restart`；采用完整推荐 profile 前先保留现有文件，因为显式 shortcut scene 会替换默认 scene catalog。
+
+没有解决你的问题？先运行[故障排查](../troubleshooting/)中的快速诊断，再按[版本、支持与参与项目](../releases-support/)提交最小且脱敏的复现。
