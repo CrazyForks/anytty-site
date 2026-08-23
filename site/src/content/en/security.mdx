@@ -20,9 +20,11 @@ AnyTTY's central security rule is that the daemon is the final authority for ter
 | Relay | forwarding protected traffic | terminal/file authority |
 
 <DocFigure
-  placeholder="Needed: trust-boundary diagram for client, Cloud/route, and endpoint daemon"
-  assetName="/assets/docs/security-boundary.webp"
-  caption="Show network reachability and terminal/file authorization as separate layers."
+  src="/assets/docs/security-boundary.webp"
+  alt="Trust boundary diagram separating client reachability from endpoint daemon authorization"
+  caption="Routes establish reachability; the endpoint daemon remains the authorization authority."
+  width={1440}
+  height={810}
 />
 
 ## Identity and transport protection

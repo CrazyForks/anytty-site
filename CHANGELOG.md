@@ -11,6 +11,7 @@ This file records user-visible changes. The current version is a prerelease and 
 - Moved all installer and product download links to the now-public `anytty/anytty` source repository.
 - Retained the site-hosted installer paths as compatibility entry points, but they now download only from `anytty/anytty` Releases.
 - Retired the site repository's product Release creation and asset-copy scripts.
+- Replaced the installation, operations, endpoint diagnostics, Cloud enrollment, file preview, and security-boundary placeholders with redacted product captures.
 
 ## [0.0.1-beta.0] - 2026-08-17
 

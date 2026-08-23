@@ -20,9 +20,11 @@ AnyTTY 的核心安全原则是：**daemon 是 terminal、file、history、设�
 | Relay | 转发加密流量 | 成为 terminal/file authority |
 
 <DocFigure
-  placeholder="待补：client、Cloud/route 与 endpoint daemon 的信任边界图"
-  assetName="/assets/docs/security-boundary.webp"
-  caption="图中应把“网络可达性”和“终端/文件授权”画成两个独立层次。"
+  src="/assets/docs/security-boundary.webp"
+  alt="将客户端可达性与 endpoint daemon 授权分开的信任边界图"
+  caption="Route 负责建立可达性，endpoint daemon 始终是最终授权方。"
+  width={1440}
+  height={810}
 />
 
 ## 身份认证与传输保护

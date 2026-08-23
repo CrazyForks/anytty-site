@@ -94,9 +94,11 @@ anytty endpoint policy set workstation --route cloud --cloud-path p2p
 Cloud path 可以选择 `auto`、`p2p`、`relay` 或 `smart_route`，Relay transport 可以选择 `auto`、`udp` 或 `tcp`。只有在排障或明确网络要求下才固定路径；通常使用 `auto`。
 
 <DocFigure
-  placeholder="待补：endpoint show、policy show 与 endpoint test 的三段脱敏输出"
-  assetName="/assets/docs/endpoint-diagnostics.webp"
-  caption="截图应保留 route 类型和连接阶段，隐藏主机名、设备 ID、指纹、地址和 credential reference。"
+  src="/assets/docs/endpoint-diagnostics.webp"
+  alt="终端中显示演示 endpoint、自动 route policy 与成功的本地 route 测试"
+  caption="本地演示 endpoint 的 route policy 与一次成功的可达性测试。"
+  width={1440}
+  height={810}
 />
 
 ## NAT、防火墙与代理

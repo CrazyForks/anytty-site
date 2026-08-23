@@ -11,6 +11,7 @@
 - 安装脚本和产品下载链接统一迁移到已经公开的 `anytty/anytty` 源码仓库。
 - site 仓库原有安装脚本 URL 继续作为兼容入口，但只从 `anytty/anytty` Releases 下载。
 - 停用 site 仓库内创建产品 Release 和复制 Release 资产的脚本。
+- 将安装、运维、endpoint 诊断、Cloud 接入、文件预览和安全边界的占位图替换为脱敏产品截图。
 
 ## [0.0.1-beta.0] - 2026-08-17
 

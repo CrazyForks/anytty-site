@@ -97,9 +97,11 @@ anytty daemon logs --follow
 日志应记录状态和错误，不应包含私钥、claim、grant、terminal 内容或文件内容。提交支持请求前仍需人工检查并删除用户名、主机名、设备 ID、指纹、地址和生产标识。
 
 <DocFigure
-  placeholder="待补：daemon status、doctor 与脱敏 logs 的运维检查截图"
-  assetName="/assets/docs/daemon-operations.webp"
-  caption="建议用全新测试用户和本地 endpoint 补拍，避免真实路径与身份信息。"
+  src="/assets/docs/daemon-operations.webp"
+  alt="终端中显示 AnyTTY daemon 状态、doctor 输出和两条脱敏日志"
+  caption="来自隔离 daemon 的真实 status、doctor 与 logs 输出，history 已关闭。"
+  width={1440}
+  height={810}
 />
 
 ## 输出缓冲
