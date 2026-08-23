@@ -1,0 +1,244 @@
+---
+import {
+  ArrowRight,
+  BookOpen,
+  Bug,
+  CreditCard,
+  Lightbulb,
+  Mail,
+  ShieldAlert,
+  Wrench,
+} from 'lucide-react'
+
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { localizedPath, sitePath, type Locale } from '@/lib/site'
+
+interface Props { locale: Locale }
+
+const { locale } = Astro.props
+const isEnglish = locale === 'en'
+const pathname = isEnglish ? '/support/' : '/zh-CN/support/'
+const copy = isEnglish
+  ? {
+      title: 'Support',
+      description: 'Get help with AnyTTY apps, connections, Cloud accounts, billing, privacy, and security.',
+      eyebrow: 'AnyTTY / Support',
+      heading: 'Route the problem to the right place.',
+      lead: 'Start with the public docs for routine troubleshooting. Use a private channel whenever a report contains account, billing, security, or personal information.',
+      routeLabel: 'A safe support route',
+      route: ['Check the docs', 'Redact private data', 'Choose a channel'],
+      channelsEyebrow: 'Support channels',
+      channelsTitle: 'Choose what you need help with.',
+      channels: [
+        {
+          title: 'Setup and connection help',
+          body: 'Use the troubleshooting guide for pairing, Local, SSH, Direct, Cloud, terminal, and file-transfer problems.',
+          label: 'Open troubleshooting',
+          href: sitePath(localizedPath(locale, '/docs/troubleshooting')),
+          icon: Wrench,
+          external: false,
+        },
+        {
+          title: 'Bug reports',
+          body: 'Report a reproducible product defect publicly after removing credentials, addresses, terminal output, and customer data.',
+          label: 'File a bug report',
+          href: 'https://github.com/anytty/anytty/issues/new?template=bug_report.yml',
+          icon: Bug,
+          external: true,
+        },
+        {
+          title: 'Feature requests',
+          body: 'Describe the workflow, the current limitation, and the result you need. Avoid including private environment details.',
+          label: 'Request a feature',
+          href: 'https://github.com/anytty/anytty/issues/new?template=feature_request.yml',
+          icon: Lightbulb,
+          external: true,
+        },
+        {
+          title: 'Cloud account and billing',
+          body: 'Use email for sign-in, subscription, invoice, cancellation, refund, or other account-specific questions.',
+          label: 'Email support',
+          href: 'mailto:support@anytty.com',
+          icon: CreditCard,
+          external: false,
+        },
+      ],
+      privateEyebrow: 'Private reports',
+      privateTitle: 'Keep sensitive reports out of public issues.',
+      securityTitle: 'Security vulnerabilities',
+      securityBody: 'Use GitHub private vulnerability reporting. Send only fresh test credentials and the minimum reproduction data needed to investigate.',
+      securityLabel: 'Report privately',
+      privacyTitle: 'Privacy and data requests',
+      privacyBody: 'Request access, correction, deletion, or other privacy help by email. We may need to verify that the data belongs to you.',
+      privacyLabel: 'Email privacy',
+      contactEyebrow: 'Direct contact',
+      contactTitle: 'App issues and general feedback',
+      contactBody: 'Email support with the AnyTTY version, device and operating-system version, connection type, event time, and steps to reproduce. Do not send passwords, private keys, pairing claims, Cloud tokens, or unredacted terminal and file content.',
+      availability: 'AnyTTY Beta has no default response-time or availability SLA. Support is provided in English and Simplified Chinese.',
+      docsLabel: 'Read support documentation',
+    }
+  : {
+      title: '支持',
+      description: '获取 AnyTTY App、连接、Cloud 账号、账单、隐私和安全问题的帮助。',
+      eyebrow: 'AnyTTY / 支持',
+      heading: '把问题交给正确的处理渠道。',
+      lead: '常规故障先查阅公开文档；只要报告中包含账号、账单、安全或个人信息，就应使用私密渠道。',
+      routeLabel: '安全的支持路径',
+      route: ['先查文档', '移除敏感信息', '选择提交渠道'],
+      channelsEyebrow: '支持渠道',
+      channelsTitle: '根据问题类型选择入口。',
+      channels: [
+        {
+          title: '安装与连接问题',
+          body: '配对、Local、SSH、Direct、Cloud、终端或文件传输异常，先按故障排查文档逐项检查。',
+          label: '打开故障排查',
+          href: sitePath(localizedPath(locale, '/docs/troubleshooting')),
+          icon: Wrench,
+          external: false,
+        },
+        {
+          title: '报告 Bug',
+          body: '确认可以稳定复现后提交公开问题；提交前移除凭据、地址、终端输出和客户数据。',
+          label: '提交 Bug',
+          href: 'https://github.com/anytty/anytty/issues/new?template=bug_report.yml',
+          icon: Bug,
+          external: true,
+        },
+        {
+          title: '功能建议',
+          body: '说明实际工作流、当前限制和期望结果，不要附带私有环境信息。',
+          label: '提交功能建议',
+          href: 'https://github.com/anytty/anytty/issues/new?template=feature_request.yml',
+          icon: Lightbulb,
+          external: true,
+        },
+        {
+          title: 'Cloud 账号与账单',
+          body: '登录、订阅、发票、取消、退款以及其他账号相关问题请通过邮件处理。',
+          label: '发送支持邮件',
+          href: 'mailto:support@anytty.com',
+          icon: CreditCard,
+          external: false,
+        },
+      ],
+      privateEyebrow: '私密报告',
+      privateTitle: '敏感问题不要提交到公开 Issue。',
+      securityTitle: '安全漏洞',
+      securityBody: '使用 GitHub 私密漏洞报告。仅使用新建的测试凭据，并只提供调查所需的最小复现数据。',
+      securityLabel: '私密报告漏洞',
+      privacyTitle: '隐私与数据请求',
+      privacyBody: '通过邮件申请访问、更正、删除数据或获取其他隐私帮助。处理前可能需要验证数据确实属于你。',
+      privacyLabel: '发送隐私邮件',
+      contactEyebrow: '直接联系',
+      contactTitle: 'App 问题与一般反馈',
+      contactBody: '邮件中请提供 AnyTTY 版本、设备与系统版本、连接类型、问题发生时间和复现步骤。不要发送密码、私钥、配对 claim、Cloud token 或未脱敏的终端与文件内容。',
+      availability: 'AnyTTY Beta 当前没有默认响应时效或可用性 SLA；支持语言为英文和简体中文。',
+      docsLabel: '阅读完整支持文档',
+    }
+
+const docsHref = sitePath(localizedPath(locale, '/docs/releases-support'))
+---
+
+<BaseLayout locale={locale} title={copy.title} description={copy.description} pathname={pathname}>
+  <main id="main">
+    <section class="border-b border-[var(--line)] py-16 sm:py-20 lg:py-24" aria-labelledby="support-title">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        <p class="font-mono text-xs font-semibold uppercase text-primary">{copy.eyebrow}</p>
+        <h1 id="support-title" class="mt-5 max-w-4xl text-4xl font-semibold leading-tight tracking-normal text-foreground sm:text-6xl">{copy.heading}</h1>
+        <p class="mt-6 max-w-3xl text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">{copy.lead}</p>
+
+        <div class="mt-12 overflow-hidden rounded-lg border border-[var(--line-strong)]" aria-label={copy.routeLabel}>
+          <div class="grid gap-px bg-[var(--line)] sm:grid-cols-[1fr_auto_1fr_auto_1fr]">
+            {copy.route.map((label, index) => (
+              <>
+                {index > 0 && <div class="hidden items-center bg-background px-3 text-muted-foreground sm:flex" aria-hidden="true"><ArrowRight className="size-4" /></div>}
+                <div class="flex min-h-20 items-center gap-4 bg-background px-5 py-4">
+                  <span class="font-mono text-xs text-primary">0{index + 1}</span>
+                  <span class="text-sm font-medium text-foreground">{label}</span>
+                </div>
+              </>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 sm:py-20 lg:py-24" aria-labelledby="support-channels-title">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        <p class="font-mono text-xs font-semibold uppercase text-primary">{copy.channelsEyebrow}</p>
+        <h2 id="support-channels-title" class="mt-4 text-3xl font-medium tracking-normal text-foreground sm:text-4xl">{copy.channelsTitle}</h2>
+
+        <div class="mt-10 grid border-y border-[var(--line)] md:grid-cols-2">
+          {copy.channels.map((channel, index) => {
+            const Icon = channel.icon
+            return (
+              <article class:list={[
+                'flex min-h-64 flex-col py-7 md:px-8',
+                index % 2 === 1 && 'md:border-l md:border-[var(--line)]',
+                index > 1 && 'border-t border-[var(--line)]',
+                index % 2 === 0 && 'md:pl-0',
+                index % 2 === 1 && 'md:pr-0',
+              ]}>
+                <Icon className="size-5 text-primary" aria-hidden="true" />
+                <h3 class="mt-5 text-xl font-medium text-foreground">{channel.title}</h3>
+                <p class="mt-3 max-w-xl text-sm leading-6 text-muted-foreground">{channel.body}</p>
+                <a class="mt-auto inline-flex min-h-11 items-center gap-2 self-start pt-6 text-sm font-medium text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring" href={channel.href}>
+                  {channel.label}{channel.external && <ArrowRight className="size-4" aria-hidden="true" />}
+                </a>
+              </article>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+
+    <section class="border-y border-[var(--line-soft)] bg-muted/35 py-16 sm:py-20" aria-labelledby="private-support-title">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        <p class="font-mono text-xs font-semibold uppercase text-primary">{copy.privateEyebrow}</p>
+        <h2 id="private-support-title" class="mt-4 max-w-3xl text-3xl font-medium tracking-normal text-foreground sm:text-4xl">{copy.privateTitle}</h2>
+        <div class="mt-10 grid gap-8 lg:grid-cols-2 lg:gap-14">
+          <article class="border-l-2 border-destructive pl-5">
+            <ShieldAlert className="size-5 text-destructive" aria-hidden="true" />
+            <h3 class="mt-4 text-lg font-medium text-foreground">{copy.securityTitle}</h3>
+            <p class="mt-3 text-sm leading-6 text-muted-foreground">{copy.securityBody}</p>
+            <a class="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-foreground underline-offset-4 hover:underline" href="https://github.com/anytty/anytty/security/advisories/new">{copy.securityLabel}<ArrowRight className="size-4" aria-hidden="true" /></a>
+          </article>
+          <article class="border-l-2 border-primary pl-5">
+            <Mail className="size-5 text-primary" aria-hidden="true" />
+            <h3 class="mt-4 text-lg font-medium text-foreground">{copy.privacyTitle}</h3>
+            <p class="mt-3 text-sm leading-6 text-muted-foreground">{copy.privacyBody}</p>
+            <a class="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-foreground underline-offset-4 hover:underline" href="mailto:privacy@anytty.com">{copy.privacyLabel}<ArrowRight className="size-4" aria-hidden="true" /></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 sm:py-20 lg:py-24" aria-labelledby="direct-contact-title">
+      <div class="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:px-12">
+        <div>
+          <p class="font-mono text-xs font-semibold uppercase text-primary">{copy.contactEyebrow}</p>
+          <h2 id="direct-contact-title" class="mt-4 text-3xl font-medium tracking-normal text-foreground sm:text-4xl">{copy.contactTitle}</h2>
+          <p class="mt-5 max-w-3xl text-base leading-7 text-muted-foreground">{copy.contactBody}</p>
+          <div class="mt-7 flex flex-wrap gap-x-6 gap-y-3">
+            <a class="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-primary underline-offset-4 hover:underline" href="mailto:support@anytty.com"><Mail className="size-4" aria-hidden="true" />support@anytty.com</a>
+            <a class="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-foreground underline-offset-4 hover:underline" href={docsHref}><BookOpen className="size-4" aria-hidden="true" />{copy.docsLabel}</a>
+          </div>
+        </div>
+        <p class="border-l-2 border-[var(--line-strong)] pl-5 text-sm leading-6 text-muted-foreground">{copy.availability}</p>
+      </div>
+    </section>
+  </main>
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: copy.title,
+    description: copy.description,
+    url: pathname,
+    mainEntity: {
+      '@type': 'Organization',
+      name: 'AnyTTY',
+      email: 'support@anytty.com',
+    },
+  })}></script>
+</BaseLayout>
