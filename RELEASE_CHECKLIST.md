@@ -1,20 +1,17 @@
-# Release Checklist
+# Site Publication Checklist
 
-This checklist is for maintainers preparing an AnyTTY public release. The project currently has no published release; every item must be evaluated rather than assumed.
+This checklist is for maintainers publishing the AnyTTY website and product documentation. Product binaries, installers, tags, and GitHub Releases are owned by [`anytty/anytty`](https://github.com/anytty/anytty); this repository must not publish a second copy.
 
 ## Source and boundary
 
-- [ ] Select a reviewed commit from the private authoritative monorepo.
-- [ ] Run `make check-public-source` in the private repository.
-- [ ] Sync with `make sync-public-source PUBLIC_DIR=../public` and review the complete public diff.
-- [ ] Confirm the export contains only reviewed user-device source and public documentation, with no private service implementation, production configuration, credentials, or private history.
-- [ ] Run `npm run public:check` in the public repository.
+- [ ] Select a reviewed site commit and review the complete public diff.
+- [ ] Confirm the site contains no private service implementation, production configuration, credentials, or private history.
+- [ ] Run `npm run site:check` in this repository.
 - [ ] Review generated files, screenshots, fixtures, and notices for secrets and personal data.
 
 ## Quality
 
-- [ ] Run `make test`, `make test-clients`, Android validation, and the supported iOS build check.
-- [ ] Build the CLI/TUI and verify official Cloud client capability remains compiled in.
+- [ ] Confirm product claims against the current public client source and Release notes.
 - [ ] Build the Pages artifact and inspect desktop, phone, keyboard, and reduced-motion behavior.
 - [ ] Confirm README, documentation, issue forms, and security links resolve.
 - [ ] Review `CHANGELOG.md`, supported platforms, known limitations, and upgrade notes.
@@ -24,7 +21,7 @@ This checklist is for maintainers preparing an AnyTTY public release. The projec
 - [ ] Confirm Apache-2.0 `LICENSE`, `NOTICE`, DCO, trademark policy, and copyright years.
 - [ ] Regenerate and review Go, npm, Android, iOS, font, and pinned third-party notices.
 - [ ] Review Dependabot and CI results; investigate known vulnerabilities and document accepted risk.
-- [ ] Produce checksums and provenance for every release artifact actually published.
+- [ ] Confirm every installer and download link points to `anytty/anytty` and uses its checksums.
 
 ## GitHub and publication
 
@@ -32,5 +29,5 @@ This checklist is for maintainers preparing an AnyTTY public release. The projec
 - [ ] Configure GitHub Pages to use GitHub Actions and verify the published base path `/anytty-site/`.
 - [ ] Review branch protection, required checks, CODEOWNERS, Discussions, issue permissions, and Actions permissions.
 - [ ] Decide whether the existing public history is suitable; only then consider a reviewed clean-history initialization.
-- [ ] Create a signed tag and release notes without claiming unavailable packages, pricing, support, or stability.
+- [ ] Verify this repository has not created a product Release; publish product tags and assets only from `anytty/anytty`.
 - [ ] Publish only after a second maintainer or designated reviewer signs off on the boundary audit.

@@ -4,8 +4,8 @@
   <p><strong>Keep terminals running. Come back whenever you need to.</strong></p>
   <p>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-3d7ea6" alt="Apache-2.0 License"></a>
-    <a href="https://github.com/anytty/anytty-site/releases"><img src="https://img.shields.io/github/v/release/anytty/anytty-site?include_prereleases&amp;sort=semver&amp;label=latest%20beta" alt="Latest Beta Release"></a>
-    <a href="https://github.com/anytty/anytty-site/releases"><img src="https://img.shields.io/github/downloads/anytty/anytty-site/total?label=release%20downloads" alt="Total GitHub Release Downloads"></a>
+    <a href="https://github.com/anytty/anytty/releases"><img src="https://img.shields.io/github/v/release/anytty/anytty?include_prereleases&amp;sort=semver&amp;label=latest%20beta" alt="Latest Beta Release"></a>
+    <a href="https://github.com/anytty/anytty/releases"><img src="https://img.shields.io/github/downloads/anytty/anytty/total?label=release%20downloads" alt="Total GitHub Release Downloads"></a>
     <a href="https://github.com/anytty/anytty-site/stargazers"><img src="https://img.shields.io/github/stars/anytty/anytty-site?style=flat&amp;label=stars" alt="GitHub Stars"></a>
     <a href="https://github.com/anytty/anytty-site/actions/workflows/ci.yml"><img src="https://github.com/anytty/anytty-site/actions/workflows/ci.yml/badge.svg" alt="CI Status"></a>
     <a href="docs/PACKAGE_MANAGERS.md"><img src="https://img.shields.io/badge/Homebrew-tap%20preparing-fbb040?logo=homebrew" alt="Homebrew Tap Preparing"></a>
@@ -57,7 +57,7 @@ AnyTTY keeps terminal sessions running on your own machines, so you can close th
   </tr>
 </table>
 
-> **Install the app:** The mobile app supports both Android and iOS. The Android Beta APK is temporarily available from [GitHub Releases](https://github.com/anytty/anytty-site/releases/tag/v0.0.1-beta.0). A public iOS build is not yet available and must wait for the Apple App Store release. Google Play and Apple App Store publishing are both in progress.
+> **Install the app:** The mobile app supports both Android and iOS. The Android Beta APK is temporarily available from [GitHub Releases](https://github.com/anytty/anytty/releases/tag/v0.0.1-beta.0). A public iOS build is not yet available and must wait for the Apple App Store release. Google Play and Apple App Store publishing are both in progress.
 
 ### Connections and file management
 
@@ -105,26 +105,26 @@ AnyTTY keeps terminal sessions running on your own machines, so you can close th
 The installer selects x64 or ARM64, downloads the matching GitHub Release archive, verifies `SHA256SUMS`, and installs to `~/.local/bin` by default.
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/anytty/anytty-site/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/anytty/anytty/main/install.sh | sh
 ```
 
 Choose another version or installation directory when needed:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/anytty/anytty-site/main/install.sh | \
+curl -fsSL https://raw.githubusercontent.com/anytty/anytty/main/install.sh | \
   sh -s -- --version v0.0.1-beta.0 --bin-dir "$HOME/bin"
 ```
 
 ### Windows PowerShell
 
 ```powershell
-Invoke-WebRequest https://raw.githubusercontent.com/anytty/anytty-site/main/install.ps1 -OutFile install.ps1
+Invoke-WebRequest https://raw.githubusercontent.com/anytty/anytty/main/install.ps1 -OutFile install.ps1
 .\install.ps1
 ```
 
 The PowerShell installer verifies SHA-256, installs to `%LOCALAPPDATA%\Programs\AnyTTY\bin`, and adds that directory to the current user's `PATH`. Pass `-NoModifyPath` to leave `PATH` unchanged.
 
-You can also download CLI archives and the unsigned Android Beta APK directly from [GitHub Releases](https://github.com/anytty/anytty-site/releases/tag/v0.0.1-beta.0). Package definitions for Homebrew, npm, and WinGet are being prepared; see [package manager publishing](docs/PACKAGE_MANAGERS.md) for their current status.
+You can also download CLI archives and the unsigned Android Beta APK directly from [GitHub Releases](https://github.com/anytty/anytty/releases/tag/v0.0.1-beta.0). Package definitions for Homebrew, npm, and WinGet are being prepared; see [package manager publishing](docs/PACKAGE_MANAGERS.md) for their current status.
 
 ## Quick start
 
@@ -172,8 +172,8 @@ Local, SSH, and Direct work entirely from this repository. Cloud is optional: it
 CLI/TUI development requires Go 1.26.5. Shared UI and mobile builds use Node.js 24 and the checked-in npm lockfile.
 
 ```sh
-git clone https://github.com/anytty/anytty-site.git
-cd anytty-site
+git clone https://github.com/anytty/anytty.git
+cd anytty
 npm ci
 make build
 ```

@@ -52,11 +52,21 @@ If startup fails, run `anytty daemon doctor` and inspect `anytty daemon logs --l
 
 ## Upgrade
 
-1. Finish or checkpoint work that cannot be recreated.
-2. Record `anytty --version` and read the target release notes and changelog.
-3. Back up non-sensitive configuration. Treat endpoint metadata and history as sensitive.
-4. Stop the current daemon, install the new binary, then start it again.
-5. Run `config validate`, `daemon doctor`, `daemon status`, and key `endpoint test` checks.
+The original `v0.0.1-beta.0` build predates the update command. Upgrade that build once by rerunning the installer; later upgrades can use `anytty update`.
+
+Check the public GitHub Release without changing the installation:
+
+```sh
+anytty update --check
+```
+
+Run `anytty update` to download the matching archive, verify its GitHub asset digest and `SHA256SUMS`, and replace the on-disk executable. The command does not stop or restart the daemon, so running terminals remain owned by the old daemon process:
+
+```sh
+anytty update
+```
+
+New CLI/TUI invocations use the updated binary. Restart the daemon only when you are ready to apply daemon changes; restarting ends its running terminals. Before a compatibility-breaking Beta update, read the release notes, back up non-sensitive configuration, and checkpoint work that cannot be recreated.
 
 Beta releases may change CLI, protocol, config, or storage formats. Old history formats may be removed instead of migrated.
 

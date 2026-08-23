@@ -6,6 +6,12 @@
 
 ## Unreleased
 
+### Changed
+
+- 安装脚本和产品下载链接统一迁移到已经公开的 `anytty/anytty` 源码仓库。
+- site 仓库原有安装脚本 URL 继续作为兼容入口，但只从 `anytty/anytty` Releases 下载。
+- 停用 site 仓库内创建产品 Release 和复制 Release 资产的脚本。
+
 ## [0.0.1-beta.0] - 2026-08-17
 
 ### Added

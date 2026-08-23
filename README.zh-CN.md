@@ -4,8 +4,8 @@
   <p><strong>终端一直跑着，你随时回来接管</strong></p>
   <p>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-3d7ea6" alt="Apache-2.0 License"></a>
-    <a href="https://github.com/anytty/anytty-site/releases"><img src="https://img.shields.io/github/v/release/anytty/anytty-site?include_prereleases&amp;sort=semver&amp;label=latest%20beta" alt="Latest Beta Release"></a>
-    <a href="https://github.com/anytty/anytty-site/releases"><img src="https://img.shields.io/github/downloads/anytty/anytty-site/total?label=release%20downloads" alt="Total GitHub Release Downloads"></a>
+    <a href="https://github.com/anytty/anytty/releases"><img src="https://img.shields.io/github/v/release/anytty/anytty?include_prereleases&amp;sort=semver&amp;label=latest%20beta" alt="Latest Beta Release"></a>
+    <a href="https://github.com/anytty/anytty/releases"><img src="https://img.shields.io/github/downloads/anytty/anytty/total?label=release%20downloads" alt="Total GitHub Release Downloads"></a>
     <a href="https://github.com/anytty/anytty-site/stargazers"><img src="https://img.shields.io/github/stars/anytty/anytty-site?style=flat&amp;label=stars" alt="GitHub Stars"></a>
     <a href="https://github.com/anytty/anytty-site/actions/workflows/ci.yml"><img src="https://github.com/anytty/anytty-site/actions/workflows/ci.yml/badge.svg" alt="CI Status"></a>
     <a href="docs/PACKAGE_MANAGERS.md"><img src="https://img.shields.io/badge/Homebrew-tap%20preparing-fbb040?logo=homebrew" alt="Homebrew Tap Preparing"></a>
@@ -57,7 +57,7 @@ AnyTTY 让终端会话一直跑在你自己的机器上。关掉窗口、切换�
   </tr>
 </table>
 
-> **下载安装：** 手机 App 同时支持 Android 与 iOS。Android Beta APK 暂时可从 [GitHub Releases](https://github.com/anytty/anytty-site/releases/tag/v0.0.1-beta.0) 下载；iOS 当前还没有公开安装包，需要等待 Apple App Store 上架。Google Play 与 Apple App Store 的上架工作均在进行中。
+> **下载安装：** 手机 App 同时支持 Android 与 iOS。Android Beta APK 暂时可从 [GitHub Releases](https://github.com/anytty/anytty/releases/tag/v0.0.1-beta.0) 下载；iOS 当前还没有公开安装包，需要等待 Apple App Store 上架。Google Play 与 Apple App Store 的上架工作均在进行中。
 
 ### 连接与文件管理
 
@@ -105,26 +105,26 @@ AnyTTY 让终端会话一直跑在你自己的机器上。关掉窗口、切换�
 安装脚本会自动选择 x64 或 ARM64，下载对应 GitHub Release，校验 `SHA256SUMS`，并默认安装到 `~/.local/bin`。
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/anytty/anytty-site/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/anytty/anytty/main/install.sh | sh
 ```
 
 也可以指定版本和安装目录：
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/anytty/anytty-site/main/install.sh | \
+curl -fsSL https://raw.githubusercontent.com/anytty/anytty/main/install.sh | \
   sh -s -- --version v0.0.1-beta.0 --bin-dir "$HOME/bin"
 ```
 
 ### Windows PowerShell
 
 ```powershell
-Invoke-WebRequest https://raw.githubusercontent.com/anytty/anytty-site/main/install.ps1 -OutFile install.ps1
+Invoke-WebRequest https://raw.githubusercontent.com/anytty/anytty/main/install.ps1 -OutFile install.ps1
 .\install.ps1
 ```
 
 PowerShell 脚本会校验 SHA-256，安装到 `%LOCALAPPDATA%\Programs\AnyTTY\bin`，并把目录加入当前用户的 `PATH`。如不希望修改 `PATH`，可传入 `-NoModifyPath`。
 
-你也可以直接从 [GitHub Releases](https://github.com/anytty/anytty-site/releases/tag/v0.0.1-beta.0) 下载各平台 CLI 压缩包和未签名 Android Beta APK。Homebrew、npm 与 WinGet 的包定义正在准备发布，当前状态见[包管理器发布说明](docs/PACKAGE_MANAGERS.md)。
+你也可以直接从 [GitHub Releases](https://github.com/anytty/anytty/releases/tag/v0.0.1-beta.0) 下载各平台 CLI 压缩包和未签名 Android Beta APK。Homebrew、npm 与 WinGet 的包定义正在准备发布，当前状态见[包管理器发布说明](docs/PACKAGE_MANAGERS.md)。
 
 ## 快速开始
 
@@ -172,8 +172,8 @@ Local、SSH 与 Direct 可以完全基于本仓库使用。Cloud 是可选能力
 CLI/TUI 开发需要 Go 1.26.5；共享 UI 与移动端使用 Node.js 24 及仓库中的 npm lockfile。
 
 ```sh
-git clone https://github.com/anytty/anytty-site.git
-cd anytty-site
+git clone https://github.com/anytty/anytty.git
+cd anytty
 npm ci
 make build
 ```

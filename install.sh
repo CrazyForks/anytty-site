@@ -2,7 +2,7 @@
 
 set -eu
 
-repository="${ANYTTY_REPOSITORY:-anytty/anytty-site}"
+repository="${ANYTTY_REPOSITORY:-anytty/anytty}"
 version="${ANYTTY_VERSION:-}"
 install_dir="${ANYTTY_INSTALL_DIR:-${HOME}/.local/bin}"
 
@@ -15,7 +15,7 @@ Usage: install.sh [--version VERSION] [--bin-dir DIRECTORY]
 Environment:
   ANYTTY_VERSION           Release tag, for example v0.0.1-beta.0
   ANYTTY_INSTALL_DIR       Installation directory (default: ~/.local/bin)
-  ANYTTY_REPOSITORY        GitHub owner/repository (default: anytty/anytty-site)
+  ANYTTY_REPOSITORY        GitHub owner/repository (default: anytty/anytty)
   ANYTTY_RELEASE_BASE_URL  Override the release download base URL
 EOF
 }

@@ -6,7 +6,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$Repository = if ($env:ANYTTY_REPOSITORY) { $env:ANYTTY_REPOSITORY } else { 'anytty/anytty-site' }
+$Repository = if ($env:ANYTTY_REPOSITORY) { $env:ANYTTY_REPOSITORY } else { 'anytty/anytty' }
 if (-not $InstallDir) {
     $InstallDir = Join-Path $env:LOCALAPPDATA 'Programs\AnyTTY\bin'
 }
