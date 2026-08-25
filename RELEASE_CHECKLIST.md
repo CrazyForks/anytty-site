@@ -26,7 +26,7 @@ This checklist is for maintainers publishing the AnyTTY website and product docu
 ## GitHub and publication
 
 - [ ] Enable private vulnerability reporting and verify the maintainer notification path.
-- [ ] Configure GitHub Pages to use GitHub Actions and verify the published base path `/anytty-site/`.
+- [ ] Configure GitHub Pages to use GitHub Actions and verify the `anytty.com` custom domain, HTTPS enforcement, and canonical URLs.
 - [ ] Review branch protection, required checks, CODEOWNERS, Discussions, issue permissions, and Actions permissions.
 - [ ] Decide whether the existing public history is suitable; only then consider a reviewed clean-history initialization.
 - [ ] Verify this repository has not created a product Release; publish product tags and assets only from `anytty/anytty`.

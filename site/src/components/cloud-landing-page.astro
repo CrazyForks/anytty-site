@@ -27,7 +27,7 @@ const copy = {
     eyebrow: 'Optional managed connectivity for AnyTTY',
     lead: 'Reach persistent terminals on computers behind NAT from the AnyTTY TUI or mobile app. Cloud discovers the paired endpoint, tries a direct P2P path first, and relays encrypted traffic only when the network requires it.',
     openConsole: 'Open Cloud console', docs: 'Read Cloud docs', pricingLink: 'See pricing',
-    proof: 'One Cloud path for the TUI, web, phone, and tablet',
+    priceLead: 'Plans from $0. Paid plans start at $9.90 USD per month.',
     routeLabel: 'The Cloud connection path', client: 'AnyTTY TUI / App', discovery: 'Cloud discovery', daemon: 'Endpoint daemon',
     direct: 'Direct P2P when possible', relay: 'Encrypted Relay fallback',
     explainEyebrow: 'How it works', explainTitle: 'One route to the machine you already trust.',
@@ -78,7 +78,7 @@ const copy = {
     eyebrow: 'AnyTTY 的可选托管连接服务',
     lead: '从 AnyTTY TUI 或手机 App 连接位于 NAT、内网中的持久终端。Cloud 先发现已配对的 endpoint，优先协商 P2P 直连，只有网络无法直连时才通过 Relay 转发加密流量。',
     openConsole: '进入 Cloud 控制台', docs: '阅读 Cloud 文档', pricingLink: '查看价格',
-    proof: 'TUI、Web、手机和平板共用一条 Cloud 连接路径',
+    priceLead: '套餐从 $0 起，付费套餐为每月 $9.90 美元起。',
     routeLabel: 'Cloud 连接路径', client: 'AnyTTY TUI / App', discovery: 'Cloud 发现与协商', daemon: 'Endpoint daemon',
     direct: '网络允许时直接 P2P', relay: '无法直连时使用加密 Relay',
     explainEyebrow: '工作方式', explainTitle: '找到你已经信任的那台机器。',
@@ -140,47 +140,28 @@ const consoleUrl = 'https://cloud.anytty.com/login'
 ---
 
 <main id="main">
-  <section class="relative isolate min-h-[calc(100svh-7rem)] overflow-hidden border-b border-white/10 bg-zinc-950 text-zinc-50" aria-labelledby="cloud-hero-title">
-    <img
-      class="absolute inset-0 -z-20 h-full w-full object-cover object-center opacity-40"
-      src={sitePath('/assets/product/mac-tui.webp')}
-      srcset={`${sitePath('/assets/product/mac-tui-960.webp')} 960w, ${sitePath('/assets/product/mac-tui.webp')} 1800w`}
-      sizes="100vw"
-      alt=""
-      width="1800"
-      height="1125"
-      fetchpriority="high"
-      decoding="async"
-    />
-    <div class="absolute inset-0 -z-10 bg-zinc-950/75" aria-hidden="true"></div>
-
-    <div class="mx-auto flex min-h-[calc(100svh-7rem)] max-w-7xl flex-col justify-between gap-6 px-5 py-6 sm:gap-10 sm:px-8 sm:py-14 lg:px-12 lg:py-16">
-      <div class="max-w-4xl">
-        <Badge variant="secondary" className="border border-white/10 bg-white/10 font-mono text-[11px] font-normal text-zinc-100 shadow-none">{t.eyebrow}</Badge>
-        <h1 id="cloud-hero-title" class="mt-6 text-5xl font-semibold leading-none tracking-normal sm:text-7xl lg:text-8xl">AnyTTY Cloud</h1>
-        <p class="mt-6 max-w-3xl text-base leading-7 text-zinc-300 sm:text-xl sm:leading-8">{t.lead}</p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a class={cn(buttonVariants({ variant: 'default', size: 'lg' }), 'min-h-11 bg-sky-500 px-5 font-medium text-white hover:bg-sky-400')} href={consoleUrl}>
-            <Cloud aria-hidden="true" />{t.openConsole}<ArrowRight aria-hidden="true" />
-          </a>
-          <a class={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'min-h-11 border-white/20 bg-zinc-950/70 px-5 font-medium text-zinc-100 shadow-none hover:bg-white/10 hover:text-white')} href={docsPath}>{t.docs}</a>
-          <a class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-zinc-300 underline-offset-4 hover:text-white hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring" href="#pricing">{t.pricingLink}</a>
-        </div>
-        <p class="mt-5 flex items-center gap-2 text-sm text-zinc-400"><ShieldCheck className="size-4 text-emerald-300" aria-hidden="true" />{t.proof}</p>
+  <section class="relative -mt-20 flex min-h-[500px] items-end overflow-hidden border-b border-white/10 bg-zinc-950 px-5 pb-14 pt-32 text-zinc-50 sm:min-h-[540px] sm:px-8 sm:pb-16 lg:px-12" aria-labelledby="cloud-hero-title">
+    <div class="mx-auto w-full max-w-7xl">
+      <Badge variant="secondary" className="border border-white/10 bg-white/10 font-mono text-[11px] font-normal text-zinc-100 shadow-none">{t.eyebrow}</Badge>
+      <h1 id="cloud-hero-title" class="mt-5 max-w-4xl text-5xl font-semibold leading-none tracking-normal sm:text-6xl">AnyTTY Cloud</h1>
+      <p class="mt-5 max-w-3xl text-base leading-7 text-zinc-300 sm:text-xl sm:leading-8">{t.lead}</p>
+      <p class="mt-4 font-mono text-sm font-medium text-emerald-300">{t.priceLead}</p>
+      <div class="mt-7 flex flex-wrap gap-3">
+        <a class={cn(buttonVariants({ variant: 'default', size: 'lg' }), 'min-h-11 bg-sky-500 px-5 font-medium text-white hover:bg-sky-400')} href={consoleUrl}>
+          <Cloud aria-hidden="true" />{t.openConsole}<ArrowRight aria-hidden="true" />
+        </a>
+        <a class={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'min-h-11 border-white/20 bg-transparent px-5 font-medium text-zinc-100 shadow-none hover:bg-white/10 hover:text-white')} href={docsPath}>{t.docs}</a>
+        <a class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-zinc-300 underline-offset-4 hover:text-white hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring" href="#pricing">{t.pricingLink}</a>
       </div>
 
-      <div class="overflow-hidden rounded-lg border border-white/15 bg-zinc-950/85 backdrop-blur-md" aria-label={t.routeLabel}>
-        <div class="grid grid-cols-3 gap-px bg-white/10 md:grid-cols-[1fr_auto_1fr_auto_1fr]">
-          <div class="flex min-h-16 flex-col items-center justify-center gap-2 bg-zinc-950/90 px-2 py-3 text-center sm:min-h-20 sm:flex-row sm:gap-3 sm:px-5 sm:text-left"><span class="flex items-center gap-1.5 text-sky-300" aria-hidden="true"><TerminalSquare className="size-5" /><Smartphone className="size-4" /></span><span class="text-xs font-medium sm:text-sm">{t.client}</span></div>
-          <div class="hidden items-center bg-zinc-950/90 px-2 text-zinc-600 md:flex" aria-hidden="true"><ArrowRight className="size-4" /></div>
-          <div class="flex min-h-16 flex-col items-center justify-center gap-2 bg-zinc-950/90 px-2 py-3 text-center sm:min-h-20 sm:flex-row sm:gap-3 sm:px-5 sm:text-left"><Network className="size-5 text-emerald-300" aria-hidden="true" /><span class="text-xs font-medium sm:text-sm">{t.discovery}</span></div>
-          <div class="hidden items-center bg-zinc-950/90 px-2 text-zinc-600 md:flex" aria-hidden="true"><ArrowRight className="size-4" /></div>
-          <div class="flex min-h-16 flex-col items-center justify-center gap-2 bg-zinc-950/90 px-2 py-3 text-center sm:min-h-20 sm:flex-row sm:gap-3 sm:px-5 sm:text-left"><Server className="size-5 text-zinc-200" aria-hidden="true" /><span class="text-xs font-medium sm:text-sm">{t.daemon}</span></div>
-        </div>
-        <div class="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/10 px-4 py-3 font-mono text-[11px] text-zinc-400 sm:px-5">
-          <span class="flex items-center gap-2"><span class="size-1.5 rounded-full bg-emerald-300"></span>{t.direct}</span>
-          <span class="flex items-center gap-2"><LockKeyhole className="size-3.5 text-sky-300" aria-hidden="true" />{t.relay}</span>
-        </div>
+      <div class="mt-8 flex max-w-4xl flex-wrap items-center gap-x-3 gap-y-2 border-t border-white/10 pt-5 font-mono text-[11px] text-zinc-400" aria-label={t.routeLabel}>
+        <span class="flex items-center gap-2"><TerminalSquare className="size-3.5 text-sky-300" aria-hidden="true" />{t.client}</span>
+        <ArrowRight className="size-3.5 text-zinc-600" aria-hidden="true" />
+        <span class="flex items-center gap-2 text-emerald-300"><Network className="size-3.5" aria-hidden="true" />{t.discovery}</span>
+        <ArrowRight className="size-3.5 text-zinc-600" aria-hidden="true" />
+        <span class="flex items-center gap-2"><Server className="size-3.5 text-sky-300" aria-hidden="true" />{t.daemon}</span>
+        <span class="flex items-center gap-2 sm:ml-auto"><span class="size-1.5 rounded-full bg-emerald-300"></span>{t.direct}</span>
+        <span class="flex items-center gap-2"><LockKeyhole className="size-3.5 text-sky-300" aria-hidden="true" />{t.relay}</span>
       </div>
     </div>
   </section>

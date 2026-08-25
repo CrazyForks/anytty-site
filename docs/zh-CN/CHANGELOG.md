@@ -8,6 +8,8 @@
 
 ### Changed
 
+- `anytty/anytty-site` 成为 `anytty.com` 唯一的网站源码与 GitHub Pages 发布仓库；产品源码仓库不再保留重复官网。
+- AnyTTY Cloud 首屏改为紧凑的无图产品与价格说明，真实产品截图继续保留在下方详细内容中。
 - 安装脚本和产品下载链接统一迁移到已经公开的 `anytty/anytty` 源码仓库。
 - site 仓库原有安装脚本 URL 继续作为兼容入口，但只从 `anytty/anytty` Releases 下载。
 - 停用 site 仓库内创建产品 Release 和复制 Release 资产的脚本。

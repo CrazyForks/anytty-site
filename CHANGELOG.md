@@ -8,6 +8,8 @@ This file records user-visible changes. The current version is a prerelease and 
 
 ### Changed
 
+- Made `anytty/anytty-site` the sole source and GitHub Pages publisher for `anytty.com`; the product source repository no longer carries a duplicate website.
+- Simplified the AnyTTY Cloud hero to a compact, image-free product and pricing introduction while retaining product captures in the detailed sections below.
 - Moved all installer and product download links to the now-public `anytty/anytty` source repository.
 - Retained the site-hosted installer paths as compatibility entry points, but they now download only from `anytty/anytty` Releases.
 - Retired the site repository's product Release creation and asset-copy scripts.
