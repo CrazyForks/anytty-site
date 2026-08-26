@@ -38,7 +38,7 @@ const copy = {
     windowsCommand: 'irm https://raw.githubusercontent.com/anytty/anytty/main/install.ps1 -OutFile install.ps1; ./install.ps1',
     copyCommand: 'Copy install command', copied: 'Copied',
     heroDesktopInstall: 'Desktop · TUI + CLI', heroMobileInstall: 'Mobile app',
-    heroIOS: 'iOS TestFlight', heroAndroid: 'Android APK', heroIOSStatus: 'New testers can install after Apple Beta App Review.',
+    heroIOS: 'iOS TestFlight', heroAndroid: 'Android APK',
     previewLabel: 'A real AnyTTY workspace', previewMeta: 'local + remote · 5 terminals · one workspace',
     previewAlt: 'AnyTTY TUI showing local and remote terminals in split and floating panels',
     tuiLabel: 'TUI interface', tabletLabel: 'Tablet view', mobileLabel: 'Mobile view',
@@ -147,9 +147,9 @@ const copy = {
     openSource: 'Apache-2.0 · source, clients, and release artifacts on GitHub',
     storeAvailability: {
       mobileLabel: 'Mobile apps', availabilityLabel: 'Public beta', appStoreLabel: 'iOS TestFlight', googlePlayLabel: 'Android Beta APK',
-      iosTitle: 'Join the iOS beta on TestFlight', iosDescription: 'The public link is ready. New testers can install the current build as soon as Apple completes Beta App Review.',
+      iosTitle: 'Join the iOS beta on TestFlight', iosDescription: 'Install the latest iOS beta from the public TestFlight link.',
       androidTitle: 'Google Play review in progress', androidDescription: 'The AnyTTY Android app is being reviewed for Google Play. In the meantime, the Android Beta APK is available from GitHub Releases.',
-      iosStatus: 'Apple Beta App Review pending · public link ready', androidStatus: 'Google Play review in progress',
+      iosStatus: 'Public TestFlight available', androidStatus: 'Google Play review in progress',
       iosDownload: 'Open TestFlight', androidDownload: 'Download Android Beta APK', closeLabel: 'Close',
     },
   },
@@ -162,7 +162,7 @@ const copy = {
     windowsCommand: 'irm https://raw.githubusercontent.com/anytty/anytty/main/install.ps1 -OutFile install.ps1; ./install.ps1',
     copyCommand: '复制安装命令', copied: '已复制',
     heroDesktopInstall: '桌面端 · TUI + CLI', heroMobileInstall: '手机 App',
-    heroIOS: 'iOS TestFlight', heroAndroid: 'Android APK', heroIOSStatus: 'Apple Beta App Review 通过后，新测试员即可安装。',
+    heroIOS: 'iOS TestFlight', heroAndroid: 'Android APK',
     previewLabel: '真实的 AnyTTY 工作台', previewMeta: '本地 + 远程 · 5 个终端 · 一个工作区',
     previewAlt: 'AnyTTY TUI 通过分屏和浮动 Panel 同时展示本地与远程终端',
     tuiLabel: 'TUI 界面', tabletLabel: '平板上的展示', mobileLabel: '手机上的展示',
@@ -271,9 +271,9 @@ const copy = {
     openSource: 'Apache-2.0 · 源码、客户端和构建产物都在 GitHub',
     storeAvailability: {
       mobileLabel: '移动客户端', availabilityLabel: '公开测试', appStoreLabel: 'iOS TestFlight', googlePlayLabel: 'Android Beta APK',
-      iosTitle: '通过 TestFlight 加入 iOS 测试', iosDescription: '公开链接已经创建。Apple 完成 Beta App Review 后，新测试员即可安装当前构建。',
+      iosTitle: '通过 TestFlight 加入 iOS 测试', iosDescription: '通过公开 TestFlight 链接安装最新 iOS 测试版。',
       androidTitle: 'Google Play 正在上架审核', androidDescription: 'AnyTTY Android 版本正在进行 Google Play 上架审核。审核期间，可以从 GitHub Releases 下载 Android Beta APK。',
-      iosStatus: 'Apple Beta App Review 审核中 · 公开链接已就绪', androidStatus: 'Google Play 正在上架审核',
+      iosStatus: '公开 TestFlight 可用', androidStatus: 'Google Play 正在上架审核',
       iosDownload: '打开 TestFlight', androidDownload: '下载 Android Beta APK', closeLabel: '关闭',
     },
   },
@@ -340,10 +340,7 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
           />
         </div>
         <div class="mt-4 flex flex-col gap-4 border-t border-[var(--line)] pt-4 sm:flex-row sm:items-center sm:justify-between">
-          <div class="min-w-0">
-            <p class="flex items-center gap-2 font-mono text-[10px] uppercase text-zinc-400"><Smartphone className="size-3.5 text-sky-400" aria-hidden="true" />{t.heroMobileInstall}</p>
-            <p class="mt-1.5 text-xs leading-5 text-amber-300">{t.heroIOSStatus}</p>
-          </div>
+          <p class="flex items-center gap-2 font-mono text-[10px] uppercase text-zinc-400"><Smartphone className="size-3.5 text-sky-400" aria-hidden="true" />{t.heroMobileInstall}</p>
           <div class="flex shrink-0 flex-wrap items-center gap-x-5 gap-y-2">
             <a class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-200 transition-colors hover:text-emerald-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring" href={testFlightUrl}>{t.heroIOS}<ArrowRight className="size-3.5" aria-hidden="true" /></a>
             <a class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-200 transition-colors hover:text-emerald-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring" href={releaseUrl}>{t.heroAndroid}<ArrowDownToLine className="size-3.5" aria-hidden="true" /></a>
@@ -1149,9 +1146,9 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
     overflow: hidden;
     border: 1px solid rgba(125, 211, 252, 0.2);
     border-radius: 0.75rem;
-    background: linear-gradient(180deg, rgba(125, 211, 252, 0.12), rgba(9, 9, 11, 0.94) 2rem);
+    background: rgba(9, 9, 11, 0.96);
     padding: 0.375rem;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.09), 0 24px 60px rgba(0, 0, 0, 0.42);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
   }
 
   .hero-window-desktop {
