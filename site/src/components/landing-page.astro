@@ -305,18 +305,22 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
           </span>
         </p>
         <p class="mx-auto mt-4 max-w-4xl text-base font-normal leading-7 text-zinc-400 sm:text-lg sm:leading-8">{t.lead}</p>
-        <div class="mt-6 flex flex-wrap justify-center gap-3">
-          <a class={cn(buttonVariants({ variant: 'default', size: 'lg' }), 'h-11 px-5 font-normal')} href="#how-it-works">{t.quickStart}<ArrowRight aria-hidden="true" /></a>
-          <a class={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-11 border-[var(--line-strong)] bg-[var(--chip-soft)] px-5 font-normal text-zinc-100 hover:bg-[var(--chip)] hover:text-zinc-100')} href="#hero-install">{t.release}<ArrowDownToLine aria-hidden="true" /></a>
-        </div>
       </div>
-      <div class="hero-set relative mx-auto mt-8 w-full max-w-6xl overflow-hidden rounded-2xl [perspective:2400px]">
-        <div class="hero-scroll-image group origin-bottom overflow-hidden rounded-2xl bg-zinc-900 shadow-2xl ring-1 ring-[var(--line)]" data-hero-image>
-          <img class="block aspect-[2862/1870] w-full cursor-zoom-in object-cover" src={sitePath('/assets/product/tui-main.webp')} alt={t.previewAlt} width="2862" height="1870" data-image-preview data-image-preview-center data-preview-label={t.tuiLabel} />
+      <div class="hero-set relative mx-auto mt-8 w-full max-w-6xl">
+        <div class="hero-device-grid">
+          <figure class="hero-window hero-window-desktop">
+            <figcaption class="hero-window-bar"><span class="hero-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>{t.tuiLabel}</figcaption>
+            <img class="block aspect-[2862/1870] w-full rounded-lg object-cover" src={sitePath('/assets/product/tui-main.webp')} alt={t.previewAlt} width="2862" height="1870" />
+          </figure>
+          <figure class="hero-window hero-window-phone">
+            <figcaption class="hero-window-bar"><span class="hero-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>{t.mobileLabel}</figcaption>
+            <img class="block w-full rounded-lg object-cover" src={sitePath('/assets/product/mobile-terminals.webp')} alt={t.mobileAlts[0]} width="480" height="1068" loading="lazy" />
+          </figure>
+          <figure class="hero-window hero-window-pad">
+            <figcaption class="hero-window-bar"><span class="hero-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>{t.tabletLabel}</figcaption>
+            <img class="block w-full rounded-lg object-cover" src={sitePath('/assets/product/pad-codex-opencode.webp')} alt={t.tabletAlts[0]} width="1200" height="1600" loading="lazy" />
+          </figure>
         </div>
-        <figure class="hero-device hero-device-phone hidden lg:block">
-          <img class="block w-full rounded-xl bg-zinc-900 object-cover ring-1 ring-[var(--line-strong)]" src={sitePath('/assets/product/mobile-terminals.webp')} alt={t.mobileAlts[0]} width="480" height="1068" loading="lazy" />
-        </figure>
       </div>
       <div id="hero-install" class="scroll-mt-24 mx-auto mt-10 w-full max-w-4xl text-left">
         <div class="flex items-center justify-between gap-4 border-b border-[var(--line)] pb-3">
@@ -848,41 +852,12 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
 </main>
 
 <script>
-  const hero = document.querySelector('[data-hero]')
-  const image = hero?.querySelector<HTMLElement>('[data-hero-image]')
-  if (hero && image) {
-    let hoverScale = 1
-    const apply = (withTransition: boolean) => {
-      image.style.transition = withTransition ? 'transform 400ms ease' : 'none'
-      const rect = hero.getBoundingClientRect()
-      const progress = Math.min(Math.max(-rect.top / window.innerHeight, 0), 1)
-      image.style.transform = `scale(${(1.04 - progress * 0.04) * hoverScale}) rotateX(${8 - progress * 8}deg) translateY(${progress * 2}%)`
-    }
-    addEventListener('scroll', () => apply(false), { passive: true })
-    addEventListener('resize', () => apply(false))
-    image.addEventListener('mouseenter', () => {
-      hoverScale = 1.03
-      apply(true)
-    })
-    image.addEventListener('mouseleave', () => {
-      hoverScale = 1
-      apply(true)
-    })
-    apply(false)
-  }
-
   const previews = Array.from(document.querySelectorAll<HTMLImageElement>('[data-image-preview]'))
-  const heroSet = document.querySelector<HTMLElement>('.hero-set')
   let active: HTMLDivElement | null = null
   let activeImage: HTMLImageElement | null = null
   let closingNode: HTMLDivElement | null = null
   let closingImage: HTMLImageElement | null = null
   let labelEl: HTMLDivElement | null = null
-
-  const updateHeroLayer = () => {
-    const previewing = activeImage !== null && activeImage.dataset.imagePreviewCenter !== undefined
-    heroSet?.classList.toggle('hero-previewing', previewing)
-  }
 
   const removeActive = (immediate = false) => {
     if (!active) return
@@ -893,7 +868,6 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
       labelEl = null
       active = null
       activeImage = null
-      updateHeroLayer()
       return
     }
     closingNode = active
@@ -903,7 +877,6 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
     labelEl = null
     active = null
     activeImage = null
-    updateHeroLayer()
     closingNode.classList.add('image-preview-inline-out')
     closingNode.addEventListener('animationend', () => {
       closingNode?.remove()
@@ -920,7 +893,6 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
     if (closingImage) closingImage.style.opacity = '0'
     closingNode = null
     closingImage = null
-    updateHeroLayer()
   }
 
   const isWithin = (x: number, y: number, rect: DOMRect) =>
@@ -1016,7 +988,6 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
 
     active = node
     activeImage = image
-    updateHeroLayer()
     positionLabel()
   }
 
@@ -1166,42 +1137,90 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
     font-variation-settings: 'wght' 650;
   }
 
-  @media (min-width: 1024px) {
-    .hero-set {
-      width: min(100%, calc((100svh - 500px) * 1.5305));
-    }
+  .hero-device-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: end;
+    gap: 0.75rem;
   }
 
-  .hero-set .hero-scroll-image,
-  .hero-set .hero-device {
-    transition: box-shadow 300ms ease;
-  }
-
-  .hero-set:has(.hero-scroll-image:hover) .hero-device,
-  .hero-set:has(.hero-device:hover) .hero-scroll-image {
-    box-shadow: 0 24px 64px rgba(56, 189, 248, 0.2);
-  }
-
-  .hero-set.hero-previewing .hero-device {
-    z-index: 45;
-  }
-
-  .hero-device {
-    position: absolute;
-    z-index: 10;
+  .hero-window {
+    min-width: 0;
     overflow: hidden;
-    border-radius: 1rem;
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(125, 211, 252, 0.2);
+    border-radius: 0.75rem;
+    background: linear-gradient(180deg, rgba(125, 211, 252, 0.12), rgba(9, 9, 11, 0.94) 2rem);
+    padding: 0.375rem;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.09), 0 24px 60px rgba(0, 0, 0, 0.42);
   }
 
-  .hero-device:hover {
-    box-shadow: 0 24px 64px rgba(56, 189, 248, 0.25);
+  .hero-window-desktop {
+    grid-column: 1 / -1;
   }
 
-  .hero-device-phone {
-    bottom: 1rem;
-    left: 1rem;
-    width: clamp(6rem, 15%, 10rem);
+  .hero-window-phone {
+    width: min(100%, 11rem);
+    justify-self: end;
+  }
+
+  .hero-window-pad {
+    width: min(100%, 15rem);
+    justify-self: start;
+  }
+
+  .hero-window-bar {
+    display: flex;
+    height: 1.625rem;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.375rem;
+    overflow: hidden;
+    color: var(--zinc-400);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.5625rem;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .hero-window-dots {
+    display: inline-flex;
+    flex: none;
+    gap: 0.2rem;
+  }
+
+  .hero-window-dots i {
+    display: block;
+    width: 0.3rem;
+    height: 0.3rem;
+    border-radius: 999px;
+    background: rgba(212, 212, 216, 0.48);
+  }
+
+  @media (min-width: 1024px) {
+    .hero-device-grid {
+      grid-template-columns: minmax(7rem, 0.24fr) minmax(0, 1fr) minmax(10rem, 0.34fr);
+      gap: 1rem;
+    }
+
+    .hero-window-desktop {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .hero-window-phone {
+      grid-column: 1;
+      grid-row: 1;
+      width: min(100%, 10rem);
+      transform: translateY(2.25rem);
+    }
+
+    .hero-window-pad {
+      grid-column: 3;
+      grid-row: 1;
+      width: min(100%, 15rem);
+      transform: translateY(1rem);
+    }
   }
 
   .pool-waters {
