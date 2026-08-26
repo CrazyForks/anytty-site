@@ -139,15 +139,16 @@ const copy = {
       ['Is terminal history a backup?', 'No. It is bounded operational context. Keep application logs, artifacts, and checkpoints for work that must be preserved independently.'],
     ],
     installEyebrow: 'Beta 0.0.1', installTitle: 'Install it. Start with one TTY.',
-    installLead: 'Grab the desktop build for macOS, Linux, or Windows. The Android Beta APK is on GitHub Releases; the App Store and Google Play versions are still in review.',
+    installLead: 'Grab the desktop build for macOS, Linux, or Windows. Android is on GitHub Releases, and the public iOS beta is on TestFlight.',
     docs: 'Read the documentation', releases: 'Open GitHub Releases',
     platforms: ['macOS', 'Linux', 'Windows', 'Android', 'iOS'],
     openSource: 'Apache-2.0 · source, clients, and release artifacts on GitHub',
     storeAvailability: {
-      mobileLabel: 'Mobile apps', comingSoon: 'Coming soon on', appStoreLabel: 'App Store', googlePlayLabel: 'Google Play',
-      iosTitle: 'App Store review in progress', iosDescription: 'The AnyTTY iOS app is being reviewed for store publication and will be available soon.',
+      mobileLabel: 'Mobile apps', availabilityLabel: 'Public beta', appStoreLabel: 'iOS TestFlight', googlePlayLabel: 'Android Beta APK',
+      iosTitle: 'Join the iOS beta on TestFlight', iosDescription: 'The public link is ready. New testers can install the current build as soon as Apple completes Beta App Review.',
       androidTitle: 'Google Play review in progress', androidDescription: 'The AnyTTY Android app is being reviewed for Google Play. In the meantime, the Android Beta APK is available from GitHub Releases.',
-      reviewStatus: 'Store review in progress · coming soon', androidDownload: 'Download Android Beta APK', closeLabel: 'Close',
+      iosStatus: 'Apple Beta App Review pending · public link ready', androidStatus: 'Google Play review in progress',
+      iosDownload: 'Open TestFlight', androidDownload: 'Download Android Beta APK', closeLabel: 'Close',
     },
   },
   'zh-CN': {
@@ -260,15 +261,16 @@ const copy = {
       ['history 是备份吗？', '不是。它是有保留边界的运行上下文。必须独立保存的工作仍要使用应用自己的日志、产物和 checkpoint。'],
     ],
     installEyebrow: 'Beta 0.0.1', installTitle: '先装起来，跑一条 TTY 试试。',
-    installLead: 'macOS、Linux 和 Windows 都有安装包。Android Beta APK 放在 GitHub Releases；App Store 和 Google Play 版本还在审核。',
+    installLead: 'macOS、Linux 和 Windows 都有安装包。Android Beta APK 在 GitHub Releases，iOS 公开测试已经开放 TestFlight 链接。',
     docs: '阅读文档', releases: '查看 GitHub Releases',
     platforms: ['macOS', 'Linux', 'Windows', 'Android', 'iOS'],
     openSource: 'Apache-2.0 · 源码、客户端和构建产物都在 GitHub',
     storeAvailability: {
-      mobileLabel: '移动客户端', comingSoon: '即将上线', appStoreLabel: 'App Store', googlePlayLabel: 'Google Play',
-      iosTitle: 'App Store 正在上架审核', iosDescription: 'AnyTTY iOS 版本正在进行商店上架审核，即将开放下载。',
+      mobileLabel: '移动客户端', availabilityLabel: '公开测试', appStoreLabel: 'iOS TestFlight', googlePlayLabel: 'Android Beta APK',
+      iosTitle: '通过 TestFlight 加入 iOS 测试', iosDescription: '公开链接已经创建。Apple 完成 Beta App Review 后，新测试员即可安装当前构建。',
       androidTitle: 'Google Play 正在上架审核', androidDescription: 'AnyTTY Android 版本正在进行 Google Play 上架审核。审核期间，可以从 GitHub Releases 下载 Android Beta APK。',
-      reviewStatus: '正在上架审核 · 即将开放', androidDownload: '下载 Android Beta APK', closeLabel: '关闭',
+      iosStatus: 'Apple Beta App Review 审核中 · 公开链接已就绪', androidStatus: 'Google Play 正在上架审核',
+      iosDownload: '打开 TestFlight', androidDownload: '下载 Android Beta APK', closeLabel: '关闭',
     },
   },
 } as const
@@ -278,6 +280,7 @@ const docsPath = sitePath(localizedPath(locale, '/docs/overview'))
 const cloudDocsPath = sitePath(localizedPath(locale, '/docs/cloud'))
 const faqPath = sitePath(localizedPath(locale, '/docs/faq'))
 const releaseUrl = 'https://github.com/anytty/anytty/releases/tag/v0.0.1-beta.0'
+const testFlightUrl = 'https://testflight.apple.com/join/rfcgFyJh'
 const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
 ---
 
@@ -776,16 +779,19 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
             <StoreAvailability
               client:load
               mobileLabel={t.storeAvailability.mobileLabel}
-              comingSoon={t.storeAvailability.comingSoon}
+              availabilityLabel={t.storeAvailability.availabilityLabel}
               appStoreLabel={t.storeAvailability.appStoreLabel}
               googlePlayLabel={t.storeAvailability.googlePlayLabel}
               iosTitle={t.storeAvailability.iosTitle}
               iosDescription={t.storeAvailability.iosDescription}
               androidTitle={t.storeAvailability.androidTitle}
               androidDescription={t.storeAvailability.androidDescription}
-              reviewStatus={t.storeAvailability.reviewStatus}
+              iosStatus={t.storeAvailability.iosStatus}
+              androidStatus={t.storeAvailability.androidStatus}
+              iosDownload={t.storeAvailability.iosDownload}
               androidDownload={t.storeAvailability.androidDownload}
               closeLabel={t.storeAvailability.closeLabel}
+              testFlightUrl={testFlightUrl}
               releaseUrl={releaseUrl}
               appIconUrl={sitePath('/assets/app-icon.webp')}
             />

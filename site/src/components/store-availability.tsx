@@ -1,7 +1,7 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { ArrowDownToLine, Clock3, X } from "lucide-react";
+import { ArrowDownToLine, Clock3, ExternalLink, X } from "lucide-react";
 import * as React from "react";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -9,16 +9,19 @@ import { cn } from "@/lib/utils";
 
 interface StoreAvailabilityProps {
   mobileLabel: string;
-  comingSoon: string;
+  availabilityLabel: string;
   appStoreLabel: string;
   googlePlayLabel: string;
   iosTitle: string;
   iosDescription: string;
   androidTitle: string;
   androidDescription: string;
-  reviewStatus: string;
+  iosStatus: string;
+  androidStatus: string;
+  iosDownload: string;
   androidDownload: string;
   closeLabel: string;
+  testFlightUrl: string;
   releaseUrl: string;
   appIconUrl: string;
 }
@@ -27,16 +30,19 @@ type Store = "ios" | "android";
 
 export function StoreAvailability({
   mobileLabel,
-  comingSoon,
+  availabilityLabel,
   appStoreLabel,
   googlePlayLabel,
   iosTitle,
   iosDescription,
   androidTitle,
   androidDescription,
-  reviewStatus,
+  iosStatus,
+  androidStatus,
+  iosDownload,
   androidDownload,
   closeLabel,
+  testFlightUrl,
   releaseUrl,
   appIconUrl,
 }: StoreAvailabilityProps) {
@@ -54,7 +60,7 @@ export function StoreAvailability({
         >
           <img className="size-7 shrink-0 rounded-md" src={appIconUrl} alt="" width="28" height="28" />
           <span className="min-w-0">
-            <span className="block font-mono text-[9px] uppercase text-zinc-500">{comingSoon}</span>
+            <span className="block font-mono text-[9px] uppercase text-zinc-500">{availabilityLabel}</span>
             <span className="block truncate text-sm font-medium">{appStoreLabel}</span>
           </span>
         </button>
@@ -65,7 +71,7 @@ export function StoreAvailability({
         >
           <img className="size-7 shrink-0 rounded-md" src={appIconUrl} alt="" width="28" height="28" />
           <span className="min-w-0">
-            <span className="block font-mono text-[9px] uppercase text-zinc-500">{comingSoon}</span>
+            <span className="block font-mono text-[9px] uppercase text-zinc-500">{availabilityLabel}</span>
             <span className="block truncate text-sm font-medium">{googlePlayLabel}</span>
           </span>
         </button>
@@ -86,13 +92,17 @@ export function StoreAvailability({
               {isAndroid ? androidDescription : iosDescription}
             </Dialog.Description>
             <div className="mt-5 flex items-center gap-2 border-y border-[var(--line)] py-3 font-mono text-[11px] text-amber-300">
-              <Clock3 className="size-4" aria-hidden="true" />{reviewStatus}
+              <Clock3 className="size-4 shrink-0" aria-hidden="true" />{isAndroid ? androidStatus : iosStatus}
             </div>
-            {isAndroid && (
-              <a className={cn(buttonVariants({ variant: "default", size: "lg" }), "mt-5 h-11 w-full gap-2 px-5 font-normal")} href={releaseUrl}>
-                <ArrowDownToLine className="size-4" aria-hidden="true" />{androidDownload}
-              </a>
-            )}
+            <a
+              className={cn(buttonVariants({ variant: "default", size: "lg" }), "mt-5 h-11 w-full gap-2 px-5 font-normal")}
+              href={isAndroid ? releaseUrl : testFlightUrl}
+            >
+              {isAndroid
+                ? <ArrowDownToLine className="size-4" aria-hidden="true" />
+                : <ExternalLink className="size-4" aria-hidden="true" />}
+              {isAndroid ? androidDownload : iosDownload}
+            </a>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
