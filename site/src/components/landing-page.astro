@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 
 import { InstallTabs } from '@/components/install-tabs'
+import { AndroidIcon, AppleIcon } from '@/components/platform-icons'
 import { StoreAvailability } from '@/components/store-availability'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
@@ -342,8 +343,8 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
         <div class="mt-4 flex flex-col gap-4 border-t border-[var(--line)] pt-4 sm:flex-row sm:items-center sm:justify-between">
           <p class="flex items-center gap-2 font-mono text-[10px] uppercase text-zinc-400"><Smartphone className="size-3.5 text-sky-400" aria-hidden="true" />{t.heroMobileInstall}</p>
           <div class="grid w-full shrink-0 gap-2 min-[420px]:grid-cols-2 sm:w-auto">
-            <a class={cn(buttonVariants({ variant: 'default', size: 'lg' }), 'h-11 min-w-40 justify-between gap-3 px-4 font-medium')} href={testFlightUrl}>{t.heroIOS}<ArrowRight className="size-4" aria-hidden="true" /></a>
-            <a class={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-11 min-w-40 justify-between gap-3 border-[var(--line-strong)] bg-[var(--chip-soft)] px-4 font-medium text-zinc-100 hover:bg-[var(--chip)] hover:text-zinc-100')} href={releaseUrl}>{t.heroAndroid}<ArrowDownToLine className="size-4" aria-hidden="true" /></a>
+            <a class={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-11 min-w-40 justify-between gap-3 border-[var(--line-strong)] bg-zinc-950/80 px-4 font-medium text-zinc-100 hover:bg-zinc-900 hover:text-zinc-100')} href={testFlightUrl}><span class="flex items-center gap-2"><AppleIcon className="size-4" aria-hidden="true" />{t.heroIOS}</span><ArrowRight className="size-4 text-zinc-500" aria-hidden="true" /></a>
+            <a class={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-11 min-w-40 justify-between gap-3 border-[var(--line-strong)] bg-zinc-950/80 px-4 font-medium text-zinc-100 hover:bg-zinc-900 hover:text-zinc-100')} href={releaseUrl}><span class="flex items-center gap-2"><AndroidIcon className="size-4" aria-hidden="true" />{t.heroAndroid}</span><ArrowDownToLine className="size-4 text-zinc-500" aria-hidden="true" /></a>
           </div>
         </div>
       </div>

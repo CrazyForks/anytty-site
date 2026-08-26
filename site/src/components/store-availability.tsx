@@ -4,6 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { ArrowDownToLine, Clock3, ExternalLink, X } from "lucide-react";
 import * as React from "react";
 
+import { AndroidIcon, AppleIcon } from "@/components/platform-icons";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -58,7 +59,7 @@ export function StoreAvailability({
           className="flex h-14 items-center gap-3 rounded-lg bg-zinc-950 px-4 text-left text-zinc-100 ring-1 ring-[var(--line-strong)] transition-colors hover:bg-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           onClick={() => setStore("ios")}
         >
-          <img className="size-7 shrink-0 rounded-md" src={appIconUrl} alt="" width="28" height="28" />
+          <AppleIcon className="size-6 shrink-0" aria-hidden="true" />
           <span className="min-w-0">
             <span className="block font-mono text-[9px] uppercase text-zinc-500">{availabilityLabel}</span>
             <span className="block truncate text-sm font-medium">{appStoreLabel}</span>
@@ -69,7 +70,7 @@ export function StoreAvailability({
           className="flex h-14 items-center gap-3 rounded-lg bg-zinc-950 px-4 text-left text-zinc-100 ring-1 ring-[var(--line-strong)] transition-colors hover:bg-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           onClick={() => setStore("android")}
         >
-          <img className="size-7 shrink-0 rounded-md" src={appIconUrl} alt="" width="28" height="28" />
+          <AndroidIcon className="size-6 shrink-0" aria-hidden="true" />
           <span className="min-w-0">
             <span className="block font-mono text-[9px] uppercase text-zinc-500">{availabilityLabel}</span>
             <span className="block truncate text-sm font-medium">{googlePlayLabel}</span>
