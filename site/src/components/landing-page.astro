@@ -32,11 +32,13 @@ const copy = {
   en: {
     eyebrow: 'Open source · cross-platform · multi-endpoint terminal multiplexer',
     lead: 'Terminals and tasks keep running on their original machines. Switch computers or move to web or mobile, and continue the same terminal session.',
-    quickStart: 'See how it works', release: 'Download beta',
+    quickStart: 'See how it works', release: 'Install now',
     installLabel: 'macOS / Linux', windowsInstallLabel: 'Windows', installPlatformLabel: 'Choose an installer',
     installCommand: 'curl -fsSL https://raw.githubusercontent.com/anytty/anytty/main/install.sh | sh',
     windowsCommand: 'irm https://raw.githubusercontent.com/anytty/anytty/main/install.ps1 -OutFile install.ps1; ./install.ps1',
     copyCommand: 'Copy install command', copied: 'Copied',
+    heroDesktopInstall: 'Desktop · TUI + CLI', heroMobileInstall: 'Mobile app',
+    heroIOS: 'iOS TestFlight', heroAndroid: 'Android APK', heroIOSStatus: 'New testers can install after Apple Beta App Review.',
     previewLabel: 'A real AnyTTY workspace', previewMeta: 'local + remote · 5 terminals · one workspace',
     previewAlt: 'AnyTTY TUI showing local and remote terminals in split and floating panels',
     tuiLabel: 'TUI interface', tabletLabel: 'Tablet view', mobileLabel: 'Mobile view',
@@ -154,11 +156,13 @@ const copy = {
   'zh-CN': {
     eyebrow: '开源 · 跨平台 · Multi-endpoint 终端复用器',
     lead: '终端和任务留在原机器上继续运行。换台电脑，或者改用浏览器、手机，都能接着工作。',
-    quickStart: '看看工作原理', release: '下载 Beta',
+    quickStart: '看看工作原理', release: '立即安装',
     installLabel: 'macOS / Linux', windowsInstallLabel: 'Windows', installPlatformLabel: '选择安装平台',
     installCommand: 'curl -fsSL https://raw.githubusercontent.com/anytty/anytty/main/install.sh | sh',
     windowsCommand: 'irm https://raw.githubusercontent.com/anytty/anytty/main/install.ps1 -OutFile install.ps1; ./install.ps1',
     copyCommand: '复制安装命令', copied: '已复制',
+    heroDesktopInstall: '桌面端 · TUI + CLI', heroMobileInstall: '手机 App',
+    heroIOS: 'iOS TestFlight', heroAndroid: 'Android APK', heroIOSStatus: 'Apple Beta App Review 通过后，新测试员即可安装。',
     previewLabel: '真实的 AnyTTY 工作台', previewMeta: '本地 + 远程 · 5 个终端 · 一个工作区',
     previewAlt: 'AnyTTY TUI 通过分屏和浮动 Panel 同时展示本地与远程终端',
     tuiLabel: 'TUI 界面', tabletLabel: '平板上的展示', mobileLabel: '手机上的展示',
@@ -279,7 +283,7 @@ const t = copy[locale]
 const docsPath = sitePath(localizedPath(locale, '/docs/overview'))
 const cloudDocsPath = sitePath(localizedPath(locale, '/docs/cloud'))
 const faqPath = sitePath(localizedPath(locale, '/docs/faq'))
-const releaseUrl = 'https://github.com/anytty/anytty/releases/tag/v0.0.1-beta.0'
+const releaseUrl = 'https://github.com/anytty/anytty/releases/tag/v0.0.1-beta.4'
 const testFlightUrl = 'https://testflight.apple.com/join/rfcgFyJh'
 const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
 ---
@@ -303,19 +307,44 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
         <p class="mx-auto mt-4 max-w-4xl text-base font-normal leading-7 text-zinc-400 sm:text-lg sm:leading-8">{t.lead}</p>
         <div class="mt-6 flex flex-wrap justify-center gap-3">
           <a class={cn(buttonVariants({ variant: 'default', size: 'lg' }), 'h-11 px-5 font-normal')} href="#how-it-works">{t.quickStart}<ArrowRight aria-hidden="true" /></a>
-          <a class={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-11 border-[var(--line-strong)] bg-[var(--chip-soft)] px-5 font-normal text-zinc-100 hover:bg-[var(--chip)] hover:text-zinc-100')} href={releaseUrl}>{t.release}<ArrowDownToLine aria-hidden="true" /></a>
+          <a class={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'h-11 border-[var(--line-strong)] bg-[var(--chip-soft)] px-5 font-normal text-zinc-100 hover:bg-[var(--chip)] hover:text-zinc-100')} href="#hero-install">{t.release}<ArrowDownToLine aria-hidden="true" /></a>
         </div>
       </div>
-      <div class="hero-set relative mx-auto mt-8 w-full max-w-6xl [perspective:2400px]">
+      <div class="hero-set relative mx-auto mt-8 w-full max-w-6xl overflow-hidden rounded-2xl [perspective:2400px]">
         <div class="hero-scroll-image group origin-bottom overflow-hidden rounded-2xl bg-zinc-900 shadow-2xl ring-1 ring-[var(--line)]" data-hero-image>
           <img class="block aspect-[2862/1870] w-full cursor-zoom-in object-cover" src={sitePath('/assets/product/tui-main.webp')} alt={t.previewAlt} width="2862" height="1870" data-image-preview data-image-preview-center data-preview-label={t.tuiLabel} />
         </div>
-        <figure class="hero-device hero-device-phone hidden lg:block" style={{ '--hero-tilt': '-8deg' }}>
+        <figure class="hero-device hero-device-phone hidden lg:block">
           <img class="block w-full rounded-xl bg-zinc-900 object-cover ring-1 ring-[var(--line-strong)]" src={sitePath('/assets/product/mobile-terminals.webp')} alt={t.mobileAlts[0]} width="480" height="1068" loading="lazy" />
         </figure>
-        <figure class="hero-device hero-device-pad hidden lg:block" style={{ '--hero-tilt': '6deg' }}>
-          <img class="block w-full rounded-xl bg-zinc-900 object-cover ring-1 ring-[var(--line-strong)]" src={sitePath('/assets/product/pad-codex-opencode.webp')} alt={t.tabletAlts[0]} width="1200" height="1600" loading="lazy" />
-        </figure>
+      </div>
+      <div id="hero-install" class="scroll-mt-24 mx-auto mt-10 w-full max-w-4xl text-left">
+        <div class="flex items-center justify-between gap-4 border-b border-[var(--line)] pb-3">
+          <p class="flex items-center gap-2 font-mono text-[10px] uppercase text-zinc-400"><TerminalSquare className="size-3.5 text-emerald-400" aria-hidden="true" />{t.heroDesktopInstall}</p>
+          <span class="font-mono text-[10px] text-zinc-500">v0.0.1-beta.4</span>
+        </div>
+        <div class="mt-3">
+          <InstallTabs
+            client:load
+            ariaLabel={t.installPlatformLabel}
+            unixLabel={t.installLabel}
+            windowsLabel={t.windowsInstallLabel}
+            unixCommand={t.installCommand}
+            windowsCommand={t.windowsCommand}
+            copyLabel={t.copyCommand}
+            copiedLabel={t.copied}
+          />
+        </div>
+        <div class="mt-4 flex flex-col gap-4 border-t border-[var(--line)] pt-4 sm:flex-row sm:items-center sm:justify-between">
+          <div class="min-w-0">
+            <p class="flex items-center gap-2 font-mono text-[10px] uppercase text-zinc-400"><Smartphone className="size-3.5 text-sky-400" aria-hidden="true" />{t.heroMobileInstall}</p>
+            <p class="mt-1.5 text-xs leading-5 text-amber-300">{t.heroIOSStatus}</p>
+          </div>
+          <div class="flex shrink-0 flex-wrap items-center gap-x-5 gap-y-2">
+            <a class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-200 transition-colors hover:text-emerald-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring" href={testFlightUrl}>{t.heroIOS}<ArrowRight className="size-3.5" aria-hidden="true" /></a>
+            <a class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-200 transition-colors hover:text-emerald-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring" href={releaseUrl}>{t.heroAndroid}<ArrowDownToLine className="size-3.5" aria-hidden="true" /></a>
+          </div>
+        </div>
       </div>
     </section>
   </div>
@@ -1163,71 +1192,16 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
     overflow: hidden;
     border-radius: 1rem;
     box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
-    animation: hero-float 4.4s ease-in-out infinite;
-    animation-delay: var(--float-delay, 0s);
   }
 
   .hero-device:hover {
-    animation-play-state: paused;
-    --hero-scale: 1.06;
     box-shadow: 0 24px 64px rgba(56, 189, 248, 0.25);
   }
 
   .hero-device-phone {
-    left: -2.25rem;
-    top: 32%;
-    width: 9.5rem;
-  }
-
-  .hero-device-pad {
-    right: -1.5rem;
-    top: 12%;
-    width: 16rem;
-  }
-
-  @keyframes hero-float {
-    0%,
-    100% {
-      transform: rotateX(8deg) rotate(var(--hero-tilt, 0deg)) translateY(0) scale(var(--hero-scale, 1));
-    }
-
-    50% {
-      transform: rotateX(8deg) rotate(var(--hero-tilt, 0deg)) translateY(-8px) scale(var(--hero-scale, 1));
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .hero-device-phone {
-      left: -3.75rem;
-      width: 10.5rem;
-    }
-
-    .hero-device-pad {
-      right: -3.5rem;
-      width: 17rem;
-    }
-  }
-
-  @media (min-width: 1536px) {
-    .hero-device-phone {
-      left: -5.75rem;
-      width: 11rem;
-    }
-
-    .hero-device-pad {
-      right: -6rem;
-      width: 18rem;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero-device {
-      animation: none;
-    }
-
-    .hero-device:hover {
-      transform: rotateX(8deg) rotate(var(--hero-tilt, 0deg)) scale(1.06);
-    }
+    bottom: 1rem;
+    left: 1rem;
+    width: clamp(6rem, 15%, 10rem);
   }
 
   .pool-waters {
