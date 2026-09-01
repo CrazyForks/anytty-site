@@ -3,8 +3,6 @@ title: Files and preview
 description: Browse authorized daemon paths, transfer files with checksum verification, and preview supported formats on mobile.
 ---
 
-import DocFigure from '@/components/doc-figure.astro'
-
 # Files and preview
 
 File operations execute under the endpoint daemon's authority. A client needs both a grant with file capability and a path allowed by the daemon's local policy. Neither a route nor a Cloud plan can expand those permissions.
@@ -18,16 +16,6 @@ anytty file cat ENDPOINT PATH
 ```
 
 Directory listing defaults to 200 entries per page. Use complete endpoint and path values in automation, and treat paths from logs or untrusted terminal output as untrusted input.
-
-<DocFigure
-  src="/assets/product/mobile-files.webp"
-  alt="AnyTTY mobile file browser"
-  caption="The browser displays only paths allowed by daemon policy and the current client grant."
-  width={480}
-  height={1068}
-  portrait
-  contain
-/>
 
 ## Create, copy, move, and remove
 
@@ -55,14 +43,6 @@ Mobile uses native file selection, resumable download behavior, and SHA-256 veri
 ## Preview
 
 Mobile preview support includes text and markup, PDF and office documents, images, audio/video, and supported 3D model formats. Searchable document families include common text, CSV/TSV, PDF, Word, spreadsheet, presentation, OpenDocument, HTML/XML, and OFD types. Exact rendering depends on the platform and file content.
-
-<DocFigure
-  src="/assets/docs/file-preview.webp"
-  alt="AnyTTY mobile previewer displaying a text document beside an STL model"
-  caption="The mobile previewer displaying a text document and an STL model."
-  width={960}
-  height={1068}
-/>
 
 Preview is a convenience, not a sandbox guarantee. Download unknown active content only to an environment where it can be handled safely.
 

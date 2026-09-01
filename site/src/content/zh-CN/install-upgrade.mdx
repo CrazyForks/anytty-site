@@ -7,7 +7,7 @@ import DocFigure from '@/components/doc-figure.astro'
 
 # 安装、升级与卸载
 
-当前 `v0.0.1-beta.4` Release 提供 macOS、Linux、Windows 和 Android 构建。桌面端包含同一个 `anytty` 可执行文件，既是 CLI，也是 daemon 和 TUI 的入口。
+当前 `v0.0.1-beta.6` Release 提供 macOS、Linux、Windows 和 Android 构建。桌面端包含同一个 `anytty` 可执行文件，既是 CLI，也是 daemon 和 TUI 的入口。
 
 ## 桌面平台支持
 
@@ -31,7 +31,7 @@ curl -fsSL https://raw.githubusercontent.com/anytty/anytty/main/install.sh | sh
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/anytty/anytty/main/install.sh | \
-  sh -s -- --version v0.0.1-beta.4 --bin-dir "$HOME/bin"
+  sh -s -- --version v0.0.1-beta.6 --bin-dir "$HOME/bin"
 ```
 
 确认目标目录位于 `PATH`，然后检查版本：
@@ -71,7 +71,7 @@ anytty daemon doctor
 
 ## Android 与 iOS
 
-Android Beta APK 可从 Release 页面下载。当前 APK 未签名，仅适合体验和评估；安装前应核对发布标签与校验值，不要从第三方镜像获取。
+Android Beta APK 可从 Release 页面下载。当前 APK 已签名；安装前应核对发布标签、设备架构与校验值，不要从第三方镜像获取。
 
 iOS 客户端最低支持 iOS 15，可通过 [TestFlight 公开测试](https://testflight.apple.com/join/rfcgFyJh) 安装；每个外部构建仍需经过 Apple Beta App Review。Apple App Store 与 Google Play 的正式上架状态以落地页和 Release 说明为准。需要开发构建时，请阅读公开仓库中的 iOS 和 Android 构建说明。
 

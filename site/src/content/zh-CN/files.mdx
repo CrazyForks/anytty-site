@@ -3,8 +3,6 @@ title: 文件管理与在线预览
 description: 在 daemon 授权的文件范围内浏览、传输、整理和预览远程文件。
 ---
 
-import DocFigure from '@/components/doc-figure.astro'
-
 # 文件管理与在线预览
 
 文件访问和终端使用同一条已认证连接，但属于独立权限。拥有 terminal 权限不自动代表拥有任意文件访问权；daemon 只处理 grant 和本地策略允许的路径。
@@ -26,15 +24,6 @@ anytty file cat workstation /workspace/build.log
 ```
 
 大目录使用 daemon 签发的 cursor 分页；`--all` 会连续读取全部页面，应避免在包含海量条目的目录中直接使用。脚本处理列表和 metadata 时使用 `--json`。
-
-<DocFigure
-  src="/assets/product/mobile-files.webp"
-  alt="AnyTTY 手机 App 的远程文件浏览器"
-  caption="移动端文件浏览器显示面包屑、目录、修改时间和批量操作入口。"
-  width={480}
-  height={1068}
-  portrait
-/>
 
 ## 新建、重命名、复制、移动与删除
 
@@ -80,14 +69,6 @@ anytty file download workstation /workspace/result.json ./result.json
 实际可用性受文件扩展名、MIME、编码、文件大小、设备内存和系统媒体解码器影响。无法预览时仍可下载后交给其他 App 打开。预览不会把文件变成公开链接。
 
 可搜索的文档类型包括常见文本、PDF、Word、表格、演示和开放文档格式。预览工具栏提供搜索、缩放与适配；大文件通过流式读取，但客户端仍可能需要为具体 renderer 准备完整 Blob。
-
-<DocFigure
-  src="/assets/docs/file-preview.webp"
-  alt="AnyTTY 手机端并列显示文本文档预览与 STL 模型预览"
-  caption="手机端预览器显示文本文档与 STL 模型。"
-  width={960}
-  height={1068}
-/>
 
 ## 失败与恢复
 

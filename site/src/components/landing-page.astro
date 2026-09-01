@@ -99,11 +99,11 @@ const copy = {
     mobileEyebrow: 'TUI · CLI · Web · Mobile', mobileTitle: 'Move from your computer to your phone without leaving the work behind.',
     mobileLead: 'Start in the desktop TUI, then open the same TTY from web, phone, or tablet and continue where you left off. The process stays on the endpoint, so switching clients does not interrupt the work.',
     mobilePoints: [
-      ['Terminal activity at a glance', 'Scan running sessions and time since last output.'],
-      ['Touch-ready controls', 'Use Esc, Ctrl, arrows, paging, and common terminal actions.'],
-      ['Files and previews', 'Browse, upload, download, and preview remote files.'],
+      ['Pair endpoints from the app', 'Scan a QR code or paste a short-lived pairing payload, then return to the same device from mobile.'],
+      ['Touch-ready controls', 'Configure the long-press petal menu for history, search, paste, quick keys, keyboard, and resource actions.'],
+      ['Terminal presentation', 'Choose the app palette, terminal theme, font, and touch behavior from native Flutter settings.'],
     ],
-    mobileAlts: ['AnyTTY mobile terminal list with recent activity', 'AnyTTY mobile terminal with an extra-key row', 'AnyTTY mobile remote file manager'],
+    mobileAlts: ['AnyTTY Flutter device list', 'AnyTTY Flutter petal menu configuration', 'AnyTTY Flutter terminal appearance settings'],
     accessEyebrow: 'Connection routes', accessTitle: 'Local, SSH, Direct, or Cloud. Pick per machine.',
     accessLead: 'Use Local on the same machine. Keep SSH where it already works. Use Direct on networks you control, and Cloud when an endpoint is hard to reach from outside.',
     accessDiagram: { endpoint: 'Workspace client', routes: ['Local', 'SSH', 'Direct', 'Cloud'], daemon: 'Endpoint daemon' },
@@ -223,11 +223,11 @@ const copy = {
     mobileEyebrow: 'TUI · CLI · Web · 手机 App', mobileTitle: '电脑上的工作，拿起手机就能接着做。',
     mobileLead: '先在电脑的 TUI 里开始，离开电脑后，用 Web、手机或平板打开同一条 TTY，直接从刚才的位置继续。任务始终跑在 endpoint 上，换设备不会打断它。',
     mobilePoints: [
-      ['终端状态一眼看清', '查看运行中的终端和距离上次输出的时间。'],
-      ['触控操作顺手', 'Esc、Ctrl、方向键、翻页和常用终端操作都做了触控适配。'],
-      ['文件也能管', '浏览、上传、下载和预览远程文件。'],
+      ['直接从 App 配对 endpoint', '扫描二维码或粘贴短期 pairing payload，之后就能从手机返回同一台设备。'],
+      ['触控操作顺手', '配置长按花瓣菜单，把历史、搜索、粘贴、快捷键、键盘和资源操作放在手边。'],
+      ['终端显示随手调整', '在原生 Flutter 设置中选择 App 配色、终端主题、字体和触控行为。'],
     ],
-    mobileAlts: ['AnyTTY 手机 App 展示终端列表与近期活动', 'AnyTTY 手机 App 使用扩展按键操作终端', 'AnyTTY 手机 App 的远程文件管理器'],
+    mobileAlts: ['AnyTTY Flutter App 的设备列表', 'AnyTTY Flutter App 的花瓣菜单配置', 'AnyTTY Flutter App 的终端显示设置'],
     accessEyebrow: '连接方式', accessTitle: '本机、SSH、直连、Cloud，按机器选。',
     accessLead: '同一台机器就走 Local；已经有 SSH，就继续用 SSH；网络可达时用 Direct；藏在内网、不好连接的机器，再交给 AnyTTY Cloud。',
     accessDiagram: { endpoint: 'Workspace 客户端', routes: ['Local', 'SSH', 'Direct', 'Cloud'], daemon: 'Endpoint daemon' },
@@ -284,7 +284,7 @@ const t = copy[locale]
 const docsPath = sitePath(localizedPath(locale, '/docs/overview'))
 const cloudDocsPath = sitePath(localizedPath(locale, '/docs/cloud'))
 const faqPath = sitePath(localizedPath(locale, '/docs/faq'))
-const releaseUrl = 'https://github.com/anytty/anytty/releases/tag/v0.0.1-beta.4'
+const releaseUrl = 'https://github.com/anytty/anytty/releases/tag/v0.0.1-beta.6'
 const testFlightUrl = 'https://testflight.apple.com/join/rfcgFyJh'
 const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
 ---
@@ -315,7 +315,7 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
           </figure>
           <figure class="hero-window hero-window-phone">
             <figcaption class="hero-window-bar"><span class="hero-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>{t.mobileLabel}</figcaption>
-            <img class="block w-full rounded-lg object-cover" src={sitePath('/assets/product/mobile-terminals.webp')} alt={t.mobileAlts[0]} width="480" height="1068" loading="lazy" />
+            <img class="block w-full rounded-lg object-cover" src={sitePath('/assets/product/flutter-devices.webp')} alt={t.mobileAlts[0]} width="480" height="1068" loading="lazy" />
           </figure>
           <figure class="hero-window hero-window-pad">
             <figcaption class="hero-window-bar"><span class="hero-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>{t.tabletLabel}</figcaption>
@@ -326,7 +326,7 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
       <div id="hero-install" class="scroll-mt-24 mx-auto mt-10 w-full max-w-4xl text-left">
         <div class="flex items-center justify-between gap-4 border-b border-[var(--line)] pb-3">
           <p class="flex items-center gap-2 font-mono text-[10px] uppercase text-zinc-400"><TerminalSquare className="size-3.5 text-emerald-400" aria-hidden="true" />{t.heroDesktopInstall}</p>
-          <span class="font-mono text-[10px] text-zinc-500">v0.0.1-beta.4</span>
+          <span class="font-mono text-[10px] text-zinc-500">v0.0.1-beta.6</span>
         </div>
         <div class="mt-3">
           <InstallTabs
@@ -645,7 +645,7 @@ const viewIcons = [PanelsTopLeft, TerminalSquare, Laptop, Smartphone]
               </div>
             </div>
             <div class="mt-5 grid grid-cols-3 gap-3 sm:gap-5">
-              {['mobile-terminals.webp', 'mobile-terminal.webp', 'mobile-files.webp'].map((image, index) => (
+              {['flutter-devices.webp', 'flutter-petal-menu.webp', 'flutter-settings.webp'].map((image, index) => (
                 <figure class="float-card group overflow-hidden rounded-2xl bg-zinc-950 ring-1 ring-[var(--line)]" style={{ '--float-delay': `${index * 0.5}s` }}>
                   <img class="block aspect-[480/1068] w-full object-cover" src={sitePath(`/assets/product/${image}`)} alt={t.mobileAlts[index]} width="480" height="1068" loading="lazy" />
                 </figure>

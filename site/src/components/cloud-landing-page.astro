@@ -42,12 +42,12 @@ const copy = {
     tuiLabel: 'AnyTTY TUI', tuiTitle: 'Keyboard-first on another computer',
     tuiBody: 'Open a paired endpoint in the AnyTTY TUI, arrange several remote terminals in one workspace, and keep the full keyboard workflow when you move between machines.',
     tuiMeta: 'macOS · Linux · Windows',
-    appLabel: 'AnyTTY App', appTitle: 'Carry the same terminal with you',
-    appBody: 'Open the paired endpoint from iOS or Android, check a running task, and continue with touch controls when you are away from a computer.',
+    appLabel: 'AnyTTY App', appTitle: 'Pair the mobile client directly',
+    appBody: 'Scan a QR code or paste a short-lived pairing payload in the Flutter app. Each iOS or Android installation receives its own client-bound access.',
     appMeta: 'iOS · Android',
     desktopAlt: 'AnyTTY TUI showing several persistent terminals reached through Cloud',
-    mobileAlt: 'AnyTTY mobile client connected to a persistent terminal',
-    desktopCaption: 'Cloud-connected endpoint in the AnyTTY TUI', mobileCaption: 'The same endpoint from the mobile app',
+    mobileAlt: 'AnyTTY Flutter app QR scanner and pairing input',
+    desktopCaption: 'Cloud-connected endpoint in the AnyTTY TUI', mobileCaption: 'Pairing an endpoint from the Flutter app',
     productPoints: [
       ['No App account sync', 'The mobile app does not populate devices from a Cloud account. Pair each client with the target service.'],
       ['Endpoint-controlled access', 'The daemon authenticates the connection and decides which terminals and files are available.'],
@@ -93,12 +93,12 @@ const copy = {
     tuiLabel: 'AnyTTY TUI', tuiTitle: '在另一台电脑上保持键盘工作流',
     tuiBody: '从 AnyTTY TUI 打开已配对 endpoint，把多个远程终端排在同一个工作区；换到另一台电脑时，依然保留完整的键盘操作。',
     tuiMeta: 'macOS · Linux · Windows',
-    appLabel: 'AnyTTY App', appTitle: '把同一个终端带在身边',
-    appBody: '从 iOS 或 Android 打开已配对 endpoint，离开电脑后也能查看运行中的任务，并用触控操作继续处理。',
+    appLabel: 'AnyTTY App', appTitle: '直接配对移动客户端',
+    appBody: '在 Flutter App 中扫描二维码或粘贴短期 pairing payload。每个 iOS 或 Android 安装都会获得绑定到自身客户端的访问权。',
     appMeta: 'iOS · Android',
     desktopAlt: 'AnyTTY TUI 通过 Cloud 连接多个持久终端',
-    mobileAlt: 'AnyTTY 手机客户端连接到持久终端',
-    desktopCaption: '在 AnyTTY TUI 中打开 Cloud endpoint', mobileCaption: '从手机 App 继续同一个 endpoint',
+    mobileAlt: 'AnyTTY Flutter App 的扫码与粘贴配对入口',
+    desktopCaption: '在 AnyTTY TUI 中打开 Cloud endpoint', mobileCaption: '从 Flutter App 配对 endpoint',
     productPoints: [
       ['App 不做账号同步', '移动 App 不会从 Cloud 账号自动填充设备；每个客户端都要与目标服务明确配对。'],
       ['访问权由 endpoint 决定', 'daemon 负责验证连接，并决定可以访问哪些终端和文件。'],
@@ -225,8 +225,7 @@ const consoleUrl = 'https://cloud.anytty.com/app'
           <figure class="mx-auto mt-6 max-w-80 overflow-hidden rounded-lg bg-zinc-950 ring-1 ring-[var(--line-strong)] lg:max-w-none">
             <img
               class="block aspect-[480/1068] w-full object-cover"
-              src={sitePath('/assets/product/mobile-terminal.webp')}
-              srcset={`${sitePath('/assets/product/mobile-terminal-320.webp')} 320w, ${sitePath('/assets/product/mobile-terminal.webp')} 480w`}
+              src={sitePath('/assets/product/flutter-pairing.webp')}
               sizes="(min-width: 1024px) 320px, 80vw"
               alt={t.mobileAlt}
               width="480"

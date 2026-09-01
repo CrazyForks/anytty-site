@@ -5,7 +5,7 @@ description: Understand AnyTTY Beta stability, known limitations, release inform
 
 # Releases, support, and participation
 
-The current AnyTTY release is `v0.0.1-beta.4`. Beta means the product is available for evaluation, while CLI, configuration, protocol, mobile packaging, and data migration may still change. It is not an LTS release and has no default SLA.
+The current AnyTTY release is `v0.0.1-beta.6`. Beta means the product is available for evaluation, while CLI, configuration, protocol, mobile packaging, and data migration may still change. It is not an LTS release and has no default SLA.
 
 ## Release and upgrade information
 
@@ -17,7 +17,7 @@ Finish or checkpoint irreplaceable work and record `anytty --version`. After upg
 
 - Compatibility of CLI, config, protocol, and data formats is not permanent across Beta releases.
 - Unsupported old history formats may be removed instead of migrated.
-- The current Android release APK is unsigned and must be evaluated before sideloading.
+- Android release APKs are signed and published with checksums; verify the tag, asset, and checksum before sideloading.
 - iOS/iPadOS has a [public TestFlight beta](https://testflight.apple.com/join/rfcgFyJh); each external build remains subject to Apple Beta App Review, and the App Store release is still in progress.
 - Package-manager distribution is still in progress; official releases and scripts are the primary desktop channel.
 - Cloud sign-in does not synchronize daemon access into the app; every client requires explicit pairing.

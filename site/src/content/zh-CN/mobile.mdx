@@ -44,9 +44,9 @@ App 不会因为登录 Cloud 账号自动列出设备。添加 endpoint 必须�
 系统输入法负责普通文字输入。使用全角标点、候选词或组合输入时，如果目标程序只接受原始按键序列，应切换到兼容的键盘布局。终端工具栏可以打开文件、调整显示或进入更多操作。
 
 <DocFigure
-  src="/assets/product/mobile-terminal.webp"
-  alt="AnyTTY 手机 App 中的远程终端与扩展键盘"
-  caption="扩展键盘让手机上常用的控制键和导航键保持可达。"
+  src="/assets/product/flutter-petal-menu.webp"
+  alt="AnyTTY Flutter App 的花瓣菜单配置"
+  caption="Flutter App 可以为每个长按花瓣配置常用终端操作。"
   width={480}
   height={1068}
   portrait
@@ -54,7 +54,7 @@ App 不会因为登录 Cloud 账号自动列出设备。添加 endpoint 必须�
 
 ## 前后台切换与断线重连
 
-App 进入后台、WebView 重载或网络变化时会取消旧请求。回到前台后，它使用本地 endpoint registry 和最后应用的 Live revision 恢复；如果 daemon 不再保留对应基线，则接收完整屏幕。
+App 进入后台、系统暂停 Flutter 进程或网络变化时会取消旧请求。回到前台后，它使用本地 endpoint registry 和最后应用的 Live revision 恢复；如果 daemon 不再保留对应基线，则接收完整屏幕。
 
 重连不会重启 terminal。若长时间离线，先检查 endpoint 是否仍在线、grant 是否过期，再判断当前 route 是否可用。Cloud、SSH 或 Direct 的路径问题不会改变 daemon 中任务的生命周期。
 
@@ -83,7 +83,7 @@ App 进入后台、WebView 重载或网络变化时会取消旧请求。回到�
 
 ## 移动端安全
 
-- endpoint 凭据存放在平台保护存储，而不是普通 WebView storage。
+- endpoint 凭据存放在平台保护存储，而不是普通应用文件或偏好设置中。
 - iOS 使用 Keychain；可用时 SSH 签名密钥使用 Secure Enclave，模拟器回退到 Keychain。
 - Android 使用平台提供的受保护存储能力。
 - 配对二维码、终端画面、文件预览和通知都可能包含敏感信息，录屏或分享前必须脱敏。
