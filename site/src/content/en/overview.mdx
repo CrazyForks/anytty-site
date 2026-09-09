@@ -1,163 +1,32 @@
 ---
-title: AnyTTY documentation overview
-description: The complete chapters, reading paths, and scope of the AnyTTY product documentation.
+title: "AnyTTY documentation"
+description: "Give your agent the llm.txt guide on GitHub and ask a question, or look up TUI, App and CLI operations as needed."
 ---
 
-# AnyTTY documentation overview
+import DocLink from '@/components/docs/DocLink.astro'
+import AgentGuideStart from '@/components/docs/AgentGuideStart.astro'
 
-This is the complete entry point for the AnyTTY product documentation. The guides focus on installation, connections, terminals, files, and cross-device workflows. Protocol implementation and internal service architecture are outside their scope. Commands, defaults, platform status, and security boundaries are checked against public source and the current CLI.
+# AnyTTY documentation
 
-## Suggested reading paths
+AnyTTY runs tasks on your computer or server and lets you view and operate them from the TUI, mobile App or CLI.
 
-- **First-time setup:** Product introduction -> Install and upgrade -> Quick start -> Terminals and TUI
-- **AI coding tasks:** AI agent workflows -> Observe and take over -> Review history
-- **Mobile terminal access:** Mobile clients -> Pairing and permissions -> Connection routes
-- **Remote machines:** Endpoints and connections -> Direct / SSH / Cloud -> Connection troubleshooting
-- **Long-running deployments:** Configuration and operations -> Security and privacy -> Troubleshooting
+## Step one: give the guide to your agent
 
-## 1. [Understand AnyTTY](../concepts/)
+Send the message below to your own agent and add your question. It can read `llm.txt` on GitHub, then explain operations, look up settings or help diagnose your setup.
 
-- Product purpose, suitable use cases, and non-goals
-- Supported platforms, clients, and current Beta limitations
-- How daemons, clients, terminals, workspaces, and panels relate
-- Endpoints, routes, pairing claims, and grants
-- Live views, history, and resuming work from another client
+<AgentGuideStart locale="en" />
 
-## 2. [Install, upgrade, and uninstall](../install-upgrade/)
+Try “Help me install AnyTTY and create a terminal,” “How do I change TUI shortcuts?” or “Why can't my phone connect?” Continue asking in your agent without reading the entire documentation first.
 
-- Installation on macOS, Linux, and Windows
-- Obtaining the Android and iOS clients
-- Starting the daemon and checking the environment
-- Upgrades, downgrades, migrations, and compatibility
-- Uninstalling while preserving or removing local data
+## Prefer to look something up?
 
-Start with [Quick start](../quick-start/).
+| Goal | Read |
+| --- | --- |
+| Understand components and their relationship | <DocLink locale="en" path="product/concepts">How AnyTTY works</DocLink> |
+| Install and create a terminal | <DocLink locale="en" path="start/quick-start">TUI quick start</DocLink> |
+| Connect from your phone | <DocLink locale="en" path="start/mobile">First mobile connection</DocLink> |
+| Change appearance and shortcuts | <DocLink locale="en" path="clients/tui/config/overview">TUI configuration</DocLink> |
+| Run remote tasks with an agent | <DocLink locale="en" path="agents/overview">Agents and automation</DocLink> |
+| Diagnose a problem | <DocLink locale="en" path="help/troubleshooting">Troubleshooting</DocLink> |
 
-## 3. [Terminals and desktop workflows](../terminals/)
-
-- Creating, naming, attaching, detaching, stopping, and removing terminals
-- TUI navigation, the terminal picker, and common actions
-- Workspaces, splits, panels, and floating panels
-- Terminal status, recent activity, and background tasks
-- Live output, history browsing, search, and restoring context
-- Using the CLI and TUI together
-
-Start with [Terminal management](../terminals/).
-
-## 4. [AI agent workflows](../agent-workflows/)
-
-- Use the AnyTTY skill to define how an AI creates and manages task terminals
-- Place long-lived, parallel, and takeover-ready work in the terminal pool
-- Organize tasks with names and `kind`, `agent`, `project`, `run`, and `task` tags
-- Inspect each task's command, state, output, events, and exit result
-- Observe and take over the same task from the TUI, CLI, or a mobile client
-- Search retained history and reconstruct a task session
-
-## 5. [Mobile and tablet clients](../mobile/)
-
-- Adding a device and making the first connection
-- Terminal lists, state, and recent activity
-- Touch controls, extra keys, and input methods
-- Backgrounding, reconnection, and moving between devices
-- Split-screen and multitasking workflows on tablets
-- Local storage, permissions, and mobile security settings
-
-## 6. [Endpoints and connection routes](../connections/)
-
-- Endpoints, routes, and local selection policy
-- Differences between Local, SSH, Direct, and Cloud
-- Adding, inspecting, editing, and removing endpoints
-- Route priority, fallback, and failure behavior
-- NAT, firewall, proxy, and enterprise network requirements
-- Latency, connection quality, and path diagnostics
-
-Start with [Connection routes](../connections/).
-
-## 7. [Pairing, authorization, and device management](../pairing/)
-
-- Generating a QR or text pairing claim
-- Scanning, pasting, and one-time redemption
-- Terminal and file permissions
-- Inspecting, narrowing, and revoking grants
-- Replacing a phone and responding to a lost device or credential
-- Diagnosing failed pairing, clock skew, and expired claims
-
-Start with [QR pairing](../pairing/).
-
-## 8. [File management and preview](../files/)
-
-- File roots and least-privilege configuration
-- Browsing, searching, creating, renaming, and deleting
-- Uploads, downloads, cancellation, and integrity checks
-- Opening files from a terminal's working directory
-- Previewing text, documents, images, media, and 3D files
-- Large files, interrupted networks, and transfer failures
-
-Start with [File management](../files/).
-
-## 9. [AnyTTY Cloud](../cloud/)
-
-- What Cloud solves and how it relates to the open-source clients
-- Sign-up, sign-in, device discovery, and account management
-- P2P negotiation, Relay fallback, and connection state
-- Choosing between Cloud, Local, SSH, and Direct
-- Service limits, usage, plans, and billing
-- Closing an account, removing devices, and data handling
-
-Start with [AnyTTY Cloud](../cloud/).
-
-## 10. [Configuration and operations](../operations/)
-
-- Daemon configuration files, flags, and environment variables
-- Starting at login, stopping, restarting, and checking status
-- History, logs, caches, and disk usage
-- Maintaining file roots and access policy
-- Backup, restore, and device migration
-- Performance, resource limits, and long-running operation
-
-## 11. [Security and privacy](../security/)
-
-- Responsibility boundaries between clients, daemons, routes, and Cloud
-- Authentication, transport encryption, and credential storage
-- Pairing claims, grants, and revocation
-- What a Relay can observe and which permissions it cannot obtain
-- Handling terminal content, files, logs, and diagnostics
-- Security checklist and vulnerability reporting
-
-Start with the [Security model](../security/).
-
-## 12. [Troubleshooting](../troubleshooting/)
-
-- Commands missing after installation or a daemon that will not start
-- TUI rendering, keyboard input, and terminal sizing problems
-- Mobile scanning, pairing, or reconnection failures
-- SSH, Direct, P2P, or Relay connection failures
-- File listing, preview, upload, or download failures
-- Collecting redacted diagnostics and getting support
-
-## 13. [Frequently asked questions](../faq/)
-
-- Closing the TUI versus stopping a task or deleting its record
-- How AI tasks enter and remain observable in the terminal pool
-- Boundaries between Cloud sign-in, pairing, routes, and Relay
-- Multiple clients, resize ownership, history, and file permissions
-- Configuration paths, runtime defaults, and the recommended profile
-
-## 14. [Command and configuration reference](../reference/)
-
-- CLI command index
-- Daemon, terminal, endpoint, pair, and file commands
-- Configuration fields and examples
-- Environment variables, default ports, and data directories
-- Status values, error codes, and log fields
-- Platform support matrix, compatibility, and glossary
-
-## 15. [Releases, support, and contributing](../releases-support/)
-
-- Beta stability commitments and known limitations
-- Release notes, upgrade notes, and compatibility policy
-- Getting help, filing issues, and suggesting features
-- Privacy questions and security vulnerability reports
-- Building from source and contributing code or documentation
-
-Developers and contributors can start with [Build and contribute](../build-contribute/).
+Client operations are grouped under TUI, App and CLI in the directory. Consult configuration and command references as needed. Web tutorials will follow later.

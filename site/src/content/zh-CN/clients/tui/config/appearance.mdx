@@ -1,0 +1,53 @@
+---
+title: "主题、颜色与界面外观"
+description: "TUI 配置控制工作台外框、标题、提示、选择器和按钮。终端内程序自己的 ANSI 颜色不由这套主题重映射；字体和字号通常在宿主终端中设置。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 主题、颜色与界面外观
+
+TUI 配置控制工作台外框、标题、提示、选择器和按钮。终端内程序自己的 ANSI 颜色不由这套主题重映射；字体和字号通常在宿主终端中设置。
+
+## 从一套清晰的配色开始
+
+```yaml
+version: 1
+tui:
+  theme:
+    mode: dark
+    palette: builtin
+    primary: "#a970ff"
+    secondary: "#7ab8ff"
+    background: "#101018"
+    foreground: "#eeeeef"
+  chrome:
+    header: true
+    footer: true
+    panel_presentation: card
+    pane_title_template: "{{terminal}}@{{endpoint}}"
+```
+
+`mode` 可选 `dark`、`light`、`system`；当前 `system` 是 host-aware dark 行为，不能承诺自动跟随操作系统浅深色切换。`palette: host` 从宿主调色板推导默认颜色，`builtin` 使用 AnyTTY 内置基线；显式颜色最后覆盖。
+
+<ScreenshotSlot id="tui-theme" locale="zh-CN" />
+
+## 颜色怎么分层
+
+`primary` 表达焦点，`secondary` 表达次级强调；`success`、`warning`、`danger`、`info` 表达状态；`muted` 用于弱文本。`theme.border` 下可以分别设置普通、活动、非活动和弱边框；`theme.surface` 下可以设置顶部、状态栏、弹层和提示背景。
+
+颜色使用带引号的 `"#RRGGBB"`。颜色留空通常表示使用内置、宿主或派生值。先修改主色和背景，确有需要再覆盖全部 token，以免焦点和错误状态失去区分。
+
+## 标题、图标与按钮
+
+`pane_title_template` 可以展示 terminal 与 endpoint；`workspace_template` 和 `tab_template` 调整顶部格式。模板支持文档化变量和样式 span，不是任意可执行代码。
+
+`chrome.pane_glyphs` 调整面板动作图标；`footer.templates` 调整模式、按键和动作文案；`shortcuts.actions` 调整动作标签与语义样式。修改显示模板不会自动更改键盘绑定。Nerd Font 图标需要宿主字体支持，默认先使用普通字符。
+
+## 显示密度
+
+`panel_presentation: split-line` 更节省空间，`card` 更突出边界。隐藏 header 或 footer 会腾出空间，但也会减少导航或快捷键提示，建议熟悉操作后再改。
+
+完整字段与模板样例见<DocLink locale="zh-CN" path="reference/configuration">配置参考</DocLink>。修改后执行 `anytty config validate` 并重开 TUI；若颜色没有变化，核对实际文件、环境覆盖和终端自身配色。

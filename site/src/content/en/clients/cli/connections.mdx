@@ -1,0 +1,43 @@
+---
+title: "Device and pairing commands"
+description: "endpoint manages saved device configuration, pair handles one-time invitations, and access manages issued grants. Always identify which machine runs each operation."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Device and pairing commands
+
+`endpoint` manages saved device configuration, `pair` handles one-time invitations, and `access` manages issued grants. Always identify which machine runs each operation.
+
+## Inspect saved devices
+
+```sh
+anytty endpoint list
+anytty endpoint show workstation
+anytty endpoint test workstation --json
+```
+
+Replace `workstation` with a real endpoint ID. Use `--route ROUTE_ID` when multiple routes are eligible. `endpoint route` manages routes; `endpoint policy` configures selection for the next session.
+
+## Issue on the target
+
+Run `anytty pair create` on the task-owning machine with network routes reachable by the recipient. Follow <DocLink locale="en" path="connections/direct">Direct</DocLink> or <DocLink locale="en" path="connections/ssh">SSH</DocLink>.
+
+`--ttl` controls invitation redemption time: default 10 minutes, maximum 168 hours. `--grant-ttl` controls redeemed access lifetime; default 0 means no time expiration. `--terminal ID` limits access to one terminal; omitting it can grant daemon-wide access.
+
+## Redeem on the client
+
+```sh
+anytty pair inspect ./claim.txt
+anytty pair import ./claim.txt --id workstation --client-label laptop
+```
+
+Receive the file privately from the device owner. Standard input is also supported; see import help. The App uses its pairing page. Redeemed credentials are client-bound rather than an indefinitely reusable shared invitation.
+
+## Revoke and clean up
+
+On the target, inspect `anytty access list`, then follow `anytty access revoke --help` for the selected grant. Local `endpoint remove` does not revoke access.
+
+Use `endpoint disable` / `enable` to suspend local selection and `set-default` to change the default. Automation should still name endpoints explicitly.

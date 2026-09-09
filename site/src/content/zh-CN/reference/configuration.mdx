@@ -1,0 +1,114 @@
+---
+title: "配置字段参考"
+description: "本页集中列出配置值、有效范围和受支持的环境覆盖。使用 config paths 找文件，使用 config show --effective 看最终值；修改后 config validate，再按 TUI / daemon 各自的生效时机应用。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 配置字段参考
+
+本页集中列出配置值、有效范围和受支持的环境覆盖。使用 `config paths` 找文件，使用 `config show --effective` 看最终值；修改后 `config validate`，再按 TUI / daemon 各自的生效时机应用。
+
+默认值与安装器提供的推荐配置不同。下表的默认值指运行时内置默认值，范围指允许值；byte 是字节，MiB 是 1024² 字节，ms 是毫秒。未列出的高级模板可在完整注释文件中逐项查阅。
+
+## daemon
+
+| 字段 | 默认值 | 范围 / 可选值 |
+| --- | --- | --- |
+| `daemon.output_buffer.capacity_bytes` | 33554432 | 65536–268435456 字节 |
+| `daemon.output_buffer.resident_budget_bytes` | 536870912 | 65536–2147483648 字节 |
+| `daemon.output_buffer.overflow` | block | block / drop |
+| `daemon.history.max_size_mb` | 512 | 0–8388608 MiB; 0 表示不设大小上限 |
+| `daemon.history.max_age_days` | 0 | 0–36500 天； 0 表示不按年龄清理 |
+| `daemon.history.compression` | zstd | zstd / s2 / none |
+| `daemon.history.compression_level` | fast | fast / balanced / best |
+| `daemon.resource_sampling.interval_ms` | 500 | 100–60000 ms |
+| `daemon.resource_sampling.max_samples` | 512 | 512–65536 |
+
+## TUI
+
+| 字段 | 默认值 | 范围 / 可选值 |
+| --- | --- | --- |
+| `version` | 1 | 1 |
+| `tui.profile` | default | 非空预留名称 |
+| `tui.theme.mode` | dark | dark / light / system |
+| `tui.theme.palette` | host | host / builtin |
+| `tui.chrome.header`, `tui.chrome.footer` | true | true / false |
+| `tui.chrome.panel_presentation` | split-line | split-line / card |
+| `tui.chrome.picker.presentation` | card | card / flat |
+| `tui.chrome.picker.width` | adaptive | adaptive / wide |
+| `tui.chrome.picker.density` | compact | compact / comfortable |
+| `tui.chrome.picker.endpoint_tabs` | underline | underline / plain |
+| `tui.chrome.tab_create_icon` | + | 非空图标或文字 |
+| `tui.interaction.mouse` | true | true / false |
+| `tui.interaction.confirm_destructive` | true | true / false |
+| `tui.interaction.sticky_prefix_timeout_ms` | 3000 | ≥ 0 ms |
+| `tui.interaction.shortcut_passthrough_interval_ms` | 1000 | > 0 ms |
+| `tui.interaction.clipboard_history.max_items` | 200 | > 0 |
+| `tui.interaction.clipboard_history.name_width` | 34 | > 0 个终端 cell |
+| `tui.interaction.clipboard_history.preview_width_ratio` | 0.68 | 大于 0 且小于 1 |
+| `tui.interaction.picker.fuzzy_match` | subsequence | subsequence |
+| `tui.interaction.picker.highlight_matches` | true | true / false |
+| `tui.terminal.auto_take_owner` | true | true / false |
+
+## 颜色字段
+
+`tui.theme` 下的 `primary`、`secondary`、`foreground`、`background`、`muted`、`success`、`warning`、`danger`、`info` 接受空字符串或 `"#RRGGBB"`。`border.panel/active/inactive/muted` 与 `surface.chrome_bg/status_bg/overlay_bg/toast_bg` 同样适用。
+
+空颜色使用内置、宿主或派生值。`mode: system` 当前不等于自动 OS 明暗同步。`profile` 不触发多 profile 合并。剪贴板 `max_items` 不应作为自动擦除敏感内容的保证。
+
+## 模板与动作显示
+
+- `chrome.workspace_template`、`tab_template`、`tab_create_template`、`pane_title_template` 是单行显示模板。
+- `chrome.pane_glyphs` 包含图标、动作周围装饰、owner 和裁切提示。部分装饰字段显式空字符串表示隐藏，与省略字段不同。
+- `chrome.picker.endpoint_status` 为各设备状态设置 glyph / style。
+- `footer.templates` 格式化 mode、key、action 与摘要；`footer.modes` 设置各模式 badge。
+- `shortcuts.actions` 覆盖动作显示；声明任意 scene 则替换整套默认绑定。
+
+完整[中文注释模板](https://github.com/anytty/anytty/blob/main/tui/docs/tui-v3.example.yaml)与[推荐配置](https://github.com/anytty/anytty/blob/main/tui/docs/tui-v3.recommended.yaml)给出变量、样式 span 和动作格式。模板并不保存终端或布局状态。
+
+## 环境覆盖映射
+
+下表来自运行时明确支持的映射。不要按命名规律推断其他变量。XDG 目录、socket、日志等运行路径变量属于另一类设置，用 `config paths` 与命令帮助核对。
+
+| 环境变量 | 对应字段 |
+| --- | --- |
+| `ANYTTY_OUTPUT_BUFFER_CAPACITY_BYTES` | `daemon.output_buffer.capacity_bytes` |
+| `ANYTTY_OUTPUT_BUFFER_OVERFLOW` | `daemon.output_buffer.overflow` |
+| `ANYTTY_OUTPUT_RESIDENT_BUDGET_BYTES` | `daemon.output_buffer.resident_budget_bytes` |
+| `ANYTTY_HISTORY_MAX_SIZE_MB` | `daemon.history.max_size_mb` |
+| `ANYTTY_HISTORY_MAX_AGE_DAYS` | `daemon.history.max_age_days` |
+| `ANYTTY_HISTORY_COMPRESSION` | `daemon.history.compression` |
+| `ANYTTY_HISTORY_COMPRESSION_LEVEL` | `daemon.history.compression_level` |
+| `ANYTTY_RESOURCE_SAMPLING_INTERVAL_MS` | `daemon.resource_sampling.interval_ms` |
+| `ANYTTY_RESOURCE_SAMPLING_MAX_SAMPLES` | `daemon.resource_sampling.max_samples` |
+| `ANYTTY_TUI_THEME_MODE` | `tui.theme.mode` |
+| `ANYTTY_TUI_THEME_PALETTE` | `tui.theme.palette` |
+| `ANYTTY_TUI_THEME_PRIMARY` | `tui.theme.primary` |
+| `ANYTTY_TUI_THEME_SECONDARY` | `tui.theme.secondary` |
+| `ANYTTY_TUI_THEME_FOREGROUND` | `tui.theme.foreground` |
+| `ANYTTY_TUI_THEME_BACKGROUND` | `tui.theme.background` |
+| `ANYTTY_TUI_THEME_MUTED` | `tui.theme.muted` |
+| `ANYTTY_TUI_THEME_SUCCESS` | `tui.theme.success` |
+| `ANYTTY_TUI_THEME_WARNING` | `tui.theme.warning` |
+| `ANYTTY_TUI_THEME_DANGER` | `tui.theme.danger` |
+| `ANYTTY_TUI_THEME_INFO` | `tui.theme.info` |
+| `ANYTTY_TUI_CHROME_HEADER` | `tui.chrome.header` |
+| `ANYTTY_TUI_CHROME_FOOTER` | `tui.chrome.footer` |
+| `ANYTTY_TUI_CHROME_PANEL_PRESENTATION` | `tui.chrome.panel_presentation` |
+| `ANYTTY_TUI_CHROME_PICKER_PRESENTATION` | `tui.chrome.picker.presentation` |
+| `ANYTTY_TUI_CHROME_PICKER_WIDTH` | `tui.chrome.picker.width` |
+| `ANYTTY_TUI_CHROME_PICKER_DENSITY` | `tui.chrome.picker.density` |
+| `ANYTTY_TUI_CHROME_PICKER_ENDPOINT_TABS` | `tui.chrome.picker.endpoint_tabs` |
+| `ANYTTY_TUI_CHROME_TAB_CREATE_TEMPLATE` | `tui.chrome.tab_create_template` |
+| `ANYTTY_TUI_CHROME_PANE_TITLE_TEMPLATE` | `tui.chrome.pane_title_template` |
+| `ANYTTY_TUI_INTERACTION_MOUSE` | `tui.interaction.mouse` |
+| `ANYTTY_TUI_STICKY_PREFIX_TIMEOUT_MS` | `tui.interaction.sticky_prefix_timeout_ms` |
+| `ANYTTY_TUI_SHORTCUT_PASSTHROUGH_INTERVAL_MS` | `tui.interaction.shortcut_passthrough_interval_ms` |
+| `ANYTTY_TUI_CONFIRM_DESTRUCTIVE` | `tui.interaction.confirm_destructive` |
+| `ANYTTY_TUI_CLIPBOARD_HISTORY_MAX_ITEMS` | `tui.interaction.clipboard_history.max_items` |
+| `ANYTTY_TUI_CLIPBOARD_HISTORY_NAME_WIDTH` | `tui.interaction.clipboard_history.name_width` |
+| `ANYTTY_TUI_CLIPBOARD_HISTORY_PREVIEW_RATIO` | `tui.interaction.clipboard_history.preview_width_ratio` |
+| `ANYTTY_TUI_TERMINAL_AUTO_TAKE_OWNER` | `tui.terminal.auto_take_owner` |

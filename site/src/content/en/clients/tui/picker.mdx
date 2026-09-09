@@ -1,0 +1,43 @@
+---
+title: "Terminal picker and manager"
+description: "The picker answers “which terminal should I open?” The manager answers “what is happening to these tasks, and how do I organize them?” Both work with the same terminals but expose "
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Terminal picker and manager
+
+The picker answers “which terminal should I open?” The manager answers “what is happening to these tasks, and how do I organize them?” Both work with the same terminals but expose different layouts and actions.
+
+## Picker: open a task quickly
+
+Press `Ctrl+F`, search by name, command or other searchable metadata, then inspect the selected preview. Search uses ordered subsequence matching; characters need not be adjacent. Match highlighting is configurable.
+
+| Built-in key | Action |
+| --- | --- |
+| Left / Right | Switch endpoint |
+| Shift+Left / Shift+Right | Switch state filter |
+| Up / Down | Select an entry |
+| `Ctrl+O` | Endpoint selector |
+| `Ctrl+T` | Tag filter |
+| `Enter` | Attach |
+| `Tab` | Open in a split |
+| `Ctrl+E` / `Ctrl+K` / `Ctrl+X` | Edit / kill / delete |
+
+**New Terminal** creates a task. If search finds nothing, check device and state filters before changing the query.
+
+## Manager: inspect and organize
+
+Press `Ctrl+G → p`. Compare names, states, commands, directories and available resource samples. CPU and memory observations do not prove application health.
+
+<ScreenshotSlot id="tui-manager" locale="en" />
+
+Built-in manager actions include `Enter` attach, `Ctrl+T` open in a tab, `Ctrl+O` open floating, `Ctrl+R` restart, `Ctrl+E` edit, `Ctrl+K` kill and `Ctrl+X` delete.
+
+Inspect before acting, especially when devices have similarly named tasks. Restart begins a new run rather than restoring process memory.
+
+## Search and layout settings
+
+`tui.chrome.picker` controls picker width, density and endpoint tabs. `tui.interaction.picker` controls match highlighting. Picker appearance settings do not change the manager layout. See <DocLink locale="en" path="clients/tui/config/interaction">interaction settings</DocLink>.

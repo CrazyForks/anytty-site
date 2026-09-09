@@ -1,0 +1,47 @@
+---
+title: "Create and manage terminals"
+description: "Creating a terminal selects its device, startup command and working directory. A pane is only the place where the resulting task is displayed."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Create and manage terminals
+
+Creating a terminal selects its device, startup command and working directory. A pane is only the place where the resulting task is displayed.
+
+## Create from the picker
+
+Press `Ctrl+F`, choose a device and select **New Terminal**. In **Create Terminal**, use `Tab` between fields, `Enter` to submit and `Esc` to return.
+
+| Field | Meaning |
+| --- | --- |
+| `name` | Required task name, such as `api-tests` |
+| `command` | Empty for the default shell; otherwise a program available on the target |
+| `server` | Required target endpoint |
+| `workdir` | Existing target-machine directory; verify any prefilled value |
+| `tags` | Optional comma-separated `KEY=VALUE`, such as `project=demo,role=test` |
+
+This TUI form has no separate environment-variable editor. Use the target shell, a startup script or a <DocLink locale="en" path="clients/cli/terminals">CLI workflow</DocLink> for environment setup.
+
+## Open and edit
+
+Search with `Ctrl+F` and press `Enter` to open a task. For centralized management, use `Ctrl+G → p`, then `Ctrl+E` on a selected entry to edit supported metadata.
+
+Renaming a terminal does not move its running process or rerun its command. Use restart deliberately, or create a separate terminal for a different command or working directory.
+
+## Distinguish lifecycle actions
+
+| Action | Result |
+| --- | --- |
+| Detach | Leave the view while the task continues |
+| Shell `exit` | End the shell normally and retain its record |
+| Kill | Request process termination; not evidence of success |
+| Delete | Remove a terminal record after reviewing whether it is still needed |
+
+Built-in panel bindings include `d` detach, `r` reconnect, `R` restart and `X` kill. The manager uses `Ctrl+R` restart, `Ctrl+K` kill and `Ctrl+X` delete. Check current help for customized or recommended bindings.
+
+## Verify the result
+
+After creation, check the name, endpoint, prompt and directory. After exit, inspect state and exit code: “exited” alone does not mean success. See <DocLink locale="en" path="concepts/lifecycle">task lifecycle</DocLink>.

@@ -1,0 +1,48 @@
+---
+title: "Connect over SSH"
+description: "Use SSH when you already have trusted SSH access to the target. The route reaches AnyTTY through SSH; SSH host verification, daemon identity and AnyTTY authorization must all succe"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Connect over SSH
+
+Use SSH when you already have trusted SSH access to the target. The route reaches AnyTTY through SSH; SSH host verification, daemon identity and AnyTTY authorization must all succeed.
+
+## Prepare the target
+
+Verify SSH login with the intended account and confirm the host’s SHA256 fingerprint through a trusted channel. Install AnyTTY on the target, run `anytty` and verify a local task.
+
+The route defaults to remote loopback signaling at `127.0.0.1:41120` and ICE-TCP at `127.0.0.1:41121`. Match route configuration to any changed listener ports.
+
+## Issue an invitation
+
+On the target, replace the host, account and verified fingerprint:
+
+```sh
+anytty pair create --route ssh \
+  --ssh-host server.example.com --ssh-user dev \
+  --ssh-host-key 'SHA256:REPLACE_WITH_VERIFIED_FINGERPRINT' \
+  --out ./ssh-claim.txt
+```
+
+Deliver it privately and run on the client:
+
+```sh
+anytty pair import ./ssh-claim.txt --id workstation --client-label laptop
+anytty endpoint show workstation
+```
+
+Mobile clients use their pairing flow and supported SSH authentication. Including an SSH route does not transfer an SSH private key; the client still needs authentication setup.
+
+## Test and use
+
+Find the SSH route ID in endpoint show, then run `anytty endpoint test workstation --route ROUTE_ID`. Open the endpoint from the TUI after success.
+
+For ProxyJump, custom loopback ports or manual setup, consult `anytty endpoint add ssh --help` and route help. Adding a route alone does not generate access credentials.
+
+## Diagnose
+
+For timeouts, inspect SSH reachability. For authentication errors, inspect accounts and keys. Verify host changes before accepting a changed fingerprint. If SSH works but AnyTTY does not, check the target daemon, ports and grant.

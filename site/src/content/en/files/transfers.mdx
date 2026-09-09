@@ -1,0 +1,39 @@
+---
+title: "Transfers and preview limits"
+description: "Transfers retrieve complete files; previews provide quick inspection. Their limits, rendering and success evidence differ."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Transfers and preview limits
+
+Transfers retrieve complete files; previews provide quick inspection. Their limits, rendering and success evidence differ.
+
+## Complete transfers
+
+CLI uploads wait for daemon checksum confirmation, and downloads verify content. The App reports results in its transfer list. Consume artifacts after successful completion and verification. Preserve errors and inspect both paths before retrying.
+
+Choose overwrite explicitly. Separate per-task result directories prevent concurrent jobs from writing identical artifact names.
+
+## Native App preview limits
+
+| Item | Current behavior |
+| --- | --- |
+| Source size | Up to 64 MiB for preview |
+| Requested payload | Up to 4 MiB; text may be truncated |
+| Image dimensions | Preview requests use a 2048-pixel constraint |
+| Text | Supported text, JSON, XML and YAML MIME types |
+| Images | PNG, JPEG, GIF, WebP and BMP |
+| Rendered text | Requires a supported format and complete payload |
+
+These are preview limits, not a universal upload/download cap. Image payloads must be complete; truncated image bytes are not a successful preview.
+
+## Unsupported or oversized files
+
+Download and open them with an appropriate local application, or generate smaller summaries/thumbnails on the target. An extension alone does not establish native Office, PDF, audiovisual or 3D support.
+
+## Deliver artifacts
+
+Record endpoint, remote path, local path and transfer result. Also record the producing task and exit state: a successful download does not prove a successful build. See <DocLink locale="en" path="agents/files">agent file delivery</DocLink>.

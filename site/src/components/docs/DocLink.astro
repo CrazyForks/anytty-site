@@ -1,0 +1,8 @@
+---
+import { localizedPath, sitePath, type Locale } from '@/lib/site';
+interface Props { path: string; locale: Locale }
+const { path, locale } = Astro.props;
+const [slug, fragment] = path.split('#');
+const href = sitePath(localizedPath(locale, `/docs/${slug}`)) + (fragment ? `#${fragment}` : '');
+---
+<a href={href}><slot /></a>

@@ -1,0 +1,52 @@
+---
+title: "Install AnyTTY"
+description: "Install anytty on the computer that will run your tasks. The binary includes the TUI, CLI and daemon. Phones and tablets use a separate App paired with that computer."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Install AnyTTY
+
+Install `anytty` on the computer that will run your tasks. The binary includes the TUI, CLI and daemon. Phones and tablets use a separate App paired with that computer.
+
+## Desktop installation
+
+macOS or Linux:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/anytty/anytty/main/install.sh | sh
+```
+
+Windows PowerShell:
+
+```powershell
+Invoke-WebRequest https://raw.githubusercontent.com/anytty/anytty/main/install.ps1 -OutFile install.ps1
+.\install.ps1
+```
+
+Alternatively, download the matching OS and architecture archive from [GitHub Releases](https://github.com/anytty/anytty/releases), verify its published checksum, and put the executable on `PATH`. Available platforms depend on that release’s assets.
+
+The installer supplies a recommended TUI configuration when none exists. Reinstalling does not replace an existing configuration with newer recommended bindings.
+
+## Verify and open the workbench
+
+```sh
+anytty --version
+anytty
+```
+
+Running `anytty` starts the local daemon when necessary. You do not need to run `daemon start` first. If the command is missing, reopen your terminal and check that the installation directory is on `PATH`.
+
+Next, <DocLink locale="en" path="start/quick-start">create your first terminal in the TUI</DocLink>. Opening the workbench and creating a task are separate steps.
+
+## Phones and tablets
+
+Find Android packages on the release page and use the [TestFlight entry](https://testflight.apple.com/join/rfcgFyJh) for iOS/iPadOS. Check the distribution page for availability, expiration and system requirements.
+
+Follow <DocLink locale="en" path="start/mobile">first mobile connection</DocLink> after installation. Installing the App does not grant access to any computer.
+
+## Maintenance
+
+Use `anytty update --check` to check for updates. Read <DocLink locale="en" path="maintenance/updates">updates and compatibility</DocLink> before upgrading: replacing the binary and restarting the daemon are separate operations. See <DocLink locale="en" path="maintenance/daemon">daemon management</DocLink> when you need background startup, logs or diagnosis.

@@ -1,0 +1,40 @@
+---
+title: "浮动窗口"
+description: "浮动窗口适合临时查看日志、运行辅助命令或把一个任务放在分屏布局之上。它仍然显示 daemon 中的终端，不是另外一种任务类型。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 浮动窗口
+
+浮动窗口适合临时查看日志、运行辅助命令或把一个任务放在分屏布局之上。它仍然显示 daemon 中的终端，不是另外一种任务类型。
+
+## 创建和打开
+
+按 `Ctrl+O` 进入浮动模式。内置 `n` 创建新浮动窗口，`f` 打开终端选择器，`o` 查看浮动窗口总览。也可以在终端管理器选中任务后按 `Ctrl+O`，将任务在浮动窗口打开。
+
+先确认聚焦的是浮动窗口，再发送输入。窗口互相遮挡时，用总览或数字键召回目标，不要根据露出的一角猜测当前终端。
+
+## 移动、调整与折叠
+
+| 浮动模式内置键位 | 操作 |
+| --- | --- |
+| `h j k l` / 方向键 | 移动 |
+| `H L` / `K J` | 调整宽度 / 高度 |
+| `c` | 居中 |
+| `=` | 适配尺寸 |
+| `s` | 切换自动适配 |
+| `z` / `m` | 折叠或展开 |
+| `v` | 切换全部浮动窗口显示 |
+| `1`–`9` | 召回对应窗口 |
+| `x` | 关闭窗口 |
+
+折叠和隐藏不会让任务暂停。关闭窗口后，需要判断任务状态时进入管理器查看；要结束程序，明确执行结束任务操作。
+
+## 合适的使用方式
+
+把长期主要任务放在标签页和分屏，把短暂观察任务放进浮动窗口。浮动窗口过多时，使用有意义的终端名称，并定期整理已经结束的记录。
+
+外框与按钮外观在<DocLink locale="zh-CN" path="clients/tui/config/appearance">主题与界面配置</DocLink>中调整。涉及远端 PTY 行列数的变化，仍遵循<DocLink locale="zh-CN" path="clients/tui/size">尺寸所有权</DocLink>。

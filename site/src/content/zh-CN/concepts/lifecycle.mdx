@@ -1,0 +1,37 @@
+---
+title: "任务生命周期与持久化"
+description: "AnyTTY 让终端任务不依附于某一个客户端窗口。持续运行的前提是目标机器和 owning daemon 继续运行；持久化记录不等于保存并恢复进程内存。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 任务生命周期与持久化
+
+AnyTTY 让终端任务不依附于某一个客户端窗口。持续运行的前提是目标机器和 owning daemon 继续运行；持久化记录不等于保存并恢复进程内存。
+
+## 从创建到清理
+
+| 阶段 | 含义 | 可以做什么 |
+| --- | --- | --- |
+| created | 任务已创建 | 检查启动信息 |
+| running | 进程正在运行 | 查看、输入、捕获、等待 |
+| exited | 进程已退出 | 检查退出码和历史 |
+| removed | 记录已移除 | 不再作为普通已有任务打开 |
+
+程序退出码为 0 通常表示程序报告成功，非 0 通常表示失败；最终语义仍由程序约定决定。被结束的任务不应被报告为正常完成。
+
+## 客户端离开时
+
+关闭 App、退出 TUI、网络中断或解除面板附加，不会自动等同于结束任务。重连后用 endpoint 与 terminal ID 找到它。多个客户端查看的是同一个进程，不是每端复制一份。
+
+## daemon 或电脑停止时
+
+daemon 停止、重启或电脑关机可能结束运行任务。升级二进制不会自动把旧进程变成新版本 daemon；要应用后台变更应安排维护时间。不能把“重新打开历史记录”理解为“进程从断点继续”。
+
+## restart、kill 与 remove
+
+restart 开始新的运行 generation，适合重新执行任务；kill 请求结束运行；remove 清理记录。先收集退出码与结果文件，再做清理。重启前记录是哪一轮执行，避免把旧历史里的成功消息当作新一轮结果。
+
+自动化处理见<DocLink locale="zh-CN" path="clients/cli/automation">脚本结果</DocLink>，后台服务管理见<DocLink locale="zh-CN" path="maintenance/daemon">daemon 生命周期</DocLink>。

@@ -1,0 +1,38 @@
+---
+title: "Security and privacy"
+description: "The target daemon controls terminals, files, history and client grants. Routes provide reachability and cannot expand authorization or bypass identity verification."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Security and privacy
+
+The target daemon controls terminals, files, history and client grants. Routes provide reachability and cannot expand authorization or bypass identity verification.
+
+## Identity and transport
+
+Remote connections verify daemon identity and client credentials. SSH also verifies host keys. Investigate reinstall or wrong-target causes for changed fingerprints instead of disabling checks.
+
+Remote terminal/file traffic is protected in transit. This does not establish broader anonymity, zero-knowledge or universal service-data guarantees.
+
+## Pairing material
+
+Invitations are short-lived, one-time secrets redeemed into client-bound grants. Manage invitation and grant expiration separately. Revoke a lost client on every relevant target; local deletion is insufficient.
+
+## Files and shells
+
+File tools are constrained by capabilities, path policy and OS permissions. Shells retain their OS user’s permissions; file-tool restrictions are not a shell sandbox. See <DocLink locale="en" path="files/permissions">file permissions</DocLink>.
+
+## Local data
+
+History, logs, clipboard and screenshots may contain commands, paths, business data or accidentally printed secrets. Configure retention accordingly. Protected keys and credentials should not be published as ordinary configuration.
+
+## Cloud metadata
+
+Cloud/Relay does not issue terminal authority, but the service processes operational account, device, network, diagnostic and usage information. Consult the site privacy policy. Local and independent SSH/Direct routes do not require terminal content to pass through Cloud.
+
+## Vulnerability reporting
+
+Use [private GitHub reporting](https://github.com/anytty/anytty/security/advisories/new) with versions, prerequisites, a test-data reproduction and impact. Never post real keys, invitations or production content in public issues.

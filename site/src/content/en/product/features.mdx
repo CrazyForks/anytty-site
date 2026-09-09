@@ -1,0 +1,40 @@
+---
+title: "Features and use cases"
+description: "AnyTTY centers on persistent terminal tasks that multiple clients can access. Clients present and control the interface; the daemon on the target machine owns processes, terminal s"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Features and use cases
+
+AnyTTY centers on persistent terminal tasks that multiple clients can access. Clients present and control the interface; the daemon on the target machine owns processes, terminal state and history.
+
+## Separate tasks from views
+
+Create a terminal for a shell, editor, build or service. Leaving a pane, quitting a client or losing a phone connection does not itself end that process. Reconnect to the same device to find existing terminals.
+
+Persistence requires the target machine and daemon to stay running. It does not restore process memory after a machine or daemon restart. See <DocLink locale="en" path="concepts/lifecycle">task lifecycle</DocLink>.
+
+## Organize parallel work
+
+Use TUI workspaces for projects, tabs for tasks and splits to watch code, tests and logs together. Floating panels provide temporary views; the picker opens existing terminals; the manager exposes status, metadata and cleanup operations.
+
+These interfaces use the same terminal pool. Distinguish detaching a view, ending a process and deleting a record.
+
+## Continue across devices
+
+Run work on a computer, inspect output and files from a phone, or use in-app splits on a tablet. Clients attached to one terminal share a process. Input and terminal resizing can affect other viewers.
+
+## Connect remote machines
+
+An endpoint is a saved target device. Use SSH, Direct or Cloud-assisted connectivity as appropriate, and pair clients to grant access. Device identity, authorization and network route are separate concepts. See <DocLink locale="en" path="connections/overview">connection options</DocLink>.
+
+## Delegate remote work to an agent
+
+The CLI creates named tasks, returns JSON, waits for exit, captures output and downloads results. Agents can report the actual target, exit code and artifact paths while a person opens the same task in the TUI or App. Follow the <DocLink locale="en" path="agents/remote-task">remote task guide</DocLink>.
+
+## Files and history
+
+File tools browse, upload, download and manage files on the target device. The native App previews supported text and images. History retains output beyond the live screen, subject to retention settings. Save important reports as files and download them rather than relying on terminal history alone.

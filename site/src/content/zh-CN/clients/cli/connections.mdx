@@ -1,0 +1,43 @@
+---
+title: "设备与配对命令"
+description: "设备配置、一次性配对和已签发授权分别由 endpoint、pair、access 管理。先弄清操作在哪台机器执行。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 设备与配对命令
+
+设备配置、一次性配对和已签发授权分别由 `endpoint`、`pair`、`access` 管理。先弄清操作在哪台机器执行。
+
+## 查看客户端保存的设备
+
+```sh
+anytty endpoint list
+anytty endpoint show workstation
+anytty endpoint test workstation --json
+```
+
+将 `workstation` 替换为真实 endpoint ID。若存在多条候选路线，测试时用 `--route ROUTE_ID` 明确指定。`endpoint route` 管理路线，`endpoint policy` 管理下次会话采用的选择策略。
+
+## 在目标机器签发邀请
+
+`anytty pair create` 在拥有任务的机器上运行，生成短期一次性邀请。必须带入接收客户端可用的网络路线，示例分别见 <DocLink locale="zh-CN" path="connections/direct">Direct</DocLink> 和 <DocLink locale="zh-CN" path="connections/ssh">SSH</DocLink>。
+
+`--ttl` 控制邀请兑换有效期，默认 10 分钟、最大 168 小时；`--grant-ttl` 控制兑换后授权有效期，默认 0 表示不按时过期。`--terminal ID` 限定单个终端，省略时可能授予 daemon 范围访问。
+
+## 在访问客户端兑换
+
+```sh
+anytty pair inspect ./claim.txt
+anytty pair import ./claim.txt --id workstation --client-label laptop
+```
+
+文件应来自设备所有者并保密传递；也可按 `pair import --help` 使用标准输入。App 使用自己的扫码或文本导入页面。邀请兑换后绑定客户端身份，不是可以无限重复使用的共享密码。
+
+## 撤销与本地清理
+
+在目标机器用 `anytty access list` 查看授权，再按 `anytty access revoke --help` 撤销指定授权。本地 `endpoint remove` 只清理客户端登记，不能代替撤销。
+
+需要暂时停用设备时可使用 `endpoint disable` / `enable`；`set-default` 修改默认目标。自动化应继续显式传 endpoint，避免默认目标变化导致误操作。

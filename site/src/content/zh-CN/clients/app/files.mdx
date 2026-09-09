@@ -1,0 +1,36 @@
+---
+title: "文件浏览、传输与预览"
+description: "App 文件管理器操作的是选中设备上的文件，不是手机本地的同名路径。每次进入先确认设备和当前目录。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 文件浏览、传输与预览
+
+App 文件管理器操作的是选中设备上的文件，不是手机本地的同名路径。每次进入先确认设备和当前目录。
+
+## 浏览与整理
+
+从终端工作区打开“文件管理”。通过目录列表、路径输入或书签跳转；用刷新、排序和显示隐藏文件调整列表。文件菜单提供预览、下载、复制路径、复制、剪切、重命名和删除；也可新建目录。
+
+<ScreenshotSlot id="app-files" locale="zh-CN" />
+
+复制路径只是取得目标文件的路径文本；下载才会把文件内容带到客户端。复制、剪切与重命名作用于目标设备，删除前确认文件没有被其他任务使用。
+
+## 上传与下载
+
+从文件管理器使用可用的上传入口选择本地文件，并检查目标目录；下载时选择具体文件。打开传输列表查看进度和最终结果。网络中断或错误时，以传输结果为准，不以列表中出现文件名作为成功证据。
+
+大文件或批量自动化可改用 <DocLink locale="zh-CN" path="clients/cli/files">CLI 文件命令</DocLink>，便于记录路径和处理失败。
+
+## 当前预览范围
+
+原生预览主要支持文本和图片：常见文本、JSON、XML、YAML，以及 PNG、JPEG、GIF、WebP、BMP 等受支持图片。部分文本格式可使用相应渲染视图，前提是内容完整且格式支持。
+
+当前预览有源文件 64 MiB、请求载荷 4 MiB 和图片尺寸处理限制。预览不是完整文件下载；遇到截断提示，不能用预览判断全文内容。Office、PDF、音视频和 3D 文件不在本页承诺的原生预览范围内。
+
+## 权限与错误
+
+目录不可访问时检查授权范围和目标操作系统权限；文件不存在时刷新目录并核对大小写。规则和限制详见<DocLink locale="zh-CN" path="files/permissions">文件权限</DocLink>与<DocLink locale="zh-CN" path="files/transfers">传输限制</DocLink>。

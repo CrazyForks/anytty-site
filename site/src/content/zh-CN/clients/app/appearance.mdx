@@ -1,0 +1,34 @@
+---
+title: "显示、主题与尺寸"
+description: "App 外观由手机设置控制，与桌面 TUI YAML 分开。先调整阅读体验，再决定是否改变远端终端尺寸。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 显示、主题与尺寸
+
+App 外观由手机设置控制，与桌面 TUI YAML 分开。先调整阅读体验，再决定是否改变远端终端尺寸。
+
+## 应用与终端外观
+
+设置中可以调整应用主题、明暗模式和语言。终端另有字体、字号、终端配色及光标闪烁等选项；改变应用外观不一定等于改变终端调色板。
+
+<ScreenshotSlot id="app-appearance" locale="zh-CN" />
+
+先用常见 shell 输出检查普通文字、错误颜色和选中内容，再打开实际使用的编辑器。字体不支持某些符号时会出现方框，应调整字体或程序符号配置。
+
+## 键盘与可视区域
+
+根据屏幕和输入习惯选择 Auto、Resize 或 Shift 键盘模式，确保键盘弹出后能看见光标。字号变大通常减少可见字符数量；它不保证每个查看者都得到独立的远端布局。
+
+## 终端尺寸
+
+自动接管尺寸决定客户端是否尝试取得调整尺寸的角色。共同查看时，建议先跟随已有尺寸，需要手机重排时再接管。创建终端时也可以选择可调整、提醒或锁定的策略。
+
+如果电脑上的全屏程序突然重排，检查手机是否接管并改变了行列数。若手机内容被裁切，先确认锁定状态，再决定移动视口还是调整尺寸。
+
+## 与 TUI 的边界
+
+App 字体、花瓣菜单和主题不由 `tui-v3.yaml` 配置。TUI 的 owner / follower 解释仍适用于共同访问的终端，详见<DocLink locale="zh-CN" path="clients/tui/size">多端尺寸规则</DocLink>。

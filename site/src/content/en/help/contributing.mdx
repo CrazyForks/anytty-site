@@ -1,0 +1,50 @@
+---
+title: "Build and contribute"
+description: "Public clients live in anytty/anytty(https://github.com/anytty/anytty); the site and product docs live in anytty/anytty-site(https://github.com/anytty/anytty-site). Private Cloud s"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Build and contribute
+
+Public clients live in [anytty/anytty](https://github.com/anytty/anytty); the site and product docs live in [anytty/anytty-site](https://github.com/anytty/anytty-site). Private Cloud services are outside the public client repository.
+
+## Client development
+
+Read CONTRIBUTING, repository guidance and CI after cloning. Install the Go, Node/npm and mobile toolchains declared by current repository files rather than relying on stale version numbers.
+
+```sh
+git clone https://github.com/anytty/anytty.git
+cd anytty
+npm ci
+make build
+make test
+make test-clients
+npm run public:check
+```
+
+Mobile builds also need Android SDK/Java or macOS/Xcode according to platform scripts. Do not copy private service implementation into public clients.
+
+## Documentation site
+
+```sh
+git clone https://github.com/anytty/anytty-site.git
+cd anytty-site
+npm ci
+npm run site:check
+npm run site:preview
+```
+
+Use the printed local address. Internal links must respect deployment base paths through shared helpers.
+
+## Documentation conventions
+
+Plan modules and hierarchy before task pages. Tutorials explain goals, prerequisites, actions, results and failures; references centralize fields and bindings. Update both locales, navigation and legacy URL compatibility.
+
+Relationship diagrams explain structure and flow; screenshots show real interfaces. When unavailable, use explicit slots describing the required state and purpose.
+
+## Before submitting
+
+Run relevant checks and state verified/unverified scope. Follow the current [contribution guide](https://github.com/anytty/anytty/blob/main/CONTRIBUTING.md) for DCO and other requirements. Exclude credentials, private source and user terminal content.

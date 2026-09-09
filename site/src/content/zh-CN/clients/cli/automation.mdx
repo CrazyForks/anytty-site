@@ -1,0 +1,51 @@
+---
+title: "脚本集成与结果处理"
+description: "一个可靠脚本需要分别处理“CLI 调用是否成功”“任务是否到达目标状态”和“任务自身是否成功”。不能只看创建命令或 wait 命令的退出码。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 脚本集成与结果处理
+
+一个可靠脚本需要分别处理“CLI 调用是否成功”“任务是否到达目标状态”和“任务自身是否成功”。不能只看创建命令或 wait 命令的退出码。
+
+## 最小完整脚本
+
+下面使用 POSIX shell 与 `jq`，在本机创建一次性检查任务。先确保本机 daemon 可用；将 endpoint 改为已配对设备即可用于相应目标。
+
+```sh
+#!/bin/sh
+set -eu
+endpoint=local
+task_name="docs-check-$(date +%s)"
+created=$(anytty terminal create --endpoint "$endpoint" --json \
+  --name "$task_name" -- sh -lc 'printf "ready\n"; exit 0')
+target=$(printf '%s' "$created" | jq -er '.target')
+printf 'Task: %s\n' "$target"
+
+if ! anytty terminal wait "$target" --state exited --timeout 2m --json > wait.json; then
+  anytty terminal show "$target" --json
+  printf 'Wait failed; task may still be running.\n' >&2
+  exit 1
+fi
+anytty terminal capture "$target" --lines 200 --json > capture.json
+code=$(jq -er '.exit_code | numbers' wait.json)
+printf 'Program exit code: %s\n' "$code"
+test "$code" -eq 0
+```
+
+`wait.json` 和 `capture.json` 写在脚本当前目录，运行前确认不会覆盖你需要保留的同名文件。脚本刻意保留任务记录，便于从 TUI 或 App 审查。
+
+## JSON 怎么读
+
+创建结果包含 `schema_version`、`kind` 和 `target`；list 的条目在 `items`，show 的任务在 `item`；wait 的任务退出码是顶层 `exit_code`。使用字段判断，不解析终端表格的空格和列宽。
+
+## 超时与重试
+
+wait 超时只表示本次等待结束，任务可能继续运行。先 show / capture，再选择继续等待或明确取消。创建请求结果不明时先按名称和列表核对，避免无条件重试产生重复工作。
+
+## 事件与服务
+
+需要连续观察时，可用 `terminal events TARGET --output ndjson --timeout 30s`。生命周期 running 只表示进程在运行；服务就绪还需要健康检查。完整场景见<DocLink locale="zh-CN" path="agents/remote-task">Agent 远端任务</DocLink>和<DocLink locale="zh-CN" path="agents/services">常驻服务</DocLink>。

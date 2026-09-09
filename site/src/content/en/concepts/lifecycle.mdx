@@ -1,0 +1,37 @@
+---
+title: "Task lifecycle and persistence"
+description: "AnyTTY separates terminal tasks from individual client windows. Continued execution requires the owning machine and daemon to remain running. Persisted records do not restore proce"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Task lifecycle and persistence
+
+AnyTTY separates terminal tasks from individual client windows. Continued execution requires the owning machine and daemon to remain running. Persisted records do not restore process memory.
+
+## Lifecycle
+
+| State | Meaning | Typical action |
+| --- | --- | --- |
+| created | Task exists | Inspect startup information |
+| running | Process is running | View, send, capture, wait |
+| exited | Process ended | Inspect exit code and history |
+| removed | Record removed | No longer an ordinary reopenable task |
+
+Exit code 0 generally means program-reported success; nonzero generally indicates failure, subject to the program’s contract. Do not report killed tasks as normal completion.
+
+## When a client leaves
+
+Closing the App, quitting the TUI, losing connectivity or detaching a pane does not itself end a task. Reconnect by endpoint and terminal ID. Multiple viewers share one process.
+
+## When the host stops
+
+Daemon stop/restart or machine shutdown can end running tasks. Updating the binary does not turn an existing daemon into a new version; schedule maintenance for daemon changes. Reopening history is not resuming process memory.
+
+## Restart, kill and remove
+
+Restart begins a new generation, kill requests termination, and remove cleans the record. Collect results before cleanup. Track which run produced evidence so an old success message is not mistaken for a new result.
+
+See <DocLink locale="en" path="clients/cli/automation">script results</DocLink> and <DocLink locale="en" path="maintenance/daemon">daemon lifecycle</DocLink>.

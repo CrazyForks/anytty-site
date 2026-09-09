@@ -1,0 +1,56 @@
+---
+title: "常见问题"
+description: "这里集中回答容易混淆的产品行为，具体步骤链接到相应教程。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 常见问题
+
+这里集中回答容易混淆的产品行为，具体步骤链接到相应教程。
+
+## 每次都要先启动 daemon 吗？
+
+不用。直接运行 `anytty`，TUI 会按需启动本机 daemon。手动命令用于维护和无人值守准备。
+
+## 退出 TUI 或 App 后任务还在吗？
+
+目标机器与 daemon 持续运行时，离开客户端不会自动结束任务。电脑关机和 daemon 重启不属于这个保证，见<DocLink locale="zh-CN" path="concepts/lifecycle">生命周期</DocLink>。
+
+## 必须用 Cloud 吗？
+
+不必。本机、SSH 和 Direct 可以独立使用；Cloud 提供可选的跨网络发现与连接能力。
+
+## 登录 Cloud 后为什么还要配对？
+
+账号与设备接入、客户端授权是不同关系。配对由目标 daemon 为具体客户端签发授权。
+
+## 手机和电脑是两个独立终端吗？
+
+如果打开相同 target，就是同一个进程。输入和尺寸变化可能影响另一端；需要独立任务时新建 terminal。
+
+## follower 是只读吗？
+
+不是。这里的角色协调终端尺寸，不等于完整输入或文件访问权限。见<DocLink locale="zh-CN" path="clients/tui/size">尺寸说明</DocLink>。
+
+## 为什么我的复制快捷键不同？
+
+内置与安装器推荐配置不同，自定义配置也会改变绑定。看当前帮助，按<DocLink locale="zh-CN" path="clients/tui/config/shortcuts">配置说明</DocLink>修改。
+
+## 修改 TUI YAML 会同步到手机吗？
+
+不会。手机主题、字体和花瓣菜单在 App 设置中配置，工作台布局也不存放在主题 YAML 里。
+
+## wait 成功为什么任务仍失败？
+
+wait 成功只说明等到了指定状态。检查任务 `exit_code` 才能判断程序结果。
+
+## 文件能预览所有格式吗？
+
+当前原生 App 主要支持受限大小的文本和图片。其他格式下载后使用适合的应用，见<DocLink locale="zh-CN" path="files/transfers">预览限制</DocLink>。
+
+## Web 文档在哪里？
+
+本次先完成 TUI、App 与 CLI。Web 在整体关系中保留位置，使用教程等交互优化后补充。

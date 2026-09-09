@@ -1,0 +1,54 @@
+---
+title: "快捷键、模式与透传"
+description: "快捷键统一由 tui.shortcuts 定义，输入路由、底部提示和帮助都使用这套配置。先决定只是改显示文案，还是要替换按键。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 快捷键、模式与透传
+
+快捷键统一由 `tui.shortcuts` 定义，输入路由、底部提示和帮助都使用这套配置。先决定只是改显示文案，还是要替换按键。
+
+## 两种覆盖方式
+
+省略 `shortcuts` 或写 `shortcuts: {}` 时，使用内置绑定。只写 `actions` 时，保留绑定，仅覆盖动作显示：
+
+```yaml
+version: 1
+tui:
+  shortcuts:
+    actions:
+      panel.close:
+        label: close view
+        style: danger
+```
+
+**一旦声明任何 scene，包括 `global: {}`，整套默认 scene 绑定都会被替换。** 不会只合并你修改的那一个键。要换键，建议复制当前版本完整推荐配置，再修改；不要只写一条 `global` 后期待其他默认模式仍然存在。
+
+## 场景和动作
+
+`global` 定义入口，`panel`、`system`、`tab`、`workspace` 等定义模式内的键，`terminal_picker` 等定义弹层操作。按键右边是动作 ID，例如 `menu.panel`、`panel.detach`。
+
+短写形式是 `ctrl-p: menu.panel`。长写可指定 `action`、`label`、`style` 和 `show` 等受支持属性。动作必须属于有效动作集合，校验错误时按提示修正，不要用自造名称。
+
+未修饰的 `Esc` 是保留返回键，不能重新绑定到 scene。默认与推荐配置对照见<DocLink locale="zh-CN" path="reference/shortcuts">快捷键参考</DocLink>。
+
+## 把入口键发给终端程序
+
+例如内置 `Ctrl+W` 会进入工作区模式。如果 shell 需要收到 `Ctrl+W`，在透传窗口内再次按相同入口键：TUI 返回终端并透传一次该键。默认窗口是 1000 毫秒。
+
+```yaml
+version: 1
+tui:
+  interaction:
+    sticky_prefix_timeout_ms: 5000
+    shortcut_passthrough_interval_ms: 700
+```
+
+前者控制前缀模式空闲退出时间，后者控制双击透传窗口，含义不同。系统模式内置 `l` 可以切换快捷键锁；操作时观察锁定提示，避免忘记当前路由状态。
+
+## 排查按键冲突
+
+先检查宿主终端是否拦截，再看当前模式和配置，最后判断子程序是否收到了输入。传统终端编码不一定区分所有修饰组合；选择宿主能可靠发送的组合键，并验证当前帮助与实际操作一致。

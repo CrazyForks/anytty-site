@@ -1,0 +1,33 @@
+---
+title: "Releases and support"
+description: "Read assets, compatibility notes and known issues for a specific release. “Latest” is insufficient because the CLI, running daemon and App may differ."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Releases and support
+
+Read assets, compatibility notes and known issues for a specific release. “Latest” is insufficient because the CLI, running daemon and App may differ.
+
+## Record versions
+
+```sh
+anytty --version
+anytty daemon status
+```
+
+Also record the App version/build. A binary update may leave the old daemon running; see <DocLink locale="en" path="maintenance/updates">updates</DocLink>.
+
+## Releases
+
+[Public releases](https://github.com/anytty/anytty/releases) contain notes and assets. Check desktop and Android assets per version, and current TestFlight availability/expiration for iOS/iPadOS.
+
+Beta interfaces, settings and storage may change. Compare documentation with the installed version; local help and loaded binding help explain differences.
+
+## Ordinary issues
+
+Use [public issues](https://github.com/anytty/anytty/issues) with versions, OS, client, minimal steps and expected/actual behavior. Include route type for connection failures and minimal configuration for setting failures, using synthetic data.
+
+Report vulnerabilities <DocLink locale="en" path="help/security">privately</DocLink>. For documentation issues, identify the page, statement, actual behavior and needed explanation.

@@ -1,0 +1,48 @@
+---
+title: "通过 Direct 连接"
+description: "Direct 使用明确的目标监听地址，适合局域网和可控网络。示例假设电脑地址是 192.168.1.20；请替换成手机或另一台电脑实际能访问的地址。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 通过 Direct 连接
+
+Direct 使用明确的目标监听地址，适合局域网和可控网络。示例假设电脑地址是 `192.168.1.20`；请替换成手机或另一台电脑实际能访问的地址。
+
+## 1. 准备监听
+
+本机默认回环地址不能直接用于手机连接。若 daemon 尚未运行，可在目标电脑启动监听：
+
+```sh
+anytty daemon start --route 192.168.1.20:41120
+```
+
+**已经运行时，`daemon start` 不会重新配置监听。** 先保存或结束现有任务，再有意执行：
+
+```sh
+anytty daemon restart --route 192.168.1.20:41120
+```
+
+重启会影响该 daemon 的运行任务，这一步是改变网络监听的维护操作，不是日常打开 TUI 的要求。监听地址应属于本机可用接口；通配地址会扩大监听范围并启用已配对设备的局域网发现。
+
+## 2. 生成邀请
+
+```sh
+anytty pair create --route direct \
+  --direct-address 192.168.1.20:41120 \
+  --qr-file ./direct-pair.png --out ./direct-claim.txt
+```
+
+`--direct-address` 是发布给接收方的地址，用于 Direct setup 与 ICE-TCP。若你的部署分别发布 signaling 与 ICE-TCP 地址，使用成对的 `--signaling-address` / `--ice-tcp-address` 参数，不要随意混填。
+
+## 3. 配对并验证
+
+App 扫描二维码；另一台电脑可以执行 `anytty pair import ./direct-claim.txt --id workstation`。邀请属于一次性秘密，失效后重新生成。
+
+检查目标防火墙和网络允许实际所需监听，避免访客 Wi-Fi 的设备隔离。CLI 用 `endpoint show` 查路线，再用 `endpoint test workstation --route ROUTE_ID` 验证。
+
+## 4. 日常使用
+
+配对完成后，在 TUI 或 App 打开该设备即可。电脑 IP 变化、切换蜂窝网络或目标休眠后，原地址可能不可达；更新路线或选择其他可用路径。Direct 监听可达仍然需要有效配对授权。

@@ -1,0 +1,47 @@
+---
+title: "Pairing, scope and revocation"
+description: "Pairing binds a client identity to access issued by a target daemon. It is more than saving an address, and does not copy a computer login password to a phone."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Pairing, scope and revocation
+
+Pairing binds a client identity to access issued by a target daemon. It is more than saving an address, and does not copy a computer login password to a phone.
+
+<Diagram id="pairing" locale="en" />
+
+## Invitation versus grant
+
+The target issues a short-lived, one-time invitation. Redemption stores client-bound credentials. `--ttl`, default 10 minutes, limits redemption time. `--grant-ttl` limits the resulting access lifetime; default 0 means no time expiration.
+
+Issue separate invitations for separate clients so each can be identified and revoked independently.
+
+## Scope
+
+`pair create --terminal TERMINAL_ID` limits a grant to one terminal. Review whether broader daemon access is needed when omitting that restriction. Terminal access, file capability and size ownership are distinct concepts.
+
+File tools are constrained by grants and daemon file policy. An interactive shell can still perform operations allowed to its OS user; file-tool path restrictions are not a shell sandbox.
+
+## Inspect access
+
+On the target:
+
+```sh
+anytty access identity
+anytty access list
+```
+
+Review client labels, scope and expiration. Labels aid management; identity and credentials establish authorization.
+
+## Revoke
+
+```sh
+anytty access revoke GRANT_ID
+```
+
+Use the grant ID from the list. Revoke lost or retired clients on every target they could access, then verify access fails with the revoked grant.
+
+Removing an App device or CLI endpoint only cleans local configuration. Cloud accounts and enrollment are also separate from daemon-issued client grants.

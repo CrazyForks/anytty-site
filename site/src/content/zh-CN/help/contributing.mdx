@@ -1,0 +1,50 @@
+---
+title: "构建与贡献"
+description: "公开客户端代码在 anytty/anytty(https://github.com/anytty/anytty)，产品网站与文档在 anytty/anytty-site(https://github.com/anytty/anytty-site)。Cloud 服务实现不属于公开客户端代码。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 构建与贡献
+
+公开客户端代码在 [anytty/anytty](https://github.com/anytty/anytty)，产品网站与文档在 [anytty/anytty-site](https://github.com/anytty/anytty-site)。Cloud 服务实现不属于公开客户端代码。
+
+## 客户端开发
+
+克隆仓库后先阅读 CONTRIBUTING、仓库指导和 CI，按当前文件声明安装 Go、Node.js、npm 及对应移动平台工具链。工具版本随项目演进，仓库配置优先于文档里的固定版本号。
+
+```sh
+git clone https://github.com/anytty/anytty.git
+cd anytty
+npm ci
+make build
+make test
+make test-clients
+npm run public:check
+```
+
+移动端构建另需 Android SDK / Java 或 macOS / Xcode，按当前平台脚本准备。不要把服务端私有实现复制进公开客户端。
+
+## 文档站开发
+
+```sh
+git clone https://github.com/anytty/anytty-site.git
+cd anytty-site
+npm ci
+npm run site:check
+npm run site:preview
+```
+
+以命令打印的本地地址为准。站点支持部署 base path，内部文档链接需要通过统一路径工具生成。
+
+## 文档改动约定
+
+先更新大模块与层级，再补具体任务页。教程说明目标、前提、操作、结果和失败处理；参考页集中维护字段与绑定。中英文页面、导航和旧地址兼容一起检查。
+
+关系图解释组成和流程；产品截图展示真实界面。无法截图时保留明确占位，写明画面状态和用途，不把概念图假装成产品截图。
+
+## 提交前
+
+运行改动相关检查，记录实际验证与未验证范围。贡献要求、DCO 和行为准则以[贡献指南](https://github.com/anytty/anytty/blob/main/CONTRIBUTING.md)为准。提交资料不应包含真实授权材料、私有源码或用户终端内容。

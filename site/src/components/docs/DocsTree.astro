@@ -1,0 +1,25 @@
+---
+import { ChevronRight } from 'lucide-react';
+import { docContains, type DocNode } from '@/lib/documentation';
+import { sitePath, localizedPath, type Locale } from '@/lib/site';
+interface Props { nodes: DocNode[]; locale: Locale; current: string; depth?: number }
+const { nodes, locale, current, depth = 0 } = Astro.props;
+---
+<ul class:list={['m-0 list-none space-y-1 p-0', depth > 0 && 'ml-2 border-l border-border pl-3']}>
+  {nodes.map(node => <li>
+    {node.path ? <a href={sitePath(localizedPath(locale, `/docs/${node.path}`))} aria-current={current === node.path ? 'page' : undefined}
+      class:list={['flex min-h-11 items-center rounded-md px-3 py-2 text-sm leading-5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary', current === node.path ? 'bg-secondary font-medium text-foreground' : 'text-muted-foreground hover:bg-secondary/60 hover:text-foreground']}>
+      {locale === 'en' ? node.en : node.zh}
+    </a> : <details open={docContains(node, current)} class="doc-section">
+      <summary class="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-md px-2 py-2 text-sm font-medium text-foreground hover:bg-secondary/60 focus-visible:outline-2 focus-visible:outline-primary [&::-webkit-details-marker]:hidden">
+        <ChevronRight className="doc-chevron size-3.5 shrink-0 transition-transform" aria-hidden="true" />
+        <span>{locale === 'en' ? node.en : node.zh}</span>
+      </summary>
+      <Astro.self nodes={node.children ?? []} locale={locale} current={current} depth={depth + 1} />
+    </details>}
+  </li>)}
+</ul>
+
+<style>
+  .doc-section[open] > summary :global(.doc-chevron) { transform: rotate(90deg); }
+</style>

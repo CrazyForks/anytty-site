@@ -1,0 +1,38 @@
+---
+title: "让 Agent 使用 AnyTTY"
+description: "AnyTTY 可以作为 Agent 的终端与文件操作工具：Agent 在已授权设备上创建可观察的任务，读取真实输出和状态，再交付结果。你可以同时用 TUI 或 App 查看这些任务。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 让 Agent 使用 AnyTTY
+
+AnyTTY 可以作为 Agent 的终端与文件操作工具：Agent 在已授权设备上创建可观察的任务，读取真实输出和状态，再交付结果。你可以同时用 TUI 或 App 查看这些任务。
+
+<Diagram id="agent" locale="zh-CN" />
+
+## 准备条件
+
+Agent 所在环境能够调用 `anytty` CLI，已配置目标 endpoint，并具备所需授权。目标机器安装项目依赖，拥有正确工作目录。脚本解析 JSON 时可使用 `jq` 或相应语言的 JSON 库。
+
+先用 `anytty endpoint list` 和 `terminal list --endpoint ENDPOINT --json` 检查目标，不要让 Agent 根据显示名猜 IP、私钥或授权信息。
+
+## 给 Agent 的任务约定
+
+可以把下面这段作为任务说明的起点：
+
+> 使用已配置的 workstation endpoint，在 /srv/project 中执行指定检查。先确认设备和目录，创建独立命名的终端任务，保留 create 返回的 target。等待任务退出并读取 exit_code，收集必要输出和报告文件。失败时保留任务供检查，报告目标、命令、退出码和产物路径。需要人工输入时暂停发送输入并告知任务名称。
+
+替换设备、目录和实际检查命令。这里只约定 AnyTTY 操作流程；Agent 自身允许执行什么工作，仍由你的任务要求决定。
+
+## 为什么使用独立任务
+
+把构建、测试和服务放到可命名的 daemon 终端中，任务不会因为一次工具调用结束就失去观察入口。人可以从管理器找到它，Agent 也能用稳定 target 继续读取结果。
+
+对普通短小本机文件读取不必强制套用远端终端；适合 AnyTTY 的是远端、长运行、需要持续观察或交接的工作。
+
+## 阅读路径
+
+先完成<DocLink locale="zh-CN" path="agents/remote-task">远端任务</DocLink>，再处理<DocLink locale="zh-CN" path="agents/services">构建与服务</DocLink>、<DocLink locale="zh-CN" path="agents/handoff">多任务与接管</DocLink>、<DocLink locale="zh-CN" path="agents/files">文件交付</DocLink>。CLI 字段规则集中在<DocLink locale="zh-CN" path="clients/cli/automation">脚本结果处理</DocLink>。

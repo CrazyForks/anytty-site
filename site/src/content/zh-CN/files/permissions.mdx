@@ -1,0 +1,34 @@
+---
+title: "文件目录、权限与路径"
+description: "AnyTTY 文件工具在目标 daemon 所在机器上操作。路径先由目标平台解释，再受客户端授权、daemon 文件策略与操作系统权限共同约束。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 文件目录、权限与路径
+
+AnyTTY 文件工具在目标 daemon 所在机器上操作。路径先由目标平台解释，再受客户端授权、daemon 文件策略与操作系统权限共同约束。
+
+## 先确认路径属于哪里
+
+`anytty file download workstation /srv/project/report.json ./report.json` 中，前一个路径属于 workstation，后一个属于运行 CLI 的电脑。App 文件管理器顶部目录属于当前选中设备。
+
+相同路径字符串在不同设备上可能指向不同内容。Windows 与 Unix 的路径格式、大小写规则也可能不同；脚本优先使用明确的绝对路径并正确引用带空格的参数。
+
+## 工作目录与文件目录
+
+创建 terminal 的 `cwd` 决定程序从哪里启动；文件管理器浏览目录不一定等于某个终端的 cwd。改变浏览目录不会改变运行中 shell 的目录，反之亦然。
+
+## 授权边界
+
+文件请求需要对应能力和路径许可，目标用户还需拥有 OS 访问权。文件权限不足时，检查实际请求、授权和目标目录，而不是直接把 daemon 提升为管理员。
+
+文件工具限制不等于 shell 沙箱。如果客户端有终端交互权限，它可以通过 shell 运行该用户本来就能执行的命令。需要隔离任务时应结合系统账号、容器或操作系统权限设计。
+
+## 修改之前
+
+上传覆盖、移动、重命名和删除都会影响目标机器的真实文件。先核对 endpoint、完整路径与用途；对正在运行任务使用的文件，考虑程序是否仍持有旧文件句柄或需要重载。
+
+操作入口见 <DocLink locale="zh-CN" path="clients/app/files">App 文件管理</DocLink>和 <DocLink locale="zh-CN" path="clients/cli/files">CLI 文件命令</DocLink>。

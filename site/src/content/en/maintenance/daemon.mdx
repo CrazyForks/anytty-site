@@ -1,0 +1,53 @@
+---
+title: "Automatic startup and lifecycle"
+description: "Run anytty for everyday use; the TUI starts the local daemon when needed. Manual commands are for unattended operation, listener changes, diagnosis and maintenance."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Automatic startup and lifecycle
+
+Run `anytty` for everyday use; the TUI starts the local daemon when needed. Manual commands are for unattended operation, listener changes, diagnosis and maintenance.
+
+## Inspect
+
+```sh
+anytty daemon status
+anytty daemon doctor
+```
+
+Status reports service state; doctor checks runtime paths, socket and ownership. The boundary is normally the current OS user. A different user or socket may address another instance environment.
+
+## Unattended startup
+
+```sh
+anytty daemon start
+```
+
+Use this to prepare a background service for CLI or remote clients. Starting an existing daemon does not reload configuration. See <DocLink locale="en" path="connections/direct">Direct</DocLink> for listeners.
+
+## Logs
+
+```sh
+anytty daemon logs --lines 100
+anytty daemon logs --follow
+```
+
+Inspect the relevant time window and redact credentials, invitations and business output before sharing. Resolve paths with `anytty config paths`.
+
+## Stop and restart
+
+```sh
+anytty daemon stop
+anytty daemon restart
+```
+
+Both affect running tasks. Inventory work and save results first. Restarting does not restore process memory or merely reopen the TUI.
+
+Use `daemon run` for foreground diagnosis, not beside a background instance using the same socket/data. Isolated tests need separate configuration, socket and state directories.
+
+## Verify changes
+
+Check status, relevant endpoint routes and a small test task. Theme changes only require reopening the TUI; schedule daemon restarts for <DocLink locale="en" path="maintenance/config">background settings</DocLink>.

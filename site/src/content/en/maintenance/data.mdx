@@ -1,0 +1,43 @@
+---
+title: "Data, logs and backups"
+description: "Preferences, routes, credentials, layouts and terminal history are different data categories. Identify locations and recovery rules before backing them up."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Data, logs and backups
+
+Preferences, routes, credentials, layouts and terminal history are different data categories. Identify locations and recovery rules before backing them up.
+
+## Resolve paths
+
+```sh
+anytty config paths
+```
+
+This reports configuration, socket, log, history and clipboard locations. Do not copy a machine-specific temporary socket path into another setup.
+
+| Data | Handling |
+| --- | --- |
+| TUI/daemon YAML | Back up, migrate selectively and validate |
+| Endpoint registry | Contains routes and credential references; redact before sharing |
+| Private keys/credentials | Use protected storage, not casual file copying |
+| Workbench layouts | Managed through workbench storage, not theme YAML |
+| History/clipboard | May contain real output and secrets |
+| Project artifacts | Back up independently using project policy |
+
+## Diagnostic logs
+
+Inspect the failure’s time window and extract version, error type and route. Most reports do not need entire histories or complete configuration.
+
+## Backup and restore
+
+Preserve artifacts and portable preferences first. Consistent data snapshots require a maintenance window without concurrent writes; stopping the daemon affects tasks. Follow platform credential recovery capabilities and prefer fresh pairing on a new device.
+
+Validate configuration, routes and grants after restoration, then run a small task. Existing files are not proof of cross-version compatibility; see <DocLink locale="en" path="maintenance/updates">updates</DocLink>.
+
+## Cleanup
+
+History prune/delete acts locally and deletion is irreversible. During uninstall, decide separately about preferences, history, logs and grants. Local cleanup still requires separate target-side revocation.

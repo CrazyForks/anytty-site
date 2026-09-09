@@ -1,0 +1,53 @@
+---
+title: "Themes and appearance"
+description: "TUI themes control workbench chrome, titles, hints, pickers and controls. They do not remap a child program’s ANSI colors. Set desktop fonts and font size in the host terminal."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Themes and appearance
+
+TUI themes control workbench chrome, titles, hints, pickers and controls. They do not remap a child program’s ANSI colors. Set desktop fonts and font size in the host terminal.
+
+## Start with a readable palette
+
+```yaml
+version: 1
+tui:
+  theme:
+    mode: dark
+    palette: builtin
+    primary: "#a970ff"
+    secondary: "#7ab8ff"
+    background: "#101018"
+    foreground: "#eeeeef"
+  chrome:
+    header: true
+    footer: true
+    panel_presentation: card
+    pane_title_template: "{{terminal}}@{{endpoint}}"
+```
+
+`mode` accepts `dark`, `light` and `system`. Currently, `system` behaves as host-aware dark, not automatic OS light/dark synchronization. `palette: host` derives defaults from the host palette; `builtin` uses AnyTTY’s baseline. Explicit colors override either.
+
+<ScreenshotSlot id="tui-theme" locale="en" />
+
+## Color layers
+
+`primary` emphasizes focus, `secondary` secondary information. `success`, `warning`, `danger` and `info` express status; `muted` reduces emphasis. `theme.border` distinguishes panel, active, inactive and muted borders. `theme.surface` controls chrome, status, overlay and toast backgrounds.
+
+Use quoted `"#RRGGBB"` values. Empty color values use built-in, host-derived or calculated defaults. Change a few core colors before overriding every token.
+
+## Titles, glyphs and controls
+
+`pane_title_template` can display terminal and endpoint names. `workspace_template` and `tab_template` format headers using documented variables and style spans.
+
+`chrome.pane_glyphs` controls action glyphs, `footer.templates` formats hints, and `shortcuts.actions` changes action labels and styles. Display templates do not change keybindings. Optional Nerd Font glyphs require an appropriate host font.
+
+## Density and validation
+
+`split-line` saves space; `card` emphasizes pane boundaries. Hiding the header or footer removes useful navigation or hints, so start with both visible.
+
+See the <DocLink locale="en" path="reference/configuration">configuration reference</DocLink> for fields and templates. Run `anytty config validate` and reopen the TUI. If changes are missing, inspect the selected file, environment overrides and host palette.

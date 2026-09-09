@@ -1,0 +1,51 @@
+---
+title: "Terminal commands"
+description: "Create independent tasks, inspect state, capture output and send input through the CLI. For a one-shot build or test, run the actual command as the task so its exit status represen"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Terminal commands
+
+Create independent tasks, inspect state, capture output and send input through the CLI. For a one-shot build or test, run the actual command as the task so its exit status represents that work.
+
+## Create
+
+```sh
+anytty terminal create --endpoint local --json \
+  --name docs-check --cwd /absolute/project/path \
+  --tag project=demo --env CI=1 \
+  -- sh -lc 'printf "check started\n"; pwd'
+```
+
+Replace the directory with a real target path. This example requires `sh`. Arguments after `--` select the program. Omit them for the default shell; `--attach` attaches after creation, and `--rows` / `--cols` set initial dimensions.
+
+Retain the response’s `target` for subsequent commands.
+
+## Inspect and wait
+
+```sh
+anytty terminal show ENDPOINT:TERMINAL_ID --json
+anytty terminal wait ENDPOINT:TERMINAL_ID --state exited --timeout 2m --json
+anytty terminal capture ENDPOINT:TERMINAL_ID --lines 200 --json
+```
+
+`wait` observes lifecycle state, not log-based readiness. After reaching exited, inspect `exit_code`. Timeout does not terminate the task.
+
+Capture reads projected history by default; `--live` reads the latest native screen. `--lines` and `--cols` affect formatting, not the running PTY size.
+
+## Send input
+
+Only after confirming an idle shell:
+
+```sh
+anytty terminal send ENDPOINT:TERMINAL_ID --literal 'pwd' --enter
+```
+
+`send` delivers input to the current program; it is not an independent remote execution API. It supports text, named keys, hex or stdin according to mutually exclusive input rules. `--key Ctrl-C` can interrupt a program and is not a connectivity probe.
+
+## Lifecycle actions
+
+`restart` begins a new run, `kill` ends a task and `remove` deletes a record. Consult subcommand help for parameters. Collect status and required output before cleanup. See <DocLink locale="en" path="clients/cli/automation">scripting and results</DocLink>.

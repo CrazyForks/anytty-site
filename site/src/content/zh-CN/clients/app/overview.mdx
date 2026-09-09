@@ -1,0 +1,34 @@
+---
+title: "App：安装与首次连接"
+description: "原生 App 用于在手机和平板上访问目标电脑的终端和文件。终端程序仍运行在目标设备；App 提供触控、键盘、设备切换和文件管理界面。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# App：安装与首次连接
+
+原生 App 用于在手机和平板上访问目标电脑的终端和文件。终端程序仍运行在目标设备；App 提供触控、键盘、设备切换和文件管理界面。
+
+## 安装与准备
+
+按<DocLink locale="zh-CN" path="start/install">安装页</DocLink>选择 Android 或 iOS / iPadOS 发布入口。电脑上先安装 AnyTTY，运行 `anytty`，准备一个容易辨认的任务。
+
+App 和 TUI 的设置是分开的。电脑的 `tui-v3.yaml` 不会改变手机字体、花瓣菜单或软键盘行为。
+
+## 完成第一次配对
+
+按<DocLink locale="zh-CN" path="start/mobile">跨设备连接教程</DocLink>准备可达路线，在电脑上生成配对邀请，再从 App 设备页扫描或粘贴兑换。设备出现后，先进入终端列表确认目标，再打开已有任务。
+
+遇到失败时，区分邀请过期、授权失败和网络不可达。分别重新生成邀请、检查授权或修复路线，不要通过反复删除设备来掩盖问题。
+
+## 认识主要入口
+
+设备页负责配对和选择目标；终端工作区负责查看、创建和操作任务；文件管理器用于目标文件；设置负责外观、输入与后台偏好。
+
+首次使用建议依次检查：设备名称是否易认、终端字体是否合适、键盘弹出时内容是否可见、是否需要自动接管终端尺寸。
+
+## 推荐阅读顺序
+
+先读<DocLink locale="zh-CN" path="clients/app/devices">设备管理</DocLink>，再读<DocLink locale="zh-CN" path="clients/app/terminals">终端操作</DocLink>与<DocLink locale="zh-CN" path="clients/app/input">触控输入</DocLink>。文件产物从<DocLink locale="zh-CN" path="clients/app/files">文件管理</DocLink>进入，长时间离开前了解<DocLink locale="zh-CN" path="clients/app/background">后台与通知</DocLink>。

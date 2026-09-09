@@ -1,0 +1,51 @@
+---
+title: "File and history commands"
+description: "File commands identify an endpoint and path; terminal history identifies a terminal. A log file on disk and AnyTTY’s terminal history are different data sources."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# File and history commands
+
+File commands identify an endpoint and path; terminal history identifies a terminal. A log file on disk and AnyTTY’s terminal history are different data sources.
+
+## Browse target files
+
+```sh
+anytty file list workstation /srv/project --all --json
+anytty file stat workstation /srv/project/report.json --json
+anytty file cat workstation /srv/project/report.json
+```
+
+Replace endpoint and paths. Lists are paginated; `--all` reads every page, while `--cursor` and `--limit` support incremental handling. Use `cat` for small text files and download binary files.
+
+## Transfer
+
+```sh
+anytty file upload workstation ./input.json /srv/project/input.json --json
+anytty file download workstation /srv/project/report.json ./report.json --json
+```
+
+Upload takes local then remote paths; download takes remote then local. Specify both for clarity. Use `--overwrite` deliberately when replacing an existing file. Commands wait for transfer verification; inspect their result.
+
+`mkdir`, `copy`, `move`, `rename` and `remove` operate on the target filesystem. Consult each subcommand’s help.
+
+## Capture remote output
+
+```sh
+anytty terminal capture workstation:TERMINAL_ID --lines 300 --json
+```
+
+Capture is useful for recent output. For complete long-task results, write artifact files and download them.
+
+## Local history search
+
+```sh
+anytty history search TERMINAL_ID ERROR -C 2
+```
+
+Currently `history search` uses a local-daemon terminal ID, not a remote endpoint target. Do not pass `workstation:ID` as a local ID. For remote tasks, capture output or execute history search on the owning machine.
+
+No matches returns exit code 1. Distinguish that from operation errors in scripts. Text, glob, RE2 regular expressions and context options are documented in `anytty history search --help`.

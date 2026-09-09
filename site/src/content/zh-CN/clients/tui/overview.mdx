@@ -1,0 +1,45 @@
+---
+title: "认识工作台与默认操作"
+description: "TUI 是在桌面终端里运行的工作台。顶部组织工作区与标签页，中间显示终端面板，底部显示当前模式、可用操作和状态。先看清焦点和模式，再输入命令。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 认识工作台与默认操作
+
+TUI 是在桌面终端里运行的工作台。顶部组织工作区与标签页，中间显示终端面板，底部显示当前模式、可用操作和状态。先看清焦点和模式，再输入命令。
+
+<ScreenshotSlot id="tui-workbench" locale="zh-CN" />
+
+## 界面与任务的关系
+
+工作区用于组织项目，标签页容纳一组视图，分屏和浮动窗口负责显示 terminal。任务属于目标设备的 daemon；布局不是任务清单的全部。没有放进当前布局的任务，仍可从选择器和管理器打开。
+
+## 默认入口
+
+下表列出内置配置与安装器推荐配置共有的入口。`Ctrl+P → d` 表示先按组合键，再按字母，不是同时按三键。
+
+| 按键 | 打开什么 | 常用下一步 |
+| --- | --- | --- |
+| `Ctrl+F` | 终端选择器 | 选择已有任务或 New Terminal |
+| `Ctrl+P` | 面板模式 | `d` 解除附加、`z` 缩放 |
+| `Ctrl+R` | 调整尺寸模式 | 按底部提示调整布局 |
+| `Ctrl+T` | 标签页模式 | 创建、切换、重命名 |
+| `Ctrl+W` | 工作区模式 | 创建、切换、打开工作台树 |
+| `Ctrl+O` | 浮动窗口模式 | 新建、显示、折叠 |
+| `Ctrl+G` | 系统模式 | `p` 管理器、`e` 连接、`?` 帮助、`q` 退出 |
+| `Esc` | 返回 | 离开当前模式或弹层 |
+
+普通实时终端视图中，未被 TUI 处理的键会送给终端程序。进入模式后，字母可能变成界面操作；底部提示会随模式改变。前缀模式默认空闲 3 秒退出，选择器和历史等明确页面不会因此自动关闭。
+
+## 这些按钮可以改
+
+界面上的按钮文字、颜色、图标和键位来自配置，不是不可更改的固定设计。安装器推荐配置与无配置文件时的内置绑定也存在差异：例如历史入口，内置为 `Ctrl+V` / `PageUp`，推荐配置使用 `Ctrl+Shift+C`。
+
+从<DocLink locale="zh-CN" path="clients/tui/config/overview">配置入门</DocLink>开始，分别了解<DocLink locale="zh-CN" path="clients/tui/config/appearance">外观</DocLink>和<DocLink locale="zh-CN" path="clients/tui/config/shortcuts">快捷键</DocLink>。修改以后，帮助和底部提示会反映当前配置。
+
+## 接下来做什么
+
+先<DocLink locale="zh-CN" path="clients/tui/terminals">创建终端</DocLink>，再按项目组织<DocLink locale="zh-CN" path="clients/tui/layouts">工作区与分屏</DocLink>。寻找后台任务用<DocLink locale="zh-CN" path="clients/tui/picker">终端管理器</DocLink>，跨设备显示异常时看<DocLink locale="zh-CN" path="clients/tui/size">尺寸规则</DocLink>。

@@ -1,0 +1,38 @@
+{
+  "product": {
+    "zh": "客户端、连接与任务的关系",
+    "en": "Clients, connections and tasks",
+    "width": 960,
+    "height": 590
+  },
+  "layout": {
+    "zh": "工作台视图与终端任务",
+    "en": "Workbench views and tasks",
+    "width": 800,
+    "height": 520
+  },
+  "config": {
+    "zh": "配置加载与应用",
+    "en": "Configuration loading and application",
+    "width": 800,
+    "height": 520
+  },
+  "pairing": {
+    "zh": "配对与连接的顺序",
+    "en": "Pairing and connection",
+    "width": 800,
+    "height": 620
+  },
+  "handoff": {
+    "zh": "从电脑到手机，再回来",
+    "en": "Desktop to phone and back",
+    "width": 800,
+    "height": 520
+  },
+  "agent": {
+    "zh": "Agent 完成远端任务",
+    "en": "An agent completes remote work",
+    "width": 800,
+    "height": 620
+  }
+}

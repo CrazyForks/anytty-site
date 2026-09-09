@@ -1,0 +1,65 @@
+---
+title: "Configuration and loading"
+description: "Local YAML controls TUI themes, controls, bindings and interaction preferences. Locate the loaded file, make a small change and validate it before applying a larger configuration."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Configuration and loading
+
+Local YAML controls TUI themes, controls, bindings and interaction preferences. Locate the loaded file, make a small change and validate it before applying a larger configuration.
+
+<Diagram id="config" locale="en" />
+
+## Locate configuration
+
+```sh
+anytty config paths
+anytty config show
+anytty config show --effective
+```
+
+The default is `$XDG_CONFIG_HOME/anytty/tui-v3.yaml`, commonly `~/.config/anytty/tui-v3.yaml` without an XDG override. Use `config paths` as the authority on your OS.
+
+`show` inspects source configuration; `show --effective` includes defaults and supported environment overrides. Review custom text before sharing output.
+
+## Loading order
+
+1. Built-in defaults.
+2. The default file or the file selected by `--config FILE`.
+3. Explicitly supported environment variables.
+4. Validation before client startup.
+
+A missing default file is allowed; a missing explicitly selected file is an error. Arbitrary `ANYTTY_` names do not override arbitrary fields. See the <DocLink locale="en" path="reference/configuration">reference</DocLink>.
+
+## Make a first change
+
+```sh
+anytty config set tui.chrome.panel_presentation card
+anytty config validate
+```
+
+Reopen the TUI to see independent card borders. Equivalent YAML:
+
+```yaml
+version: 1
+tui:
+  chrome:
+    panel_presentation: card
+```
+
+The parser accepts a YAML subset: use two-space indentation and mappings, without lists, anchors or complex YAML features. Quote color strings. The current schema version is `1`.
+
+## When changes apply
+
+TUI preferences load at startup; reopen the TUI after editing. Changing a theme does not require restarting the daemon. Settings under `daemon:` load with the background service; see <DocLink locale="en" path="maintenance/config">daemon settings</DocLink>.
+
+Preferences do not contain workbench layouts, terminal processes or device grants. `tui.profile` is currently a reserved name, not automatic profile selection or multi-file merging.
+
+## Revert and experiment
+
+Remove an override with `anytty config unset tui.chrome.panel_presentation`, validate and reopen. Back up the file before larger edits. Use `anytty --config ./trial.yaml` for a separate trial configuration.
+
+Continue with <DocLink locale="en" path="clients/tui/config/appearance">appearance</DocLink>, <DocLink locale="en" path="clients/tui/config/shortcuts">bindings</DocLink>, <DocLink locale="en" path="clients/tui/config/interaction">interaction</DocLink> and <DocLink locale="en" path="clients/tui/config/examples">complete examples</DocLink>.

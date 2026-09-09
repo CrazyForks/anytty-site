@@ -1,0 +1,50 @@
+---
+title: "Remote files and delivery"
+description: "“Command executed” is not a complete deliverable. Connect inputs, execution evidence and artifact paths so people can review and reuse results."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Remote files and delivery
+
+“Command executed” is not a complete deliverable. Connect inputs, execution evidence and artifact paths so people can review and reuse results.
+
+## Prepare inputs
+
+Inspect the destination with file stat/list, then upload explicit paths:
+
+```sh
+anytty file upload workstation ./input.json /srv/project/input.json --json
+```
+
+Check transfer success before starting a dependent task. Use established secure configuration channels for secrets rather than printing them into terminal history.
+
+## Define outputs
+
+Write artifacts to explicit locations such as `/srv/project/results/run-001/report.json`. Use per-run directories to preserve previous results. After exit-code inspection, stat the expected file.
+
+## Download and validate
+
+```sh
+anytty file download workstation \
+  /srv/project/results/run-001/report.json ./report.json --json
+```
+
+Transfer verification establishes content integrity, not business correctness. Parse JSON, inspect test failures or validate build artifacts according to the project.
+
+App previews help inspect supported text/images, but truncated previews cannot replace full validation.
+
+## Delivery record
+
+| Information | Example |
+| --- | --- |
+| Execution location | workstation, /srv/project |
+| Reviewable task | Returned target |
+| Result | exited, exit_code 0 and checks performed |
+| Remote artifact | /srv/project/results/run-001/report.json |
+| Local artifact | Actual downloaded path |
+| Outstanding work | Failures, running services or manual checks |
+
+Link to genuinely downloaded local files, not remote paths presented as local links. Confirm artifacts are no longer needed before removing remote copies.

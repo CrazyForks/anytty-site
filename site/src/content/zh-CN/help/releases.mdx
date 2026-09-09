@@ -1,0 +1,33 @@
+---
+title: "版本与支持"
+description: "安装包、兼容说明和已知问题以对应发布版本为单位查看。不要只报告“最新版”，因为 CLI、运行中的 daemon 与 App 可能不是同一版本。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 版本与支持
+
+安装包、兼容说明和已知问题以对应发布版本为单位查看。不要只报告“最新版”，因为 CLI、运行中的 daemon 与 App 可能不是同一版本。
+
+## 确认版本
+
+```sh
+anytty --version
+anytty daemon status
+```
+
+同时记录 App 中的版本与构建号。更新二进制后，daemon 可能仍是旧进程；详见<DocLink locale="zh-CN" path="maintenance/updates">更新说明</DocLink>。
+
+## 获取发布内容
+
+[公开发布页](https://github.com/anytty/anytty/releases)提供版本说明与附件。Android 包和桌面平台资产按该版本查看；iOS / iPadOS 以 TestFlight 当前构建和有效期为准。
+
+Beta 阶段接口、配置与存储可能变化。文档中的键位和参数应与安装版本对照；本机 `--help` 和当前配置帮助是排查差异的重要依据。
+
+## 报告普通问题
+
+通过[公开 issue](https://github.com/anytty/anytty/issues)提供版本、系统、客户端、最小步骤、预期和实际结果。连接问题加上路线类型，配置问题附最小相关片段，使用合成任务和脱敏数据。
+
+安全问题走<DocLink locale="zh-CN" path="help/security">私密报告</DocLink>，不要公开凭据。文档问题请指出页面、具体句子、实际行为和期望说明，方便修正事实而不是只改措辞。

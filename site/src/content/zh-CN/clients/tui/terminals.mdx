@@ -1,0 +1,47 @@
+---
+title: "创建和管理终端"
+description: "创建终端时，你选择的是任务所在设备、启动命令和工作目录。面板只是创建成功后显示这个任务的位置。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 创建和管理终端
+
+创建终端时，你选择的是任务所在设备、启动命令和工作目录。面板只是创建成功后显示这个任务的位置。
+
+## 从选择器创建
+
+按 `Ctrl+F`，切换到目标设备，选择 **New Terminal**。在 **Create Terminal** 表单中使用 `Tab` 移动，`Enter` 提交，`Esc` 返回。
+
+| 字段 | 怎么填写 |
+| --- | --- |
+| `name` | 必填。用能描述用途的名称，例如 `api-tests` |
+| `command` | 留空使用默认 shell；指定命令时确认目标机器已安装程序 |
+| `server` | 必填。目标 endpoint，不是项目名称 |
+| `workdir` | 目标机器上的实际目录；表单可能带入当前或上次目录，提交前检查 |
+| `tags` | 可选的逗号分隔 `KEY=VALUE`，例如 `project=demo,role=test` |
+
+TUI 这份创建表单没有独立的环境变量编辑器。需要精确的环境构造时，使用目标 shell、启动脚本或<DocLink locale="zh-CN" path="clients/cli/terminals">CLI 工作流</DocLink>，不要把环境变量写进名称字段。
+
+## 打开和编辑
+
+已有任务按 `Ctrl+F` 搜索，`Enter` 在目标面板打开。要集中管理，按 `Ctrl+G → p` 打开管理器。选中条目后 `Ctrl+E` 编辑可修改的信息。
+
+修改展示名称不会把现有进程搬到另一个目录，也不会自动重新执行启动命令。需要重新运行时，明确选择 restart；需要不同工作目录或命令的独立任务时，创建新终端更容易追踪。
+
+## 四种结束方式
+
+| 操作 | 结果 |
+| --- | --- |
+| Detach / 解除附加 | 视图离开终端，任务继续运行 |
+| 在 shell 中 `exit` | shell 正常退出，终端记录保留 |
+| Kill / 结束进程 | 请求结束任务，不应视为正常成功退出 |
+| Delete / 删除记录 | 清理终端记录；先确认不再需要任务和历史 |
+
+面板模式内置 `d` 解除附加、`r` 重连、`R` 重启、`X` 结束进程；管理器用 `Ctrl+R` 重启、`Ctrl+K` 结束、`Ctrl+X` 删除。自定义或推荐配置以当前帮助为准，尤其不要仅凭字母大小写猜测行为。
+
+## 判断是否成功
+
+创建后检查名称、目标设备、提示符和工作目录。任务退出后检查状态和退出码；“已退出”并不代表执行成功。更完整的状态说明见<DocLink locale="zh-CN" path="concepts/lifecycle">任务生命周期</DocLink>。

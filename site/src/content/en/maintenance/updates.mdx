@@ -1,0 +1,37 @@
+---
+title: "Updates and compatibility"
+description: "Replacing the executable, restarting the daemon and migrating data are separate steps. Read release notes before applying background changes."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Updates and compatibility
+
+Replacing the executable, restarting the daemon and migrating data are separate steps. Read release notes before applying background changes.
+
+## Check and update
+
+```sh
+anytty update --check
+anytty update
+```
+
+Supported versions download and verify matching release assets before replacing the binary. Very early builds without update can use the installer again. Inspect [releases](https://github.com/anytty/anytty/releases) for versions and assets.
+
+## Running daemon
+
+Update does not automatically stop or restart the daemon. New CLI/TUI processes use the new binary while an existing daemon may remain old. Resolve protocol incompatibility by saving tasks and coordinating component updates.
+
+## Configuration and history
+
+Installers preserve existing TUI configuration, including old bindings. Compare new templates and validate deliberate changes.
+
+Beta releases may change protocol, configuration and storage. Current source includes cleanup rather than migration of old history formats. Review release notes and preserve important results before crossing formats.
+
+## Downgrade
+
+Older versions may not read newer data. Back up recoverable preferences and artifacts, reinstall deliberately and prefer fresh pairing. Protected credentials are not ordinary portable settings.
+
+After upgrading, verify versions, daemon status, connections and a small task. Keep the App compatible too; see <DocLink locale="en" path="help/releases">releases and support</DocLink>.

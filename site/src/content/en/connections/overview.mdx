@@ -1,0 +1,39 @@
+---
+title: "Choose a route"
+description: "A connection requires correct target identity, a reachable route and valid client authorization. Configuring a route addresses reachability, not all three requirements."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Choose a route
+
+A connection requires correct target identity, a reachable route and valid client authorization. Configuring a route addresses reachability, not all three requirements.
+
+## Endpoint versus route
+
+An endpoint identifies a device; a route is one way to reach it. Multiple routes can belong to one endpoint, but switching routes must not bypass identity checks.
+
+| Route | Use case | Requirements |
+| --- | --- | --- |
+| Local | Same-computer use | Local daemon and user access |
+| SSH | Existing trusted SSH infrastructure | SSH authentication, host pin and AnyTTY grant |
+| Direct | LAN or explicitly reachable address | Listener, ports and reachable pairing route |
+| Cloud | Cross-network discovery and relay | Enrollment, pairing and available service paths |
+
+## Choose a starting point
+
+Use `anytty` and local for desktop-only work. Use Direct for a reachable LAN, SSH for existing administrative access, or Cloud-assisted P2P/Relay across networks.
+
+Cloud is not required for Local, SSH or Direct, and enrolling does not automatically grant an App terminal access.
+
+## Configure in order
+
+1. Verify the target daemon and a local terminal.
+2. Prepare one reachable route.
+3. Issue and redeem a client invitation.
+4. Test that route and open an existing task.
+5. Add backup routes and automatic selection afterward.
+
+Continue with <DocLink locale="en" path="connections/ssh">SSH</DocLink>, <DocLink locale="en" path="connections/direct">Direct</DocLink>, <DocLink locale="en" path="connections/pairing">pairing</DocLink> or <DocLink locale="en" path="cloud/overview">Cloud</DocLink>.

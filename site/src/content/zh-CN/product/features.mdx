@@ -1,0 +1,40 @@
+---
+title: "核心功能与使用场景"
+description: "AnyTTY 的核心是可持续运行、可从多个客户端访问的终端任务。界面负责呈现和交互，目标机器上的 daemon 负责管理实际进程、终端状态与历史。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 核心功能与使用场景
+
+AnyTTY 的核心是可持续运行、可从多个客户端访问的终端任务。界面负责呈现和交互，目标机器上的 daemon 负责管理实际进程、终端状态与历史。
+
+## 终端任务与界面分离
+
+在 TUI 中新建一个终端，运行 shell、编辑器、构建命令或服务。离开一个面板、退出客户端或手机暂时断网，不等于结束这个进程。再次连接同一台设备，便可以找到已有终端。
+
+这种持续运行依赖目标机器和 daemon 仍在运行；它不意味着电脑关机、daemon 重启后可以恢复进程内存。详见<DocLink locale="zh-CN" path="concepts/lifecycle">生命周期</DocLink>。
+
+## 用工作台组织并行工作
+
+TUI 用工作区区分项目，标签页区分任务，分屏同时查看代码、测试和日志。浮动窗口适合临时检查任务，终端选择器用于快速打开已有终端，管理器用于查看状态、编辑信息和清理记录。
+
+这些都是同一终端池的不同入口：关闭一个视图前，应区分“解除附加”“结束进程”和“删除记录”。
+
+## 跨设备继续工作
+
+电脑上运行任务，手机查看输出、输入命令或浏览产物，平板可以借助应用内分屏并排工作。多个客户端查看同一终端时，共享的是同一个进程；输入和尺寸变化可能影响其他查看者。
+
+## 连接远端设备
+
+endpoint 是客户端保存的目标设备。根据网络条件使用 SSH、Direct 或 Cloud 辅助连接，并通过配对授予客户端访问权限。设备身份、访问授权和当前网络路径是不同概念，见<DocLink locale="zh-CN" path="connections/overview">连接方式</DocLink>。
+
+## 把远端操作交给 Agent
+
+CLI 可以创建有名字的任务，返回 JSON，等待退出，读取输出和下载结果。Agent 能报告真实的目标、退出码和产物路径；人可以同时从 TUI 或 App 打开这个任务检查进度。详见<DocLink locale="zh-CN" path="agents/remote-task">完整远端任务</DocLink>。
+
+## 文件与历史
+
+文件工具支持浏览、上传、下载和管理目标设备上的文件；原生 App 可预览支持的文本和图片。历史用于回看已经滚出屏幕的输出，受到保留策略约束。终端历史并不等于项目产物，重要报告仍应写入文件并下载。

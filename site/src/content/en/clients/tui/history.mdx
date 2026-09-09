@@ -1,0 +1,37 @@
+---
+title: "History, copy and paste"
+description: "The live screen is the current terminal display. Enter history/copy view to inspect old output, search errors and select text without sending navigation keys to the running program"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# History, copy and paste
+
+The live screen is the current terminal display. Enter history/copy view to inspect old output, search errors and select text without sending navigation keys to the running program.
+
+## Open history
+
+Built-in bindings use `Ctrl+V` or `PageUp`. The installer-recommended configuration uses `Ctrl+Shift+C`, with `Ctrl+Shift+H` for clipboard history and `Ctrl+Shift+V` for system paste. A host terminal may intercept these chords; check current help and resolve host/TUI conflicts.
+
+<ScreenshotSlot id="tui-history" locale="en" />
+
+## Search and copy
+
+1. Enter history, press `/` and search for text such as `ERROR`.
+2. Use `Tab` for the available search mode and `n` / `N` for the next/previous match.
+3. Move to the selection start, press Space, then move to its end.
+4. Press `y` to copy; use `Esc` to leave the selection or view.
+
+Built-in navigation includes arrows / `hjkl`, page keys, `u` / `d` half-pages, `g` oldest and `G` newest. Reaching the newest history does not prove application readiness.
+
+## Clipboard history and system paste
+
+In copy view, built-in `H` opens clipboard history, `p` pastes the latest item and `P` pastes from the system. Clipboard history uses `Enter` paste, `Ctrl+N` create, `Ctrl+E` edit and `Ctrl+X` delete.
+
+Pasted text reaches the focused program. Inspect multiline content and focus first. System clipboard availability also depends on the host terminal and environment.
+
+## Retention limits
+
+Daemon settings govern history size and age. Evicted data and explicit output gaps cannot be reconstructed by a client. Read <DocLink locale="en" path="concepts/history">live screens and history</DocLink> and <DocLink locale="en" path="maintenance/config">daemon retention settings</DocLink>.

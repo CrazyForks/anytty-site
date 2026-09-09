@@ -1,0 +1,49 @@
+---
+title: "Enroll, pair and verify"
+description: "Enroll Cloud on the task-owning computer. Verify the daemon and obtain an enrollment code generated for your account."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Enroll, pair and verify
+
+Enroll Cloud on the task-owning computer. Verify the daemon and obtain an enrollment code generated for your account.
+
+## 1. Enroll the daemon
+
+Use the complete service-provided command, whose basic form is:
+
+```sh
+anytty cloud enroll ENROLLMENT_CODE
+anytty cloud status
+```
+
+The code is account-specific; keep it private. Status describes local Cloud runtime, not an App’s authorization.
+
+## 2. Pair clients
+
+Issue and redeem invitations following <DocLink locale="en" path="connections/pairing">pairing</DocLink>. Enrollment and pairing have different responsibilities even when presented in one setup flow.
+
+## 3. Verify the route
+
+Inspect the endpoint’s Cloud route ID, then:
+
+```sh
+anytty endpoint test ENDPOINT --route ROUTE_ID --json
+```
+
+The App’s network connections page shows the actual path. Open an existing terminal to confirm the intended target.
+
+## 4. Edge and runtime controls
+
+```sh
+anytty cloud edge list
+anytty cloud disable
+anytty cloud enable
+```
+
+Edge list probes and ranks available servers. `edge reselect` selects again without restarting the daemon. Disable pauses Cloud while retaining enrollment; enable resumes it. Neither revokes client grants.
+
+Diagnose target daemon, Cloud status, authorization and route separately before disrupting running tasks.

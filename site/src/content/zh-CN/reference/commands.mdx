@@ -1,0 +1,1494 @@
+---
+title: "CLI 命令与参数"
+description: "按命令组展开查看参数。以下来自本次核对的公开 CLI 帮助，不包含真实设备和凭据。已安装版本若有差异，运行同一命令的 --help 核对。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# CLI 命令与参数
+
+按命令组展开查看参数。以下来自本次核对的公开 CLI 帮助，不包含真实设备和凭据。已安装版本若有差异，运行同一命令的 `--help` 核对。
+
+## 使用约定
+
+`ENDPOINT` 是客户端保存的设备 ID，`TARGET` 通常是 `ENDPOINT:TERMINAL_ID`。全大写占位符须替换。`--json` 仅用于支持它的命令，事件命令可选择 NDJSON。
+
+创建任务后保存返回 target；wait 到 exited 后读取任务 exit_code；历史 search 当前只查本机 daemon。详细例子见<DocLink locale="zh-CN" path="clients/cli/overview">CLI 入门</DocLink>与<DocLink locale="zh-CN" path="clients/cli/automation">结果处理</DocLink>。
+
+全局常用参数包括 `--config`、`--socket`、`--log-file` 和 `--timeout`。子命令可以有自己的超时默认值，以展开内容为准。日常 TUI 直接执行 `anytty`，更新使用 `anytty update --check` / `anytty update`。
+
+## 终端 · `terminal`
+
+<details>
+<summary><code>anytty terminal list</code></summary>
+
+```text
+List terminals from one or all daemon endpoints
+
+Usage:
+  anytty terminal list [flags]
+
+Flags:
+      --all-endpoints     aggregate every enabled endpoint
+      --format string     Go template over stable lowercase terminal fields
+  -h, --help              help for list
+      --json              print machine-readable JSON
+      --no-header         omit the human table header
+      --state string      filter by exact lifecycle state
+      --tag stringArray   filter by KEY or KEY=VALUE (repeatable)
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --endpoint string    owning endpoint ID (default: registry default)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty terminal show</code></summary>
+
+```text
+Show one terminal from its owning daemon endpoint
+
+Usage:
+  anytty terminal show TARGET [flags]
+
+Flags:
+      --format string   Go template over stable lowercase terminal fields
+  -h, --help            help for show
+      --json            print machine-readable JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --endpoint string    owning endpoint ID (default: registry default)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty terminal create</code></summary>
+
+```text
+Create a terminal on an owning daemon endpoint
+
+Usage:
+  anytty terminal create [-- COMMAND...] [flags]
+
+Flags:
+      --attach               attach after creation
+      --cols uint16          initial terminal columns
+      --cwd string           working directory on the daemon host
+      --env stringArray      environment entry KEY=VALUE (repeatable)
+  -h, --help                 help for create
+      --json                 print machine-readable JSON
+      --name string          stable daemon-local terminal name
+      --rows uint16          initial terminal rows
+      --tag stringToString   terminal tag KEY=VALUE (repeatable) (default [])
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --endpoint string    owning endpoint ID (default: registry default)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty terminal attach</code></summary>
+
+```text
+Attach the TUI to a terminal
+
+Usage:
+  anytty terminal attach TARGET [flags]
+
+Flags:
+  -h, --help   help for attach
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --endpoint string    owning endpoint ID (default: registry default)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty terminal capture</code></summary>
+
+```text
+Capture authoritative terminal history or the latest native screen
+
+Usage:
+  anytty terminal capture TARGET [flags]
+
+Flags:
+      --cols int           history projection width (default 80)
+  -h, --help               help for capture
+      --json               print machine-readable JSON
+      --lines int          maximum projected history rows (default 200)
+      --live               capture the latest native screen instead of history
+      --timeout duration   operation timeout (default 30s)
+
+Global Flags:
+      --config string     anytty config path (default: XDG config dir tui-v3.yaml)
+      --endpoint string   owning endpoint ID (default: registry default)
+      --log-file string   log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string     socket path
+```
+
+</details>
+
+<details>
+<summary><code>anytty terminal send</code></summary>
+
+```text
+Send literal bytes, named keys, hex bytes, or stdin to a terminal
+
+Usage:
+  anytty terminal send TARGET [TEXT...] [flags]
+
+Flags:
+      --enter                 append a carriage return
+  -h, --help                  help for send
+      --hex stringArray       hex-encoded bytes (repeatable)
+      --json                  print machine-readable JSON
+      --key stringArray       named key such as Enter, Ctrl-C, Up, or Escape (repeatable)
+      --literal stringArray   literal UTF-8 text (repeatable)
+      --stdin                 read bytes from stdin
+      --timeout duration      operation timeout (default 30s)
+
+Global Flags:
+      --config string     anytty config path (default: XDG config dir tui-v3.yaml)
+      --endpoint string   owning endpoint ID (default: registry default)
+      --log-file string   log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string     socket path
+```
+
+</details>
+
+<details>
+<summary><code>anytty terminal wait</code></summary>
+
+```text
+Wait for a daemon-owned terminal lifecycle state
+
+Usage:
+  anytty terminal wait TARGET [flags]
+
+Flags:
+  -h, --help               help for wait
+      --json               print machine-readable JSON
+      --state string       created, running, exited, or removed (default "exited")
+      --timeout duration   maximum wait duration (default 30s)
+
+Global Flags:
+      --config string     anytty config path (default: XDG config dir tui-v3.yaml)
+      --endpoint string   owning endpoint ID (default: registry default)
+      --log-file string   log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string     socket path
+```
+
+</details>
+
+<details>
+<summary><code>anytty terminal events</code></summary>
+
+```text
+Stream daemon terminal events as human records or NDJSON
+
+Usage:
+  anytty terminal events [TARGET] [flags]
+
+Flags:
+      --count int          stop after N events (0 streams until canceled)
+  -h, --help               help for events
+      --json               write NDJSON event records
+      --output string      human or ndjson (default "human")
+      --timeout duration   optional stream timeout
+      --type stringArray   event type filter (repeatable)
+
+Global Flags:
+      --config string     anytty config path (default: XDG config dir tui-v3.yaml)
+      --endpoint string   owning endpoint ID (default: registry default)
+      --log-file string   log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string     socket path
+```
+
+</details>
+
+<details>
+<summary><code>anytty terminal restart</code></summary>
+
+```text
+Restart a terminal from its daemon-owned process specification
+
+Usage:
+  anytty terminal restart TARGET [flags]
+
+Flags:
+  -h, --help    help for restart
+      --json    print machine-readable JSON
+  -q, --quiet   suppress success output
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --endpoint string    owning endpoint ID (default: registry default)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty terminal kill</code></summary>
+
+```text
+Stop a terminal process and preserve its record and history
+
+Usage:
+  anytty terminal kill TARGET [flags]
+
+Flags:
+  -h, --help    help for kill
+      --json    print machine-readable JSON
+  -q, --quiet   suppress success output
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --endpoint string    owning endpoint ID (default: registry default)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty terminal remove</code></summary>
+
+```text
+Remove an exited terminal record
+
+Usage:
+  anytty terminal remove TARGET [flags]
+
+Flags:
+  -h, --help    help for remove
+      --json    print machine-readable JSON
+  -q, --quiet   suppress success output
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --endpoint string    owning endpoint ID (default: registry default)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+## 设备与路线 · `endpoint`
+
+<details>
+<summary><code>anytty endpoint list</code></summary>
+
+```text
+List configured endpoints without dialing them
+
+Usage:
+  anytty endpoint list [flags]
+
+Flags:
+  -h, --help   help for list
+      --json   print machine-readable JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --registry string    endpoint registry path (default: XDG config dir endpoints.yaml)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty endpoint show</code></summary>
+
+```text
+Show one configured endpoint and all routes
+
+Usage:
+  anytty endpoint show ID [flags]
+
+Flags:
+  -h, --help   help for show
+      --json   print machine-readable JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --registry string    endpoint registry path (default: XDG config dir endpoints.yaml)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty endpoint test</code></summary>
+
+```text
+Dial one route and verify anytty protocol reachability
+
+Usage:
+  anytty endpoint test ID [flags]
+
+Flags:
+  -h, --help           help for test
+      --json           print machine-readable JSON
+      --route string   explicit route ID (required when multiple routes are eligible before CONN003)
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --registry string    endpoint registry path (default: XDG config dir endpoints.yaml)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty endpoint add</code></summary>
+
+```text
+Add an endpoint with its first route
+
+Usage:
+  anytty endpoint add [command]
+
+Available Commands:
+  cloud       Add an endpoint with a managed-webrtc route
+  direct      Add an endpoint with a direct-webrtc-tcp route
+  local       Add an endpoint with a local-unix route
+  ssh         Add an endpoint with a ssh-webrtc-tcp route
+
+Flags:
+  -h, --help   help for add
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --registry string    endpoint registry path (default: XDG config dir endpoints.yaml)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+
+Use "anytty endpoint add [command] --help" for more information about a command.
+```
+
+</details>
+
+<details>
+<summary><code>anytty endpoint update</code></summary>
+
+```text
+Update endpoint identity, label, or selection policy
+
+Usage:
+  anytty endpoint update ID [flags]
+
+Flags:
+      --connect-mode string    auto, on_demand, or manual (default "on_demand")
+      --hedge-delay duration   delay before starting the next priority group (default 300ms)
+  -h, --help                   help for update
+      --label string           display label
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --registry string    endpoint registry path (default: XDG config dir endpoints.yaml)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty endpoint remove</code></summary>
+
+```text
+Remove an endpoint from the registry
+
+Usage:
+  anytty endpoint remove ID [flags]
+
+Flags:
+  -h, --help   help for remove
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --registry string    endpoint registry path (default: XDG config dir endpoints.yaml)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty endpoint enable</code></summary>
+
+```text
+Enable an endpoint
+
+Usage:
+  anytty endpoint enable ID [flags]
+
+Flags:
+  -h, --help   help for enable
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --registry string    endpoint registry path (default: XDG config dir endpoints.yaml)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty endpoint disable</code></summary>
+
+```text
+Disable an endpoint
+
+Usage:
+  anytty endpoint disable ID [flags]
+
+Flags:
+  -h, --help   help for disable
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --registry string    endpoint registry path (default: XDG config dir endpoints.yaml)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty endpoint set-default</code></summary>
+
+```text
+Set the default endpoint
+
+Usage:
+  anytty endpoint set-default ID [flags]
+
+Flags:
+  -h, --help   help for set-default
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --registry string    endpoint registry path (default: XDG config dir endpoints.yaml)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty endpoint route</code></summary>
+
+```text
+Manage routes within an endpoint
+
+Usage:
+  anytty endpoint route [command]
+
+Available Commands:
+  add         Add a route to an existing endpoint
+  disable
+  enable
+  remove
+  update
+
+Flags:
+  -h, --help   help for route
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --registry string    endpoint registry path (default: XDG config dir endpoints.yaml)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+
+Use "anytty endpoint route [command] --help" for more information about a command.
+```
+
+</details>
+
+<details>
+<summary><code>anytty endpoint policy</code></summary>
+
+```text
+Show or change the connection policy used by the next session
+
+Usage:
+  anytty endpoint policy [command]
+
+Available Commands:
+  set
+  show
+
+Flags:
+  -h, --help   help for policy
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --registry string    endpoint registry path (default: XDG config dir endpoints.yaml)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+
+Use "anytty endpoint policy [command] --help" for more information about a command.
+```
+
+</details>
+
+<details>
+<summary><code>anytty endpoint share</code></summary>
+
+```text
+Share portable Endpoint routes and policy through a one-time TLS session
+
+Usage:
+  anytty endpoint share ID [flags]
+  anytty endpoint share [command]
+
+Available Commands:
+  receive     Receive, preview, and atomically import an Endpoint share
+
+Flags:
+      --address stringArray   receiver-reachable TLS HOST:PORT (repeatable)
+  -h, --help                  help for share
+      --listen string         one-time TLS listener address (default "0.0.0.0:41130")
+      --raw                   print the share URI instead of a QR code
+      --ttl duration          share session lifetime (default 10m0s)
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --registry string    endpoint registry path (default: XDG config dir endpoints.yaml)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+
+Use "anytty endpoint share [command] --help" for more information about a command.
+```
+
+</details>
+
+## 配对 · `pair`
+
+<details>
+<summary><code>anytty pair create</code></summary>
+
+```text
+Issue a short-lived one-time pairing claim from the local daemon
+
+Usage:
+  anytty pair create [flags]
+
+Flags:
+      --access-label string             owner-defined name for the resulting client authorization
+      --command                         write a copyable one-command pairing import
+      --direct-address stringArray      published Direct HOST:PORT used for both setup and ICE TCP (repeatable)
+      --direct-id string                stable ID suffix for the parameterized Direct Route
+      --direct-name string              display name for the parameterized Direct Route
+      --grant-ttl duration              bound capability lifetime (default 0: no expiration)
+  -h, --help                            help for create
+      --ice-tcp-address stringArray     published Direct ICE-TCP HOST:PORT (repeatable; requires --signaling-address)
+      --label string                    daemon display label (defaults to this host name)
+      --out string                      write the one-time pairing claim to an owner-only file
+      --qr-file string                  write a square pairing QR PNG to an owner-only file
+      --raw                             write the one-time pairing claim to stdout for explicit owner scripting
+      --route stringArray               pairing Route: direct, ssh, or a strict Route URI (repeatable)
+      --signaling-address stringArray   published Direct signaling HOST:PORT (repeatable; requires --ice-tcp-address)
+      --ssh-host string                 SSH server host for the parameterized SSH Route
+      --ssh-host-key stringArray        pinned SSH SHA256 host-key fingerprint (repeatable)
+      --ssh-id string                   stable ID suffix for the parameterized SSH Route
+      --ssh-name string                 display name for the parameterized SSH Route
+      --ssh-port uint16                 SSH server port (defaults to 22)
+      --ssh-user string                 SSH user for the parameterized SSH Route
+      --terminal string                 limit the capability to one terminal instead of daemon-wide access
+      --text                            write the portable pairing URI to stdout for copying
+      --ttl duration                    one-time ticket lifetime (maximum 168h) (default 10m0s)
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty pair inspect</code></summary>
+
+```text
+Verify one-time pairing claim metadata
+
+Usage:
+  anytty pair inspect <CLAIM_FILE|-> [flags]
+
+Flags:
+  -h, --help   help for inspect
+      --json   print redacted machine-readable JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty pair import</code></summary>
+
+```text
+Redeem a one-time claim into client-bound credentials and endpoint registry
+
+Usage:
+  anytty pair import <CLAIM_FILE|-> [flags]
+
+Flags:
+      --allow-scope-expansion   confirm replacing an existing credential with a broader capability scope
+      --client-label string     label recorded for this client access key
+  -h, --help                    help for import
+      --id string               client-local endpoint id
+      --label string            override the daemon display label
+      --pair-socket string      owner-only PairingExchange Unix socket (defaults to local daemon)
+      --registry string         endpoint registry path (default: XDG config dir endpoints.yaml)
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+## 授权 · `access`
+
+<details>
+<summary><code>anytty access identity</code></summary>
+
+```text
+Show the local daemon global DeviceIdentity
+
+Usage:
+  anytty access identity [flags]
+
+Flags:
+  -h, --help   help for identity
+      --json   print machine-readable JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty access list</code></summary>
+
+```text
+List daemon-local client access grants
+
+Usage:
+  anytty access list [flags]
+
+Flags:
+  -h, --help   help for list
+      --json   print machine-readable JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty access revoke</code></summary>
+
+```text
+Revoke one daemon-local client access grant
+
+Usage:
+  anytty access revoke GRANT_ID [flags]
+
+Flags:
+  -h, --help   help for revoke
+      --json   print machine-readable JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+## 文件 · `file`
+
+<details>
+<summary><code>anytty file list</code></summary>
+
+```text
+List a daemon-owned directory
+
+Usage:
+  anytty file list ENDPOINT [PATH] [flags]
+
+Flags:
+      --all             read all pages
+      --cursor string   daemon-issued pagination cursor
+  -h, --help            help for list
+      --json            print machine-readable JSON
+      --limit int       entries per page (default 200)
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   operation timeout (default 2m0s)
+```
+
+</details>
+
+<details>
+<summary><code>anytty file stat</code></summary>
+
+```text
+Show daemon-owned file metadata
+
+Usage:
+  anytty file stat ENDPOINT PATH [flags]
+
+Flags:
+  -h, --help   help for stat
+      --json   print machine-readable JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   operation timeout (default 2m0s)
+```
+
+</details>
+
+<details>
+<summary><code>anytty file cat</code></summary>
+
+```text
+Stream a daemon-owned file to stdout
+
+Usage:
+  anytty file cat ENDPOINT PATH [flags]
+
+Flags:
+  -h, --help   help for cat
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   operation timeout (default 2m0s)
+```
+
+</details>
+
+<details>
+<summary><code>anytty file mkdir</code></summary>
+
+```text
+Create a daemon-owned directory
+
+Usage:
+  anytty file mkdir ENDPOINT PATH [flags]
+
+Flags:
+  -h, --help      help for mkdir
+      --json      print machine-readable JSON
+  -p, --parents   create parent directories
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   operation timeout (default 2m0s)
+```
+
+</details>
+
+<details>
+<summary><code>anytty file copy</code></summary>
+
+```text
+Copy daemon-owned paths
+
+Usage:
+  anytty file copy ENDPOINT SRC... DEST_DIR [flags]
+
+Flags:
+  -h, --help        help for copy
+      --json        print machine-readable JSON
+      --overwrite   replace existing targets
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   operation timeout (default 2m0s)
+```
+
+</details>
+
+<details>
+<summary><code>anytty file move</code></summary>
+
+```text
+Move daemon-owned paths
+
+Usage:
+  anytty file move ENDPOINT SRC... DEST_DIR [flags]
+
+Flags:
+  -h, --help        help for move
+      --json        print machine-readable JSON
+      --overwrite   replace existing targets
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   operation timeout (default 2m0s)
+```
+
+</details>
+
+<details>
+<summary><code>anytty file rename</code></summary>
+
+```text
+Rename a daemon-owned path
+
+Usage:
+  anytty file rename ENDPOINT OLD NEW [flags]
+
+Flags:
+  -h, --help        help for rename
+      --json        print machine-readable JSON
+      --overwrite   replace an existing target
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   operation timeout (default 2m0s)
+```
+
+</details>
+
+<details>
+<summary><code>anytty file remove</code></summary>
+
+```text
+Remove daemon-owned paths
+
+Usage:
+  anytty file remove ENDPOINT PATH... [flags]
+
+Flags:
+  -h, --help        help for remove
+      --json        print machine-readable JSON
+  -r, --recursive   remove directories recursively
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   operation timeout (default 2m0s)
+```
+
+</details>
+
+<details>
+<summary><code>anytty file upload</code></summary>
+
+```text
+Upload a local file and wait for daemon checksum confirmation
+
+Usage:
+  anytty file upload ENDPOINT LOCAL [REMOTE] [flags]
+
+Flags:
+  -h, --help        help for upload
+      --json        print machine-readable JSON
+      --overwrite   replace an existing remote file
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   operation timeout (default 2m0s)
+```
+
+</details>
+
+<details>
+<summary><code>anytty file download</code></summary>
+
+```text
+Download and verify a daemon-owned file
+
+Usage:
+  anytty file download ENDPOINT REMOTE [LOCAL] [flags]
+
+Flags:
+  -h, --help        help for download
+      --json        print machine-readable JSON
+      --overwrite   replace an existing local file
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   operation timeout (default 2m0s)
+```
+
+</details>
+
+## 本机历史 · `history`
+
+<details>
+<summary><code>anytty history search</code></summary>
+
+```text
+Search authoritative terminal history
+
+Usage:
+  anytty history search <terminal-id> <pattern> [flags]
+
+Flags:
+  -A, --after-context int    print NUM lines after each match
+  -B, --before-context int   print NUM lines before each match
+      --color string         highlight matches: auto, always, or never (default "auto")
+  -C, --context int          print NUM lines before and after each match
+  -E, --extended-regexp      interpret the pattern as a Go RE2 regular expression
+  -F, --fixed-strings        interpret the pattern as literal text
+  -G, --glob                 interpret the pattern as a shell-style wildcard
+  -h, --help                 help for search
+  -m, --max-count int        stop after NUM matching lines (0 is unlimited)
+      --mode string          search mode: text, glob, or regex (default "text")
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty history prune</code></summary>
+
+```text
+Apply configured history retention immediately
+
+Usage:
+  anytty history prune [flags]
+
+Flags:
+  -h, --help   help for prune
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty history delete</code></summary>
+
+```text
+Delete local terminal history
+
+Usage:
+  anytty history delete [terminal-id] [flags]
+
+Flags:
+      --all    delete history for every terminal
+  -h, --help   help for delete
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+## 配置 · `config`
+
+<details>
+<summary><code>anytty config paths</code></summary>
+
+```text
+Show resolved configuration and runtime paths
+
+Usage:
+  anytty config paths [flags]
+
+Flags:
+  -h, --help   help for paths
+      --json   print machine-readable JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty config show</code></summary>
+
+```text
+Show source or effective configuration
+
+Usage:
+  anytty config show [flags]
+
+Flags:
+      --effective   show defaults and environment overrides
+  -h, --help        help for show
+      --json        print source configuration as JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty config get</code></summary>
+
+```text
+Read one source configuration value
+
+Usage:
+  anytty config get KEY [flags]
+
+Flags:
+  -h, --help   help for get
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty config set</code></summary>
+
+```text
+Atomically set one configuration value
+
+Usage:
+  anytty config set KEY VALUE [flags]
+
+Flags:
+  -h, --help   help for set
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty config unset</code></summary>
+
+```text
+Atomically remove one source configuration value
+
+Usage:
+  anytty config unset KEY [flags]
+
+Flags:
+  -h, --help   help for unset
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty config validate</code></summary>
+
+```text
+Validate a configuration with the runtime parser
+
+Usage:
+  anytty config validate [FILE] [flags]
+
+Flags:
+  -h, --help   help for validate
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+## 后台服务 · `daemon`
+
+<details>
+<summary><code>anytty daemon start</code></summary>
+
+```text
+Start the current-user daemon service
+
+Usage:
+  anytty daemon start [flags]
+
+Flags:
+  -h, --help   help for start
+      --json   print machine-readable JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --route string       Direct listen HOST:PORT; wildcard hosts enable paired-device LAN discovery
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty daemon status</code></summary>
+
+```text
+Show current-user daemon service status
+
+Usage:
+  anytty daemon status [flags]
+
+Flags:
+  -h, --help   help for status
+      --json   print machine-readable JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --route string       Direct listen HOST:PORT; wildcard hosts enable paired-device LAN discovery
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty daemon doctor</code></summary>
+
+```text
+Check daemon runtime paths and ownership
+
+Usage:
+  anytty daemon doctor [flags]
+
+Flags:
+  -h, --help   help for doctor
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --route string       Direct listen HOST:PORT; wildcard hosts enable paired-device LAN discovery
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty daemon logs</code></summary>
+
+```text
+Read the current-user daemon log
+
+Usage:
+  anytty daemon logs [flags]
+
+Flags:
+  -f, --follow      follow appended log data
+  -h, --help        help for logs
+  -n, --lines int   number of trailing lines (default 100)
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --route string       Direct listen HOST:PORT; wildcard hosts enable paired-device LAN discovery
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty daemon restart</code></summary>
+
+```text
+Restart the current-user daemon service
+
+Usage:
+  anytty daemon restart [flags]
+
+Flags:
+  -h, --help   help for restart
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --route string       Direct listen HOST:PORT; wildcard hosts enable paired-device LAN discovery
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty daemon stop</code></summary>
+
+```text
+Stop the current-user daemon service
+
+Usage:
+  anytty daemon stop [flags]
+
+Flags:
+  -h, --help   help for stop
+      --json   print machine-readable JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --route string       Direct listen HOST:PORT; wildcard hosts enable paired-device LAN discovery
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty daemon run</code></summary>
+
+```text
+Run the current-user daemon in the foreground
+
+Usage:
+  anytty daemon run [flags]
+
+Flags:
+  -h, --help   help for run
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --route string       Direct listen HOST:PORT; wildcard hosts enable paired-device LAN discovery
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+## Cloud · `cloud`
+
+<details>
+<summary><code>anytty cloud enroll</code></summary>
+
+```text
+Enroll this daemon DeviceIdentity into AnyTTY Cloud
+
+Usage:
+  anytty cloud enroll CODE [flags]
+
+Flags:
+  -h, --help   help for enroll
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty cloud status</code></summary>
+
+```text
+Show local daemon Cloud runtime state
+
+Usage:
+  anytty cloud status [flags]
+
+Aliases:
+  status, state, states
+
+Flags:
+  -h, --help   help for status
+      --json   print machine-readable JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty cloud enable</code></summary>
+
+```text
+Resume Cloud runtime without re-enrolling
+
+Usage:
+  anytty cloud enable [flags]
+
+Aliases:
+  enable, resume, on
+
+Flags:
+  -h, --help   help for enable
+      --json   print machine-readable JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty cloud disable</code></summary>
+
+```text
+Temporarily stop using Cloud without deleting enrollment
+
+Usage:
+  anytty cloud disable [flags]
+
+Aliases:
+  disable, pause, off
+
+Flags:
+  -h, --help   help for disable
+      --json   print machine-readable JSON
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+```
+
+</details>
+
+<details>
+<summary><code>anytty cloud edge</code></summary>
+
+```text
+Inspect and reselect the daemon Cloud Edge
+
+Usage:
+  anytty cloud edge [command]
+
+Available Commands:
+  list        Probe and rank available Edge servers
+  prefer      Prefer one Edge and immediately reselect
+  reselect    Probe and reselect an Edge without restarting the daemon
+
+Flags:
+  -h, --help   help for edge
+
+Global Flags:
+      --config string      anytty config path (default: XDG config dir tui-v3.yaml)
+      --log-file string    log file path (default: $ANYTTY_LOG_FILE or XDG state dir)
+      --socket string      socket path
+      --timeout duration   maximum duration for the complete command (0 disables)
+
+Use "anytty cloud edge [command] --help" for more information about a command.
+```
+
+</details>

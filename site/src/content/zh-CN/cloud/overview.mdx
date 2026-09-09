@@ -1,0 +1,32 @@
+---
+title: "AnyTTY Cloud 的作用与适用场景"
+description: "AnyTTY Cloud 是可选的设备接入、发现与跨网络连接服务。任务仍在目标电脑的 daemon 中运行，Cloud 不替代本机终端管理，也不自动授予客户端访问权限。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# AnyTTY Cloud 的作用与适用场景
+
+AnyTTY Cloud 是可选的设备接入、发现与跨网络连接服务。任务仍在目标电脑的 daemon 中运行，Cloud 不替代本机终端管理，也不自动授予客户端访问权限。
+
+## 什么时候需要
+
+如果只在本机使用，直接运行 `anytty` 即可。已有可达 SSH 或局域网 Direct 时，也可以独立使用。经常切换网络、需要设备发现或 Relay 备用路径时，Cloud 才参与连接。
+
+## 三个独立关系
+
+| 关系 | 作用 |
+| --- | --- |
+| Cloud 账号与设备接入 | 登记 daemon 身份，提供发现与服务能力 |
+| 客户端与 daemon 配对 | 授予某客户端终端或文件访问范围 |
+| 当前网络路径 | 实际采用 P2P、Relay 或其他已配置路线 |
+
+登录账号不等于已配对；设备登记成功不等于每条网络路径都通；走 Relay 也不会扩大客户端原有授权。
+
+## 使用顺序
+
+先确认本机任务可用，再按<DocLink locale="zh-CN" path="cloud/connect">接入与检查</DocLink>登记 daemon，然后完成客户端配对，最后验证实际路线。需要理解连接策略和服务限制时，阅读<DocLink locale="zh-CN" path="cloud/paths">P2P 与 Relay</DocLink>。
+
+本版只描述 Cloud 在整体产品中的作用和客户端侧操作，Web 界面教程暂不展开。价格、额度和服务能力以当前服务页面与购买确认信息为准，本文不维护重复价格表。

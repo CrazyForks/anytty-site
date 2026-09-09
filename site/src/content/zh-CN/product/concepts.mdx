@@ -1,0 +1,45 @@
+---
+title: "产品组成与工作原理"
+description: "理解 AnyTTY 时，先区分“从哪里操作”“任务在哪里运行”和“通过什么路径连接”。这能解释为什么退出 TUI 后任务还在，以及手机为什么能看到电脑上已经打开的终端。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 产品组成与工作原理
+
+理解 AnyTTY 时，先区分“从哪里操作”“任务在哪里运行”和“通过什么路径连接”。这能解释为什么退出 TUI 后任务还在，以及手机为什么能看到电脑上已经打开的终端。
+
+<Diagram id="product" locale="zh-CN" />
+
+## 各部分的职责
+
+| 组成 | 职责 | 不负责什么 |
+| --- | --- | --- |
+| TUI | 桌面终端里的交互工作台、布局、快捷键 | 不把面板当作进程的生命周期 |
+| CLI | 一次命令或脚本调用，结构化输入输出 | 不需要常驻显示工作台 |
+| 手机、平板 App | 触控终端、设备和文件操作 | 远端进程不在手机上执行 |
+| Web | 浏览器客户端入口 | 本版暂不编写使用教程 |
+| daemon | 在目标机器管理终端进程、状态、历史及连接服务 | 不替代目标操作系统的文件权限 |
+| Cloud | 可选的设备接入与跨网络连接服务 | 不把本机终端任务搬到云端运行 |
+
+## endpoint、terminal 与视图
+
+**endpoint** 是客户端认识的一台目标设备的标识和连接配置。`local` 表示本机入口。远端 endpoint 可以拥有不同网络路径，显示名也可以修改。
+
+**terminal** 是目标 daemon 管理的终端任务，拥有 ID、状态、命令、工作目录、输出等信息。CLI 中用 `ENDPOINT:TERMINAL_ID` 定位它，不能只看可能重名的展示名称。
+
+**pane / 视图** 是客户端打开这个 terminal 的位置。同一个 terminal 可以出现在不同客户端。TUI 的工作区、标签页和面板组织视图；关闭视图与杀死任务应分别理解。
+
+## 一次操作如何到达目标
+
+例如在手机上输入 `pwd`：App 连接目标设备，授权通过后把输入送到目标 terminal 的 PTY；shell 在目标机器执行，再把输出送回查看者。下载文件读取的也是目标机器的文件系统。
+
+因此，工作目录、程序是否安装、环境变量和操作系统权限，都以目标机器为准。
+
+## 自动启动与配置边界
+
+日常桌面使用直接运行 `anytty`。TUI 会按需拉起本机 daemon，然后进入工作台。只有后台维护、无人值守运行或诊断时，才需要显式管理 daemon。
+
+TUI 外观和快捷键、工作台布局、终端任务状态、设备授权属于不同层次。配置关系详见<DocLink locale="zh-CN" path="clients/tui/config/overview">TUI 配置加载规则</DocLink>，后台参数见<DocLink locale="zh-CN" path="maintenance/config">daemon 配置</DocLink>。

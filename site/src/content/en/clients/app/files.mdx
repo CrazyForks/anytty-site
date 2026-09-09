@@ -1,0 +1,36 @@
+---
+title: "Browse and transfer files"
+description: "The App file manager operates on the selected device’s filesystem, not a similarly named phone path. Verify the device and directory first."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Browse and transfer files
+
+The App file manager operates on the selected device’s filesystem, not a similarly named phone path. Verify the device and directory first.
+
+## Browse and organize
+
+Open File manager from the terminal workspace. Navigate through directories, path entry or bookmarks. Refresh, sort and show hidden files as needed. File actions include preview, download, copy path, copy, cut, rename and delete; directory creation is also available.
+
+<ScreenshotSlot id="app-files" locale="en" />
+
+Copy path retrieves path text; download retrieves content. Copy, cut and rename modify target files. Check whether tasks still use a file before deleting it.
+
+## Upload and download
+
+Use the available upload entry to select local content and verify the destination directory. Download selected files and inspect the transfer list for progress and final status. A filename appearing in a list does not prove a completed transfer.
+
+Use <DocLink locale="en" path="clients/cli/files">CLI file commands</DocLink> for scripted transfers and explicit failure handling.
+
+## Preview support
+
+Native preview focuses on text and images: supported text, JSON, XML, YAML, and images such as PNG, JPEG, GIF, WebP and BMP. Some text formats offer a rendered view when the payload is complete and supported.
+
+Current preview limits include a 64 MiB source size, a 4 MiB requested payload and image dimension constraints. Preview is not full download. A truncated preview cannot establish complete file contents. This guide does not claim native Office, PDF, audiovisual or 3D previews.
+
+## Permissions and errors
+
+For inaccessible directories, inspect grant scope and target OS permissions. Refresh and check spelling/case for missing paths. Read <DocLink locale="en" path="files/permissions">file permissions</DocLink> and <DocLink locale="en" path="files/transfers">transfer limits</DocLink>.

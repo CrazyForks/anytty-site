@@ -1,0 +1,182 @@
+{
+  "tui-first": {
+    "zh": {
+      "title": "第一次创建终端",
+      "scene": "默认推荐配置；打开 Ctrl+F，列表包含 New Terminal；另截 Create Terminal 表单，填 first-session，保留本地 server 和默认 shell。",
+      "purpose": "识别创建入口与需要填写的字段；不要放配对凭据。"
+    },
+    "en": {
+      "title": "Create the first terminal",
+      "scene": "Use the supplied profile. Show Ctrl+F with New Terminal, then the Create Terminal form with first-session and local/default shell.",
+      "purpose": "Identify the entry point and fields; exclude credentials."
+    }
+  },
+  "tui-workbench": {
+    "zh": {
+      "title": "TUI 工作台区域",
+      "scene": "同屏显示 workspace、两个 tab、左右两个 panel 和底部快捷键；标注当前焦点、终端名与设备。",
+      "purpose": "分清布局、任务与默认操作入口。"
+    },
+    "en": {
+      "title": "Workbench regions",
+      "scene": "Show a workspace, two tabs, two panels and the footer; label focus, terminal name and endpoint.",
+      "purpose": "Distinguish layout, tasks and default controls."
+    }
+  },
+  "tui-manager": {
+    "zh": {
+      "title": "选择器与终端管理器",
+      "scene": "准备 3 个演示任务，含运行、退出、kind=task 标签；分别截 Ctrl+F 选择器和 Ctrl+G → p 管理器，保留右侧预览。",
+      "purpose": "说明快速切换和任务检查的区别，展示状态、标签与资源信息。"
+    },
+    "en": {
+      "title": "Picker and terminal manager",
+      "scene": "Prepare three demo tasks with running/exited states and kind=task tags; capture the picker and manager with preview.",
+      "purpose": "Compare switching with inspection and show state, tags and resources."
+    }
+  },
+  "tui-layout": {
+    "zh": {
+      "title": "分屏与浮动窗口",
+      "scene": "同一 workspace 内两个平铺终端、一个已打开的浮动日志窗口；再截浮动窗口收起后的状态。",
+      "purpose": "展示平铺、浮动和收起不等于停止进程。"
+    },
+    "en": {
+      "title": "Splits and floating views",
+      "scene": "Show two tiled terminals and an open floating log view, then the collapsed float.",
+      "purpose": "Show that arranging or collapsing a view does not stop its task."
+    }
+  },
+  "tui-history": {
+    "zh": {
+      "title": "历史选择与搜索",
+      "scene": "演示日志输出后进入历史模式；搜索 ERROR 并显示上下文，再选中两行；不使用真实业务日志。",
+      "purpose": "区分搜索命中、文本选择和 Live。"
+    },
+    "en": {
+      "title": "History selection and search",
+      "scene": "Use synthetic logs, search ERROR with context, then select two lines in history.",
+      "purpose": "Distinguish a search result, text selection and Live."
+    }
+  },
+  "tui-connections": {
+    "zh": {
+      "title": "TUI 连接管理",
+      "scene": "Ctrl+G → e，选中一个脱敏 SSH 或 Direct 演示 endpoint；包含连接状态与右侧 route 信息。",
+      "purpose": "说明设备状态与网络路径；隐去地址、身份指纹等真实资料。"
+    },
+    "en": {
+      "title": "TUI connections",
+      "scene": "Open Ctrl+G → e and select a synthetic SSH or Direct endpoint with status and route details.",
+      "purpose": "Explain endpoint state and path without real addresses or fingerprints."
+    }
+  },
+  "tui-theme": {
+    "zh": {
+      "title": "配置前后对照",
+      "scene": "固定同一布局，分别使用基础配置与教程中的配色示例；保证截图尺寸相同。",
+      "purpose": "让读者直接看到 theme、chrome、footer 修改的作用范围。"
+    },
+    "en": {
+      "title": "Appearance before and after",
+      "scene": "Use the same layout and dimensions with the minimal profile and the tutorial color example.",
+      "purpose": "Show which parts of theme, chrome and footer change."
+    }
+  },
+  "tui-size": {
+    "zh": {
+      "title": "尺寸控制状态",
+      "scene": "电脑和手机同时打开演示终端；截 TUI 的 owner/follow/尺寸锁定提示和对应手机画面。",
+      "purpose": "说明查看同一任务与控制其尺寸的区别。"
+    },
+    "en": {
+      "title": "Resize ownership",
+      "scene": "Open one demo terminal on desktop and phone; capture owner/follow/lock indicators and the phone view.",
+      "purpose": "Explain viewing versus controlling terminal dimensions."
+    }
+  },
+  "app-pair": {
+    "zh": {
+      "title": "App 配对入口",
+      "scene": "设备页右上角扫码配对入口及粘贴面板；二维码和 claim 区域留空或打码。",
+      "purpose": "帮助新用户找到扫码和粘贴两种入口。"
+    },
+    "en": {
+      "title": "App pairing entry",
+      "scene": "Show the scanner entry and paste panel; leave claims and QR codes blank or redacted.",
+      "purpose": "Locate scanning and pasting without exposing pairing material."
+    }
+  },
+  "app-devices": {
+    "zh": {
+      "title": "设备与网络连接",
+      "scene": "演示设备的更多操作面板，显示网络连接、默认设备与断开；另截网络详情中的实际路径。",
+      "purpose": "区分编辑设备、查看线路、断开和移除。"
+    },
+    "en": {
+      "title": "Devices and routes",
+      "scene": "Show demo device actions and network details including the actual path.",
+      "purpose": "Distinguish editing, routes, disconnecting and removing."
+    }
+  },
+  "app-terminals": {
+    "zh": {
+      "title": "App 终端列表与创建",
+      "scene": "终端列表中有运行和退出任务，打开新建终端面板，展示名称、命令、目录和尺寸策略。",
+      "purpose": "明确手机端也能创建任务，并说明字段属于目标主机。"
+    },
+    "en": {
+      "title": "App terminal list and creation",
+      "scene": "Show running and exited tasks and the creation form with name, command, directory and size policy.",
+      "purpose": "Show task creation on mobile and host-side field meanings."
+    }
+  },
+  "app-input": {
+    "zh": {
+      "title": "键盘与花瓣菜单",
+      "scene": "使用默认键盘显示终端和扩展键；另截长按花瓣菜单及设置中的动作编辑器。",
+      "purpose": "展示普通文字、特殊按键与自定义动作的入口。"
+    },
+    "en": {
+      "title": "Keyboard and petal menu",
+      "scene": "Show the software keyboard and extra keys, a long-press menu and its action editor.",
+      "purpose": "Locate text input, special keys and custom actions."
+    }
+  },
+  "app-appearance": {
+    "zh": {
+      "title": "App 显示与设置",
+      "scene": "设置页显示字体、字号、终端主题、键盘模式与自动接管尺寸；另截主题预览。",
+      "purpose": "区分应用外观、终端配色和终端尺寸。"
+    },
+    "en": {
+      "title": "App display settings",
+      "scene": "Show font, size, theme, keyboard mode and automatic size takeover settings plus a theme preview.",
+      "purpose": "Separate App appearance, terminal colors and terminal size."
+    }
+  },
+  "app-files": {
+    "zh": {
+      "title": "文件浏览与传输",
+      "scene": "演示目录包含 build.log、report.json、sample.png；显示单文件菜单和传输任务，不使用个人目录。",
+      "purpose": "展示预览、下载、路径复制与传输状态。"
+    },
+    "en": {
+      "title": "File browsing and transfers",
+      "scene": "Show synthetic build.log, report.json and sample.png, the file menu and transfer list.",
+      "purpose": "Show preview, download, copy path and transfer status."
+    }
+  },
+  "app-background": {
+    "zh": {
+      "title": "后台与平板布局",
+      "scene": "截后台保持连接、终端通知设置；平板另截 App 自身 Split below 的两终端视图。",
+      "purpose": "区分后台连接、通知权限、App 内分屏与系统分屏。"
+    },
+    "en": {
+      "title": "Background and tablet layout",
+      "scene": "Capture background/notification settings and the App’s own Split below view on a tablet.",
+      "purpose": "Separate background connection, notification permission and App/system splits."
+    }
+  }
+}

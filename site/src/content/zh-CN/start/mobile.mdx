@@ -1,0 +1,44 @@
+---
+title: "第一次跨设备连接"
+description: "目标是从手机打开电脑上已经运行的终端，而不是在手机上重新执行同一条任务。开始前，电脑上应已运行 anytty，并创建一个容易辨认的终端；手机上已安装 App。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 第一次跨设备连接
+
+目标是从手机打开电脑上已经运行的终端，而不是在手机上重新执行同一条任务。开始前，电脑上应已运行 `anytty`，并创建一个容易辨认的终端；手机上已安装 App。
+
+<Diagram id="handoff" locale="zh-CN" />
+
+## 1. 先选网络路径
+
+电脑和手机在同一局域网、地址可达时，可按 <DocLink locale="zh-CN" path="connections/direct">Direct 教程</DocLink>准备监听和配对入口。已有 SSH 访问条件时，按 <DocLink locale="zh-CN" path="connections/ssh">SSH 教程</DocLink>准备。经常跨网络访问时，考虑 <DocLink locale="zh-CN" path="cloud/overview">Cloud</DocLink>。
+
+本机能打开 `anytty` 不代表手机能连接它。默认本地地址 `127.0.0.1` 在手机上指手机自己，不能当成电脑地址使用。
+
+## 2. 在电脑上生成配对邀请
+
+按所选连接教程执行 `anytty pair create`，生成包含可达路径的一次性配对二维码或文本。邀请有效期与兑换后的授权有效期是两个设置；不要把完整二维码公开分享。
+
+## 3. 在 App 中兑换
+
+打开设备页，选择“扫码配对”；扫描二维码，或者使用配对页提供的文本输入入口。检查目标设备名称和提示后完成配对。
+
+<ScreenshotSlot id="app-pair" locale="zh-CN" />
+
+如果邀请已过期或被使用，回到电脑重新生成。若网络不可达，重新生成邀请码本身不会修复路由问题。
+
+## 4. 打开已有终端
+
+选择配对成功的设备，进入终端列表，打开电脑上的那个终端。先执行一个无破坏性的检查，例如在空闲 shell 中输入 `pwd`，并对照电脑上的同一视图。
+
+如果终端正在运行构建或编辑器，先查看，不要把检查命令输入正在接收交互的程序。
+
+## 5. 检查尺寸与退出行为
+
+手机屏幕较窄时，先保持跟随查看，需要改变远端行列数时再主动接管尺寸。关闭 App 后，电脑上的任务应继续由电脑 daemon 管理；手机后台连接则受到系统限制。
+
+继续阅读<DocLink locale="zh-CN" path="clients/app/devices">App 设备管理</DocLink>、<DocLink locale="zh-CN" path="clients/tui/size">尺寸规则</DocLink>与<DocLink locale="zh-CN" path="connections/pairing">授权撤销</DocLink>。

@@ -1,0 +1,32 @@
+---
+title: "App: install and connect"
+description: "The native App accesses terminals and files on a target computer from phones and tablets. Programs remain on the target; the App provides touch input, keyboards, device selection a"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# App: install and connect
+
+The native App accesses terminals and files on a target computer from phones and tablets. Programs remain on the target; the App provides touch input, keyboards, device selection and file management.
+
+## Install and prepare
+
+Choose an Android or iOS/iPadOS channel from <DocLink locale="en" path="start/install">installation</DocLink>. Install AnyTTY on the computer, run `anytty` and create a recognizable task.
+
+App settings are separate from TUI settings. The computer’s `tui-v3.yaml` does not configure mobile fonts, the petal menu or software keyboard behavior.
+
+## Pair for the first time
+
+Follow <DocLink locale="en" path="start/mobile">first mobile connection</DocLink>: prepare a reachable route, create an invitation on the computer, and scan or paste it in the App. Open the paired device’s terminal list and verify the target before attaching.
+
+Distinguish an expired invitation, authorization failure and unreachable network. Regenerate the invitation, inspect access or repair routing accordingly.
+
+## Main areas
+
+The device page handles pairing and target selection. The terminal workspace creates and operates tasks. File manager accesses target files. Settings control appearance, input and background preferences.
+
+On first use, check device labels, font readability, content visibility when the keyboard opens, and automatic size ownership.
+
+Read <DocLink locale="en" path="clients/app/devices">devices</DocLink>, <DocLink locale="en" path="clients/app/terminals">terminal operations</DocLink>, <DocLink locale="en" path="clients/app/input">input</DocLink>, <DocLink locale="en" path="clients/app/files">files</DocLink>, then <DocLink locale="en" path="clients/app/background">background behavior</DocLink>.

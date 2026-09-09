@@ -1,0 +1,44 @@
+---
+title: "Troubleshooting"
+description: "Identify the failing layer: interface, route, authorization, daemon or child program. This prevents using a disruptive daemon restart for a binding or font problem."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Troubleshooting
+
+Identify the failing layer: interface, route, authorization, daemon or child program. This prevents using a disruptive daemon restart for a binding or font problem.
+
+## TUI does not open
+
+Check command availability and an interactive terminal, then run `anytty --version` and `anytty config validate`. For a nested-TUI warning, start from the outer terminal. Inspect daemon status, doctor and relevant logs for background failures.
+
+## Keys differ from the guide
+
+Check footer and `Ctrl+G → ?` help. Built-in, recommended and custom bindings differ, especially history entry. If other keys disappear after a scene edit, read the <DocLink locale="en" path="clients/tui/config/shortcuts">complete-catalog replacement rule</DocLink>.
+
+## Configuration does not apply
+
+Check config paths and effective configuration for environment overrides. Reopen the TUI for preferences; restart the daemon deliberately for background settings. `profile` is not automatic profile switching.
+
+## Remote connection fails
+
+Check target wakefulness, daemon, addressing and network. A phone cannot reach a computer through the phone’s `127.0.0.1`. Regenerate expired invitations, inspect grants for authorization errors, and test routes separately. See <DocLink locale="en" path="connections/routes">route diagnosis</DocLink>.
+
+## Connected but task missing
+
+Verify endpoint, terminal ID, device and state filters. Exited tasks may be filtered out. Deleting a record differs from closing a view; do not immediately create duplicate tasks.
+
+## Clipping or repeated reflow
+
+Inspect owner/follower, size lock and other clients before local font/window settings. See <DocLink locale="en" path="clients/tui/size">sizing</DocLink>.
+
+## Results appear wrong
+
+Wait timeout does not stop a task; exited does not imply success. Capture has row limits, history can be evicted, and previews can be truncated or unsupported. Download complete artifacts when needed.
+
+## Report a reproducible issue
+
+Include versions, OS, client, steps, expected/actual results, route type and redacted errors. Share only relevant configuration and safe screenshots. See <DocLink locale="en" path="help/releases">support</DocLink>.

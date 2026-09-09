@@ -1,0 +1,43 @@
+---
+title: "数据、日志与备份"
+description: "AnyTTY 的偏好、连接信息、凭据、布局和终端历史不是同一种数据。备份前先确认各自位置和恢复方式。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 数据、日志与备份
+
+AnyTTY 的偏好、连接信息、凭据、布局和终端历史不是同一种数据。备份前先确认各自位置和恢复方式。
+
+## 查实际路径
+
+```sh
+anytty config paths
+```
+
+输出包含当前配置、socket、日志、历史和剪贴板路径。不要把某台电脑上的临时 socket 路径硬编码到另一台电脑。
+
+| 数据 | 管理原则 |
+| --- | --- |
+| TUI / daemon YAML | 备份后可逐项迁移并校验 |
+| endpoint 登记 | 包含设备、路线与凭据引用，分享前脱敏 |
+| 客户端私钥和凭据 | 使用受保护存储，不作为普通配置随意复制 |
+| 工作台布局 | 由 workbench 存储管理，不写在主题 YAML 中 |
+| 终端历史与剪贴板 | 可能含真实输出和秘密，控制保留与访问 |
+| 项目产物 | 按项目备份策略独立保存 |
+
+## 日志排障
+
+读取失败时间附近的 daemon logs，先提取版本、错误类型和路线，再考虑是否需要更多内容。提交问题通常不需要整份历史或全部配置。
+
+## 备份与恢复
+
+先保存项目产物，再备份可迁移的偏好。需要一致的数据目录快照时，应安排停止相关写入的维护窗口；停止 daemon 会影响运行任务。凭据恢复遵循平台能力，新设备优先重新配对。
+
+恢复后验证配置、重新检查路线和授权，再创建测试任务。文件存在不代表旧版本一定能读取它，跨版本行为见<DocLink locale="zh-CN" path="maintenance/updates">更新与迁移</DocLink>。
+
+## 清理
+
+history prune / delete 作用于本机历史，删除不可逆。卸载时分别决定保留配置、历史、日志和授权，不要用一个宽泛目录删除命令代替逐项检查。客户端本地清理后，目标 grant 的撤销仍需单独完成。

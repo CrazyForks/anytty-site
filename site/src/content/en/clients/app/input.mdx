@@ -1,0 +1,36 @@
+---
+title: "Touch, keyboard and petal menu"
+description: "Mobile input combines text, control keys and each terminal program’s interaction model. The App supports software keyboards, hardware keyboards and a configurable petal menu. Test "
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Touch, keyboard and petal menu
+
+Mobile input combines text, control keys and each terminal program’s interaction model. The App supports software keyboards, hardware keyboards and a configurable petal menu. Test with harmless input first.
+
+## Text and control keys
+
+Focus the terminal, open the keyboard and run `pwd` in an idle shell to verify the target. Editors, interactive programs and shells interpret keys differently. For example, Ctrl+C may interrupt a task rather than copy text.
+
+With a hardware keyboard, check OS and input-method shortcuts. Interface copying and sending control keys are separate actions.
+
+## Configure the petal menu
+
+Open terminal/petal settings, enable the menu, choose haptic feedback and edit its slots.
+
+<ScreenshotSlot id="app-input" locale="en" />
+
+Start with frequently used control and navigation actions. Test each change in a disposable terminal. Resetting restores default slots; read the confirmation first.
+
+## Keyboard layout modes
+
+Terminal settings provide `Auto`, `Resize` and `Shift` keyboard modes to accommodate the software keyboard. Check prompt and cursor visibility on your device. Keyboard layout adaptation and remote size ownership are related but separate concerns.
+
+## Scrolling and pasting
+
+Adjust scrolling inertia in terminal settings. Before pasting, inspect the focused program and embedded newlines. Avoid pasting multiline commands into an editor, password prompt or unrelated REPL.
+
+See <DocLink locale="en" path="clients/app/appearance">display settings</DocLink> for fonts and cursor options.

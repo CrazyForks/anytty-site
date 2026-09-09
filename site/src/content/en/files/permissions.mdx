@@ -1,0 +1,34 @@
+---
+title: "File paths and permissions"
+description: "AnyTTY file tools operate on the daemon’s machine. The target platform interprets paths, while grants, daemon file policy and OS permissions constrain access."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# File paths and permissions
+
+AnyTTY file tools operate on the daemon’s machine. The target platform interprets paths, while grants, daemon file policy and OS permissions constrain access.
+
+## Identify each side
+
+In `anytty file download workstation /srv/project/report.json ./report.json`, the first path belongs to workstation and the second to the CLI machine. The App file manager browses its selected device.
+
+Identical path strings can refer to different content on different machines. Windows and Unix formats and case rules differ. Prefer explicit absolute remote paths and quote paths containing spaces.
+
+## Working directory versus browsing
+
+A terminal’s `cwd` sets where its program starts. A file manager’s current directory need not match that terminal. Browsing does not change a running shell’s directory.
+
+## Access boundaries
+
+A request needs the relevant capability, path permission and target OS rights. Diagnose the request and directory rather than escalating the daemon to administrator.
+
+File-tool restrictions are not a shell sandbox. An interactive shell can run commands available to its OS user. Use OS accounts, containers or system permissions when task isolation is required.
+
+## Before modifying files
+
+Overwrite, move, rename and delete affect real target files. Check endpoint, full path and purpose. A running process may retain old file handles or require a reload after changes.
+
+Use <DocLink locale="en" path="clients/app/files">App files</DocLink> or <DocLink locale="en" path="clients/cli/files">CLI file commands</DocLink>.

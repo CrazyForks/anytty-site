@@ -1,0 +1,34 @@
+---
+title: "P2P、Relay 与服务限制"
+description: "Cloud 可以协助建立 P2P 路径，或在需要时使用 Relay 转发。实际路径取决于网络、客户端策略和服务可用能力。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# P2P、Relay 与服务限制
+
+Cloud 可以协助建立 P2P 路径，或在需要时使用 Relay 转发。实际路径取决于网络、客户端策略和服务可用能力。
+
+## 路径含义
+
+P2P 尝试让客户端与目标直接交换连接数据；Relay 在无法或不选择直接路径时参与转发。两种路径都不改变任务属于目标 daemon 的事实，也不绕过身份验证和授权。
+
+## 策略设置
+
+```sh
+anytty endpoint policy set ENDPOINT --route cloud --cloud-path auto
+```
+
+诊断时可按帮助选择 `p2p`、`relay` 或 `smart_route`，Relay 传输可选 `auto`、`udp`、`tcp`。修改后需要新会话验证；强制 P2P 在网络不支持时可能直接失败，不能期待仍自动走 Relay。
+
+## 限制与计量
+
+可用路线、智能选路、Relay 传输和额度可能受服务方案与当前服务状态影响。客户端出现额度或能力错误时，应查看当前服务信息，而不是不断重建终端。
+
+P2P 与 Relay 的计量可能不同。本文不提供固定价格、配额或延迟保证，以当前服务展示和购买确认内容为准。
+
+## 诊断证据
+
+记录当时网络、实际路径、时间、版本和脱敏错误。先测试单一路径，再检查自动选择。Relay 负责转发受保护流量，不是终端或文件权限的签发者；服务仍会处理运行连接所需的元数据，见<DocLink locale="zh-CN" path="help/security">安全与隐私</DocLink>。

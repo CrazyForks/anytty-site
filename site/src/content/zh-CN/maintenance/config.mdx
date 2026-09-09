@@ -1,0 +1,55 @@
+---
+title: "daemon 配置与历史保留"
+description: "daemon: 参数控制输出缓冲、历史保留与资源采样，和 tui: 展示偏好位于同一配置体系，但在后台服务启动时读取。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# daemon 配置与历史保留
+
+`daemon:` 参数控制输出缓冲、历史保留与资源采样，和 `tui:` 展示偏好位于同一配置体系，但在后台服务启动时读取。
+
+## 一份保留策略示例
+
+```yaml
+version: 1
+daemon:
+  output_buffer:
+    capacity_bytes: 33554432
+    resident_budget_bytes: 536870912
+    overflow: block
+  history:
+    max_size_mb: 256
+    max_age_days: 14
+    compression: zstd
+    compression_level: fast
+  resource_sampling:
+    interval_ms: 500
+    max_samples: 512
+```
+
+示例把每终端历史物理大小上限设为 256 MiB，并清理超过 14 天的历史块；这些不是默认值。默认历史大小为每终端 512 MiB，年龄为 0，表示不按天数清理。
+
+## 输出缓冲
+
+`capacity_bytes` 是每个 terminal generation 的输出缓冲上限，默认 32 MiB；`resident_budget_bytes` 是 daemon 共享驻留预算，默认 512 MiB。
+
+`block` 在压力下施加背压，可能减慢输出读取；`drop` 丢弃旧 payload 并报告 gap。选择取决于连续输出与资源占用的权衡，不是单纯“越快越好”。
+
+## 历史与采样
+
+`max_size_mb: 0` 表示不设大小上限，`max_age_days: 0` 表示不按年龄清理，不是关闭历史。压缩支持 zstd、s2、none，级别 fast、balanced、best；none 下级别不生效。
+
+资源采样控制 CPU / 内存观测间隔和保留点数。更频繁的采样和更多点需要额外资源，先用默认值，再根据实际需求调整。
+
+## 应用改动
+
+```sh
+anytty config validate
+```
+
+验证不等于应用到正在运行的 daemon。安排可中断窗口，再重启后台服务；显式文件可用 `anytty --config ./daemon.yaml daemon restart`。重开 TUI 并不能让现有 daemon 自动读取新的后台参数。
+
+有效范围与环境覆盖见<DocLink locale="zh-CN" path="reference/configuration">配置参考</DocLink>。调整保留设置前先保存需要的历史；已经清理的数据不能通过增大上限恢复。

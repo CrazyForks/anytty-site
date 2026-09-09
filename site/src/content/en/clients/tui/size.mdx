@@ -1,0 +1,44 @@
+---
+title: "Multiple clients and sizing"
+description: "A terminal has one PTY row/column size. Multiple desktop, phone and tablet viewers must coordinate resizing so every client window change does not reflow the running program."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Multiple clients and sizing
+
+A terminal has one PTY row/column size. Multiple desktop, phone and tablet viewers must coordinate resizing so every client window change does not reflow the running program.
+
+## Owner, follower and size lock
+
+The owner can request terminal resizing; followers display the existing size. A size lock keeps dimensions stable. The owning daemon arbitrates these operations.
+
+Size ownership is not an access-control role. A follower is not necessarily read-only. Use <DocLink locale="en" path="connections/pairing">pairing scope</DocLink> for authorization decisions.
+
+<ScreenshotSlot id="tui-size" locale="en" />
+
+## Desktop and phone workflow
+
+1. Set appropriate dimensions on the desktop.
+2. Open the same task on your phone as a follower.
+3. Request ownership only if you need the program to reflow for the phone; desktop viewers will see that change too.
+4. Take ownership again on the desktop when returning.
+
+Built-in TUI panel mode uses `a` to request ownership and `s` to toggle size lock. Check the resulting status rather than assuming the request succeeded.
+
+## Automatic ownership
+
+```yaml
+version: 1
+tui:
+  terminal:
+    auto_take_owner: false
+```
+
+With `false`, the TUI stays a follower until you request ownership. The default `true` requests ownership only when the daemon reports no current owner; it does not unconditionally displace another client.
+
+## Diagnose display problems
+
+Check owner/lock state, other connected clients, then distinguish remote PTY dimensions from local font or window width. CLI capture’s `--cols` formats captured text; it does not resize the running terminal.

@@ -1,0 +1,34 @@
+---
+title: "后台、通知与平板使用"
+description: "任务是否持续运行取决于目标电脑；App 在后台能保持多久的连接，则取决于手机系统和应用设置。这两件事需要分开判断。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 后台、通知与平板使用
+
+任务是否持续运行取决于目标电脑；App 在后台能保持多久的连接，则取决于手机系统和应用设置。这两件事需要分开判断。
+
+## 后台连接
+
+设置中可以调整后台保持连接偏好。系统仍可能因为省电、内存压力或网络切换挂起应用，因此不能把后台开关当成永久在线保证。
+
+回到前台后，先检查设备连接状态，再打开已有终端确认进度。不要因为屏幕暂时没有新输出就创建重复任务。
+
+## 通知
+
+终端通知需要 App 内设置和系统通知权限共同允许。开启后用一个可识别的测试任务验证当前设备的实际行为。通知不是任务结果的唯一依据；最终以目标状态、退出码或产物为准。
+
+<ScreenshotSlot id="app-background" locale="zh-CN" />
+
+## 平板布局
+
+工作区提供 **Split below** 应用内分屏。可把终端和辅助区域并排安排，配合外接键盘完成较长操作。分屏是视图布局，两个区域如果打开同一 terminal，仍然操作同一进程。
+
+平板外接键盘的系统快捷键、App 输入和远端程序快捷键可能冲突，按<DocLink locale="zh-CN" path="clients/app/input">输入说明</DocLink>逐项验证。
+
+## 离开前的检查
+
+对于构建、测试和服务，确认任务已创建在目标 daemon，记录任务名称。需要结果文件时写入明确路径。回到前台通过名称重新打开；只有明确决定停止工作时才结束进程。

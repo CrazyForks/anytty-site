@@ -1,0 +1,36 @@
+---
+title: "远端设备管理"
+description: "TUI 把已配置的远端设备作为 endpoint 展示。先完成连接准备和配对，再在工作台里选择设备、打开或创建任务。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 远端设备管理
+
+TUI 把已配置的远端设备作为 endpoint 展示。先完成连接准备和配对，再在工作台里选择设备、打开或创建任务。
+
+## 准备一个 endpoint
+
+按<DocLink locale="zh-CN" path="connections/overview">连接方式</DocLink>选择 SSH、Direct 或 Cloud，通过配对或受支持的 CLI 配置入口登记设备。TUI 的 Connections 页面主要用于编辑、启停和刷新已有 endpoint；不要把它当作完整的新设备配对向导。
+
+## 检查连接页
+
+按 `Ctrl+G → e` 打开 Connections。确认设备名称、是否启用、路由及当前状态。
+
+<ScreenshotSlot id="tui-connections" locale="zh-CN" />
+
+内置操作为 `Enter` 编辑、空格启用或禁用、`r` 刷新。修改展示名便于辨认；调整路由或选择策略后，需要建立新连接才能判断新设置是否生效。
+
+“已保存”不代表“当前可达”；“已连接”也不表示某个任务已经成功完成。
+
+## 在远端创建或打开终端
+
+按 `Ctrl+F`，用左右键切到目标设备，选中已有任务，或通过 New Terminal 创建。创建前检查 `server` 与 `workdir`，因为远端路径可能与本机完全不同。
+
+建议让任务名称包含项目与用途，面板标题显示设备名。可使用 `tui.chrome.pane_title_template` 自定义标题，见<DocLink locale="zh-CN" path="clients/tui/config/appearance">外观配置</DocLink>。
+
+## 离线时怎么处理
+
+先确认目标电脑和 daemon 仍运行，再检查地址、网络与授权。需要进一步验证时用 `anytty endpoint test ENDPOINT`；命令形式和路由选择见<DocLink locale="zh-CN" path="clients/cli/connections">CLI 设备命令</DocLink>。禁用或移除本地 endpoint 不等于在目标设备撤销授权。

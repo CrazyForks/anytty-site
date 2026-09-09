@@ -1,0 +1,39 @@
+---
+title: "选择连接方式"
+description: "连接需要同时满足三个条件：目标身份正确、网络路径可达、客户端拥有有效授权。配置一条路线只解决其中的可达性部分。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 选择连接方式
+
+连接需要同时满足三个条件：目标身份正确、网络路径可达、客户端拥有有效授权。配置一条路线只解决其中的可达性部分。
+
+## 先区分 endpoint 和 route
+
+endpoint 表示目标设备，route 表示抵达该设备的一种方式。一个 endpoint 可以有多条 route；切换路线不应变成连接另一台身份不匹配的设备。
+
+| 路线 | 适合场景 | 准备条件 |
+| --- | --- | --- |
+| Local | 同一台电脑本机使用 | 本机 daemon 与当前用户访问 |
+| SSH | 已有可信 SSH 管理路径 | SSH 服务、账号认证、主机指纹及 AnyTTY 授权 |
+| Direct | 局域网或明确可达地址 | 监听地址、网络端口、可用配对路径 |
+| Cloud | 经常跨网络、需要发现和中继 | 设备接入 Cloud、客户端配对、可用服务路径 |
+
+## 如何选择
+
+只在电脑上工作，直接使用 `anytty` 与 local。手机在同一局域网访问，可准备 Direct。已有 SSH 基础设施时使用 SSH。需要在不同网络之间访问时，再考虑 Cloud 的 P2P 或 Relay 路径。
+
+不必先开通 Cloud 才能使用本机、SSH 或 Direct。Cloud 也不会自动给 App 授予终端访问权限。
+
+## 推荐配置顺序
+
+1. 在目标电脑运行 daemon，确认本机终端正常。
+2. 准备一条明确可达的路线。
+3. 为访问客户端生成并兑换配对邀请。
+4. 测试指定路线，再打开已有任务。
+5. 最后增加备用路线和自动选择策略。
+
+继续阅读 <DocLink locale="zh-CN" path="connections/ssh">SSH</DocLink>、<DocLink locale="zh-CN" path="connections/direct">Direct</DocLink>、<DocLink locale="zh-CN" path="connections/pairing">配对与撤销</DocLink>或<DocLink locale="zh-CN" path="cloud/overview">Cloud</DocLink>。

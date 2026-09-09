@@ -1,0 +1,43 @@
+---
+title: "终端选择器与管理器"
+description: "选择器解决“现在打开哪个终端”；管理器解决“这些终端的状态是什么、如何整理”。两者操作同一批目标任务，但信息密度和默认动作不同。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 终端选择器与管理器
+
+选择器解决“现在打开哪个终端”；管理器解决“这些终端的状态是什么、如何整理”。两者操作同一批目标任务，但信息密度和默认动作不同。
+
+## 选择器：快速进入任务
+
+按 `Ctrl+F`。输入任务名称、命令或其他可检索信息，方向键选择条目，预览帮助你确认目标。输入是按顺序子序列匹配，不要求字符连续；匹配高亮可以在配置里关闭。
+
+| 内置键位 | 操作 |
+| --- | --- |
+| 左 / 右 | 切换 endpoint |
+| `Shift+左` / `Shift+右` | 切换状态筛选 |
+| 上 / 下 | 选择条目 |
+| `Ctrl+O` | 打开 endpoint 选择 |
+| `Ctrl+T` | 标签筛选 |
+| `Enter` | 附加选中任务 |
+| `Tab` | 分屏打开 |
+| `Ctrl+E` / `Ctrl+K` / `Ctrl+X` | 编辑 / 结束 / 删除 |
+
+New Terminal 是创建入口，不是已经运行的任务。搜不到条目时，先检查设备和状态筛选，再检查拼写。
+
+## 管理器：集中检查和整理
+
+按 `Ctrl+G → p`。列表和预览用于对照名称、状态、命令、目录及可用的资源信息。CPU 与内存采样是观察线索，不是程序是否健康的保证。
+
+<ScreenshotSlot id="tui-manager" locale="zh-CN" />
+
+管理器内置 `Enter` 附加、`Ctrl+T` 在标签页打开、`Ctrl+O` 在浮动窗口打开。`Ctrl+R` 重启，`Ctrl+E` 编辑，`Ctrl+K` 结束，`Ctrl+X` 删除。
+
+先预览再操作，尤其在多个设备有同名任务时。重启会产生新一轮运行，不会恢复上一进程的内存。
+
+## 搜索与布局偏好
+
+选择器宽度、密度和设备标签样式在 `tui.chrome.picker` 中设置；模糊搜索高亮在 `tui.interaction.picker` 中设置。选择器的外观设置不会自动改变管理器布局。详见<DocLink locale="zh-CN" path="clients/tui/config/interaction">交互配置</DocLink>。

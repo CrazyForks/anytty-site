@@ -1,0 +1,40 @@
+---
+title: "Floating panels"
+description: "Floating panels provide temporary log views, auxiliary shells or a task above the tiled layout. They display ordinary daemon-owned terminals, not a separate task type."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Floating panels
+
+Floating panels provide temporary log views, auxiliary shells or a task above the tiled layout. They display ordinary daemon-owned terminals, not a separate task type.
+
+## Create and open
+
+Enter floating mode with `Ctrl+O`. Built-in `n` creates a panel, `f` opens the terminal picker and `o` opens the floating overview. In the terminal manager, `Ctrl+O` opens the selected task in a floating panel.
+
+Confirm focus before typing. Use the overview or number shortcuts when panels overlap.
+
+## Arrange panels
+
+| Built-in floating key | Action |
+| --- | --- |
+| `h j k l` / arrows | Move |
+| `H L` / `K J` | Adjust width / height |
+| `c` | Center |
+| `=` | Fit size |
+| `s` | Toggle automatic fitting |
+| `z` / `m` | Collapse or expand |
+| `v` | Toggle all floating visibility |
+| `1`–`9` | Summon a panel |
+| `x` | Close the panel |
+
+Collapsing or hiding a panel does not pause its task. Check the manager after closing a view; explicitly end a task when that is your intention.
+
+## Practical organization
+
+Keep primary long-running work in tabs and splits, and use floating panels for temporary observation. Give tasks meaningful names and remove unneeded exited records periodically.
+
+Customize borders and controls in <DocLink locale="en" path="clients/tui/config/appearance">appearance settings</DocLink>. Changes to remote PTY dimensions still follow <DocLink locale="en" path="clients/tui/size">size ownership</DocLink>.

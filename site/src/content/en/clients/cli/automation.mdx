@@ -1,0 +1,51 @@
+---
+title: "Scripting and results"
+description: "Reliable scripts distinguish CLI success, reaching a lifecycle state and the program’s own success. Creation or wait command exit status alone is insufficient."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Scripting and results
+
+Reliable scripts distinguish CLI success, reaching a lifecycle state and the program’s own success. Creation or wait command exit status alone is insufficient.
+
+## Complete minimal script
+
+This POSIX shell example uses `jq` and a ready local daemon. Replace the endpoint with a paired target as needed.
+
+```sh
+#!/bin/sh
+set -eu
+endpoint=local
+task_name="docs-check-$(date +%s)"
+created=$(anytty terminal create --endpoint "$endpoint" --json \
+  --name "$task_name" -- sh -lc 'printf "ready\n"; exit 0')
+target=$(printf '%s' "$created" | jq -er '.target')
+printf 'Task: %s\n' "$target"
+
+if ! anytty terminal wait "$target" --state exited --timeout 2m --json > wait.json; then
+  anytty terminal show "$target" --json
+  printf 'Wait failed; task may still be running.\n' >&2
+  exit 1
+fi
+anytty terminal capture "$target" --lines 200 --json > capture.json
+code=$(jq -er '.exit_code | numbers' wait.json)
+printf 'Program exit code: %s\n' "$code"
+test "$code" -eq 0
+```
+
+The script writes `wait.json` and `capture.json` in the current directory; avoid overwriting needed files. It keeps the task record available for TUI or App review.
+
+## JSON fields
+
+Creation includes `schema_version`, `kind` and `target`; list entries are in `items`, show data in `item`, and wait’s program exit code is top-level `exit_code`. Parse fields rather than human-readable table spacing.
+
+## Timeouts and retries
+
+A wait timeout leaves the task potentially running. Inspect with show/capture before waiting again or cancelling. If a creation response is uncertain, inspect names and the list before retrying to avoid duplicate work.
+
+## Events and services
+
+Use `terminal events TARGET --output ndjson --timeout 30s` for continuous observation. A running process is not necessarily a ready service; perform a health check. See <DocLink locale="en" path="agents/remote-task">remote tasks</DocLink> and <DocLink locale="en" path="agents/services">services</DocLink>.

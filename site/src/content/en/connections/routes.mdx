@@ -1,0 +1,44 @@
+---
+title: "Route policy and diagnosis"
+description: "A device can have Direct, SSH and Cloud routes. Automatic selection reduces manual switching, but diagnose each route independently first."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Route policy and diagnosis
+
+A device can have Direct, SSH and Cloud routes. Automatic selection reduces manual switching, but diagnose each route independently first.
+
+## Inspect and test
+
+```sh
+anytty endpoint show workstation
+anytty endpoint policy show workstation
+anytty endpoint test workstation --route ROUTE_ID --json
+```
+
+Use real route IDs and record each result. Listing endpoints reads saved configuration; test attempts protocol reachability.
+
+## Configure the next connection
+
+```sh
+anytty endpoint policy set workstation --route auto
+```
+
+Route policy accepts `auto`, `direct`, `ssh` or `cloud`. Cloud paths support `auto`, `p2p`, `relay` or `smart_route`; Relay transport supports `auto`, `udp` or `tcp`. Available parameters do not guarantee service-plan entitlement.
+
+Policies apply to the next session. Reconnect and inspect the actual route. Forced routes help diagnosis; verify backups before restoring automatic selection.
+
+## Diagnose by layer
+
+| Symptom | Check first |
+| --- | --- |
+| Timeout/refused connection | Target, listener, network and firewall |
+| SSH authentication failure | Account, keys and host verification |
+| Daemon identity mismatch | Wrong device, reinstall or identity change |
+| Authorization failure | Redemption, expiration or revocation |
+| Connected but task missing | Endpoint, filters and terminal ID |
+
+Fallback changes routing, not identity or authorization requirements. Reports should include client/daemon versions, time, route type and redacted errors, never complete invitations or credentials.

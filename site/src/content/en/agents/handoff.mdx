@@ -1,0 +1,37 @@
+---
+title: "Organize tasks and hand over"
+description: "Remote automation includes making tasks discoverable and understandable to people. Plan naming and handoff metadata at creation time."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Organize tasks and hand over
+
+Remote automation includes making tasks discoverable and understandable to people. Plan naming and handoff metadata at creation time.
+
+## Organize parallel work
+
+Use names such as `demo-build`, `demo-tests` and `demo-server`, with tags such as `project=demo` and `role=test`. Keep separate targets and result files; concurrent tasks must not overwrite a shared `wait.json`.
+
+Isolate working directories before parallel repository edits. Multiple terminals do not automatically isolate a Git checkout.
+
+## Human observation
+
+Open the TUI manager with `Ctrl+G → p` and find the task, or use the App’s device terminal list. Observation can coexist with agent reads, but concurrent PTY input may interfere.
+
+<Diagram id="handoff" locale="en" />
+
+## Handoff protocol
+
+1. The agent reports endpoint, target, command, directory and what needs attention.
+2. It stops sending PTY input while human input is required.
+3. The person opens the same task, checks the current program and acts.
+4. After confirmation, the agent rereads state and screen before continuing.
+
+Size ownership coordinates resizing, not this input protocol. A follower is not necessarily unable to send input.
+
+## Cleanup
+
+Report successful exits, failures and services left running. Remove records after review, not before delivering failure evidence. Archive artifacts separately; see <DocLink locale="en" path="agents/files">delivery</DocLink>.

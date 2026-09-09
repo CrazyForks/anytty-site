@@ -1,0 +1,51 @@
+---
+title: "终端与任务命令"
+description: "CLI 可以创建独立任务、检查状态、读取输出和发送输入。对一次性构建或测试，优先直接创建运行该命令的任务，这样退出状态对应这次工作。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 终端与任务命令
+
+CLI 可以创建独立任务、检查状态、读取输出和发送输入。对一次性构建或测试，优先直接创建运行该命令的任务，这样退出状态对应这次工作。
+
+## 创建
+
+```sh
+anytty terminal create --endpoint local --json \
+  --name docs-check --cwd /absolute/project/path \
+  --tag project=demo --env CI=1 \
+  -- sh -lc 'printf "check started\n"; pwd'
+```
+
+先把目录替换成目标机器的真实目录；示例需要目标有 `sh`。`--` 后是程序及参数。省略程序会启动默认 shell；`--attach` 在创建后进入交互。`--rows` / `--cols` 设置初始尺寸。
+
+返回 JSON 的 `target` 是后续操作依据，不要假定每次创建返回同一 ID。
+
+## 查看与等待
+
+```sh
+anytty terminal show ENDPOINT:TERMINAL_ID --json
+anytty terminal wait ENDPOINT:TERMINAL_ID --state exited --timeout 2m --json
+anytty terminal capture ENDPOINT:TERMINAL_ID --lines 200 --json
+```
+
+`wait` 等待生命周期状态，不等待“日志里出现 ready”。成功等到 exited 仍需检查结果的 `exit_code`。等待超时不会结束任务。
+
+默认 capture 读取历史投影；`--live` 读取最新原生屏幕。`--lines` 和 `--cols` 控制捕获格式，不改变运行中 PTY 尺寸。
+
+## 交互输入
+
+确认目标是空闲 shell 后才执行：
+
+```sh
+anytty terminal send ENDPOINT:TERMINAL_ID --literal 'pwd' --enter
+```
+
+`send` 把字节或命名键送进当前程序，不是独立的远端命令执行接口。它支持文本、`--key`、`--hex` 或 `--stdin` 等输入来源，按帮助使用互斥组合。`--key Ctrl-C` 可能中断程序，不能用来测试连接。
+
+## 生命周期操作
+
+`restart` 开始新一轮运行；`kill` 结束任务；`remove` 删除记录。动作参数以 `anytty terminal COMMAND --help` 为准。删除之前先获取退出状态和需要保留的输出。更完整的脚本见<DocLink locale="zh-CN" path="clients/cli/automation">自动化结果处理</DocLink>。

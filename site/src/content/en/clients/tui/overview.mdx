@@ -1,0 +1,43 @@
+---
+title: "Workbench and default controls"
+description: "The TUI is a workbench inside your desktop terminal. Workspaces and tabs appear at the top, terminal panes in the center, and the current mode, actions and status at the bottom. Ch"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Workbench and default controls
+
+The TUI is a workbench inside your desktop terminal. Workspaces and tabs appear at the top, terminal panes in the center, and the current mode, actions and status at the bottom. Check focus and mode before typing.
+
+<ScreenshotSlot id="tui-workbench" locale="en" />
+
+## Views and tasks
+
+Workspaces organize projects; tabs group views; splits and floating panels display terminals. Tasks belong to the target daemon. Your current layout is not the entire task list: use the picker or manager to open tasks outside it.
+
+## Common default entry keys
+
+These entries are shared by built-in and installer-recommended configurations. `Ctrl+P → d` means press the chord, then the letter.
+
+| Key | Opens | Typical next action |
+| --- | --- | --- |
+| `Ctrl+F` | Terminal picker | Existing task or New Terminal |
+| `Ctrl+P` | Panel mode | `d` detach, `z` zoom |
+| `Ctrl+R` | Resize mode | Follow footer sizing actions |
+| `Ctrl+T` | Tab mode | Create, switch, rename |
+| `Ctrl+W` | Workspace mode | Create, switch, open tree |
+| `Ctrl+O` | Floating mode | Create, show, collapse |
+| `Ctrl+G` | System mode | `p` manager, `e` connections, `?` help, `q` quit |
+| `Esc` | Back | Leave a mode or overlay |
+
+In live terminal view, keys not handled by the TUI reach the terminal program. Inside a mode, letters can trigger interface actions. The footer changes accordingly. Prefix modes time out after 3 seconds by default; explicit screens such as the picker and history do not.
+
+## Controls are configurable
+
+Button labels, colors, glyphs and bindings come from configuration. Built-in bindings and the installer’s recommended file also differ: built-in history uses `Ctrl+V` or `PageUp`, while the recommended file uses `Ctrl+Shift+C`.
+
+Start with <DocLink locale="en" path="clients/tui/config/overview">configuration loading</DocLink>, then <DocLink locale="en" path="clients/tui/config/appearance">appearance</DocLink> and <DocLink locale="en" path="clients/tui/config/shortcuts">keybindings</DocLink>. Help and footer hints reflect the loaded configuration.
+
+Next, <DocLink locale="en" path="clients/tui/terminals">create terminals</DocLink>, organize <DocLink locale="en" path="clients/tui/layouts">workspaces and splits</DocLink>, or find background tasks in the <DocLink locale="en" path="clients/tui/picker">manager</DocLink>.

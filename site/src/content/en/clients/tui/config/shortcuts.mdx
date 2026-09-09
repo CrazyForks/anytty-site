@@ -1,0 +1,54 @@
+---
+title: "Keybindings and passthrough"
+description: "tui.shortcuts is the single source for key routing, footer hints and help. Decide whether you are changing labels or replacing bindings."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Keybindings and passthrough
+
+`tui.shortcuts` is the single source for key routing, footer hints and help. Decide whether you are changing labels or replacing bindings.
+
+## Two override modes
+
+Omitting `shortcuts`, or using `shortcuts: {}`, keeps built-in bindings. An `actions`-only override changes presentation while preserving keys:
+
+```yaml
+version: 1
+tui:
+  shortcuts:
+    actions:
+      panel.close:
+        label: close view
+        style: danger
+```
+
+**Declaring any scene, even `global: {}`, replaces the entire default scene catalog.** It does not merge just one modified key. To change bindings, copy the complete current recommended configuration and edit it.
+
+## Scenes and actions
+
+`global` contains entry keys. `panel`, `system`, `tab` and `workspace` contain mode keys; scenes such as `terminal_picker` handle overlays. Values are action IDs such as `menu.panel` and `panel.detach`.
+
+Short form uses `ctrl-p: menu.panel`. Long form supports properties including `action`, `label`, `style` and `show`. Use valid action IDs and resolve validation errors rather than inventing names.
+
+Unmodified `Esc` is reserved for returning and cannot be rebound. See the <DocLink locale="en" path="reference/shortcuts">binding reference</DocLink> for built-in versus recommended differences.
+
+## Pass an entry key to the program
+
+For example, built-in `Ctrl+W` enters workspace mode. Press it again within the passthrough interval to return and send one `Ctrl+W` to the terminal. The default interval is 1000 ms.
+
+```yaml
+version: 1
+tui:
+  interaction:
+    sticky_prefix_timeout_ms: 5000
+    shortcut_passthrough_interval_ms: 700
+```
+
+The first setting controls prefix-mode idle timeout; the second controls double-press passthrough. Built-in system mode `l` toggles shortcut lock. Observe the lock status when using it.
+
+## Resolve conflicts
+
+Check host-terminal interception first, then active mode and configuration, then the child program. Traditional terminal encodings may not distinguish every modifier combination. Choose keys your host reliably transmits and verify both help and actual behavior.

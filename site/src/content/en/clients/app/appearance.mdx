@@ -1,0 +1,34 @@
+---
+title: "Display, themes and sizing"
+description: "App appearance is configured on the phone, independently of desktop TUI YAML. Adjust readability before deciding whether to change remote terminal dimensions."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Display, themes and sizing
+
+App appearance is configured on the phone, independently of desktop TUI YAML. Adjust readability before deciding whether to change remote terminal dimensions.
+
+## App and terminal appearance
+
+Settings include app theme, light/dark behavior and language. Terminal settings separately control font, font size, terminal palette and cursor blinking. Changing the application theme does not necessarily change the terminal palette.
+
+<ScreenshotSlot id="app-appearance" locale="en" />
+
+Check ordinary text, error colors and selection before testing your editor. Missing font glyphs may appear as boxes; choose another font or adjust the program’s symbols.
+
+## Keyboard and viewport
+
+Choose Auto, Resize or Shift keyboard mode and verify cursor visibility. Larger text reduces visible characters; it does not give each viewer an independent remote layout.
+
+## Terminal size
+
+Automatic ownership controls whether the client attempts to take the resizing role. Start as a follower when co-viewing and take ownership when mobile reflow is needed. Creation also offers resizable, ask-before-resize or locked policies.
+
+If a desktop full-screen program suddenly reflows, check whether the phone changed terminal dimensions. If content is clipped on mobile, inspect locking before moving the viewport or resizing.
+
+## TUI boundary
+
+`tui-v3.yaml` does not configure App fonts, the petal menu or theme. Shared terminal owner/follower rules still apply; see <DocLink locale="en" path="clients/tui/size">multiple clients and sizing</DocLink>.

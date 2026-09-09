@@ -1,0 +1,59 @@
+---
+title: "交互与选择器设置"
+description: "交互配置决定鼠标、确认提示、搜索和选择器密度。它不保存终端状态，也不改变设备授权。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 交互与选择器设置
+
+交互配置决定鼠标、确认提示、搜索和选择器密度。它不保存终端状态，也不改变设备授权。
+
+## 一个适合初次使用的配置
+
+```yaml
+version: 1
+tui:
+  interaction:
+    mouse: true
+    confirm_destructive: true
+    sticky_prefix_timeout_ms: 5000
+    shortcut_passthrough_interval_ms: 1000
+    picker:
+      fuzzy_match: subsequence
+      highlight_matches: true
+  chrome:
+    picker:
+      presentation: card
+      width: adaptive
+      density: comfortable
+      endpoint_tabs: underline
+```
+
+`mouse: false` 关闭 TUI 的宿主鼠标交互，保留键盘操作。保留破坏性动作确认可以减少误触；这不替代你检查目标设备和任务。
+
+## 选择器外观与搜索
+
+外观字段位于 `tui.chrome.picker`：`presentation` 为 `card` / `flat`，`width` 为 `adaptive` / `wide`，`density` 为 `compact` / `comfortable`，`endpoint_tabs` 为 `underline` / `plain`。
+
+搜索字段位于 `tui.interaction.picker`。当前 `fuzzy_match` 只支持 `subsequence`；关闭 `highlight_matches` 只去掉着色，不会关闭筛选。设备状态标记还可通过 `chrome.picker.endpoint_status` 的 `glyph` 与 `style` 自定义。
+
+## 剪贴板历史布局
+
+```yaml
+version: 1
+tui:
+  interaction:
+    clipboard_history:
+      max_items: 200
+      name_width: 34
+      preview_width_ratio: 0.68
+```
+
+`name_width` 的单位是终端 cell；预览比例还受窗口宽度和最小列宽约束。`max_items` 是配置项，不应把它作为敏感内容必定自动清除的保证；需要删除的条目请在剪贴板历史中明确删除。
+
+## 验证方法
+
+验证配置后重开 TUI，分别检查点击面板、选择器密度、搜索高亮和删除确认。一次只改一类设置，能更容易判断变化是否符合预期。终端尺寸自动接管单独位于 `tui.terminal.auto_take_owner`，详见<DocLink locale="zh-CN" path="clients/tui/size">尺寸规则</DocLink>。

@@ -1,0 +1,34 @@
+---
+title: "P2P, Relay and limits"
+description: "Cloud can coordinate P2P or use Relay forwarding. The resulting path depends on network conditions, policy and available service capabilities."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# P2P, Relay and limits
+
+Cloud can coordinate P2P or use Relay forwarding. The resulting path depends on network conditions, policy and available service capabilities.
+
+## Path meaning
+
+P2P attempts direct client-to-target exchange. Relay forwards when a direct path is unavailable or not selected. Both retain daemon ownership and identity/authorization requirements.
+
+## Configure policy
+
+```sh
+anytty endpoint policy set ENDPOINT --route cloud --cloud-path auto
+```
+
+For diagnosis, help also exposes `p2p`, `relay` and `smart_route`, with Relay transport `auto`, `udp` or `tcp`. Verify changes in a new session. Forced P2P may fail rather than fall back to Relay.
+
+## Limits and accounting
+
+Route features, smart selection, Relay transports and quotas may depend on the service plan and state. Inspect current service information when a capability or quota error appears; recreating terminals will not resolve it.
+
+P2P and Relay may be accounted for differently. Current service and purchase information define prices and quotas; this guide makes no fixed latency guarantee.
+
+## Diagnostic evidence
+
+Record network, actual path, time, versions and redacted errors. Test individual paths before automatic selection. Relay forwards protected traffic but does not issue terminal/file grants. The service still processes operational metadata; see <DocLink locale="en" path="help/security">security and privacy</DocLink>.

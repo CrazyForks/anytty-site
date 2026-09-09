@@ -1,0 +1,56 @@
+---
+title: "Your first task in the TUI"
+description: "Create a terminal, run a command, leave its view and open it again—all inside the workbench. First install AnyTTY(doc:start/install), then run anytty in a regular terminal."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Your first task in the TUI
+
+Create a terminal, run a command, leave its view and open it again—all inside the workbench. First <DocLink locale="en" path="start/install">install AnyTTY</DocLink>, then run `anytty` in a regular terminal.
+
+## 1. Open the workbench
+
+```sh
+anytty
+```
+
+The local daemon starts when needed. You may see restored views in an existing setup or an empty workbench in a new one. Both are valid starting points.
+
+## 2. Create a local terminal
+
+`Ctrl+F` is shared by the built-in and installer-recommended configurations. If you customized bindings, follow your footer instead.
+
+1. Press `Ctrl+F` to open Terminal Picker.
+2. Select the `local` endpoint, using left/right arrows if necessary.
+3. Select **New Terminal** and press `Enter`.
+4. In **Create Terminal**, set `name` to `first-session`. Leave `command` empty for the default shell. Confirm the local `server` and an existing `workdir`; `tags` can stay empty.
+5. Use `Tab` between fields and `Enter` to submit.
+
+The new terminal attaches to the target pane and displays a shell prompt. If creation fails, check the name, endpoint and directory before retrying.
+
+<ScreenshotSlot id="tui-first" locale="en" />
+
+## 3. Run a verifiable command
+
+In the new shell, run:
+
+```sh
+pwd
+```
+
+The output should match the chosen working directory. PowerShell also supports `pwd`. The command executes on the selected machine.
+
+## 4. Leave and reopen the task
+
+Press `Ctrl+P`, then `d`, to detach the current pane. Press `Ctrl+F`, find `first-session` and press `Enter`.
+
+You are opening the same shell rather than creating another one. You can also quit the TUI with `Ctrl+G`, then `q`, and run `anytty` again. Tasks remain while their owning machine and daemon continue running.
+
+## 5. Finish deliberately
+
+Run `exit` in the shell to end it normally. Its terminal record remains available for inspecting the result; delete that record later if needed. Closing a pane alone is not evidence that a task ended.
+
+Continue with <DocLink locale="en" path="clients/tui/overview">the workbench</DocLink>, <DocLink locale="en" path="clients/tui/layouts">workspaces and splits</DocLink>, or <DocLink locale="en" path="start/mobile">your first mobile connection</DocLink>.

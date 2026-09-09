@@ -1,0 +1,48 @@
+---
+title: "通过 SSH 连接"
+description: "SSH 路线适合已经能通过 SSH 访问目标电脑的情况。它借助 SSH 抵达远端 AnyTTY 服务；SSH 主机验证与 AnyTTY daemon 身份、授权都需要成立。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 通过 SSH 连接
+
+SSH 路线适合已经能通过 SSH 访问目标电脑的情况。它借助 SSH 抵达远端 AnyTTY 服务；SSH 主机验证与 AnyTTY daemon 身份、授权都需要成立。
+
+## 准备目标
+
+确认客户端能够用预期账号登录目标 SSH 服务，并通过可信渠道核对 SSH 主机的 SHA256 指纹。在目标上安装 AnyTTY，运行 `anytty`，确认本机终端可用。
+
+SSH 路线默认连接目标回环 signaling `127.0.0.1:41120` 与 ICE-TCP `127.0.0.1:41121`。若目标修改过端口，需要让路线配置与实际监听一致。
+
+## 签发可导入邀请
+
+在目标电脑上执行，替换主机、账号与经过核实的指纹：
+
+```sh
+anytty pair create --route ssh \
+  --ssh-host server.example.com --ssh-user dev \
+  --ssh-host-key 'SHA256:REPLACE_WITH_VERIFIED_FINGERPRINT' \
+  --out ./ssh-claim.txt
+```
+
+通过私密渠道把邀请交给客户端，在客户端执行：
+
+```sh
+anytty pair import ./ssh-claim.txt --id workstation --client-label laptop
+anytty endpoint show workstation
+```
+
+手机则使用配对界面的相应入口和自身支持的 SSH 认证。邀请中包含路线，不代表它携带了系统 SSH 私钥；客户端仍需完成 SSH 认证准备。
+
+## 测试与使用
+
+从 `endpoint show` 找到 SSH route ID，再执行 `anytty endpoint test workstation --route ROUTE_ID`。成功后在 TUI 选择该 endpoint，打开或新建终端。
+
+需要 ProxyJump、远端端口或手动路线配置时，查看 `anytty endpoint add ssh --help` 与 `endpoint route --help`。单纯添加路线不会凭空生成授权凭据。
+
+## 常见故障
+
+连接超时先查 SSH 网络和端口；认证失败查账号与密钥；指纹不符先核实主机变化；SSH 成功但 AnyTTY 不通，检查远端 daemon、回环端口和配对授权。不要通过取消身份验证来绕过错误。

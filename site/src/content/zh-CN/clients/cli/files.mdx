@@ -1,0 +1,51 @@
+---
+title: "文件与历史命令"
+description: "文件命令定位 endpoint 和路径，终端历史命令定位 terminal。不要把文件系统中的日志文件与 AnyTTY 保存的终端历史混为一谈。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 文件与历史命令
+
+文件命令定位 endpoint 和路径，终端历史命令定位 terminal。不要把文件系统中的日志文件与 AnyTTY 保存的终端历史混为一谈。
+
+## 浏览目标文件
+
+```sh
+anytty file list workstation /srv/project --all --json
+anytty file stat workstation /srv/project/report.json --json
+anytty file cat workstation /srv/project/report.json
+```
+
+替换设备 ID 和路径。目录列表默认分页，`--all` 读取所有页；大目录脚本也可用 `--cursor` 与 `--limit` 逐页处理。`cat` 输出原始文件内容，适合小型文本，二进制文件应下载处理。
+
+## 上传与下载
+
+```sh
+anytty file upload workstation ./input.json /srv/project/input.json --json
+anytty file download workstation /srv/project/report.json ./report.json --json
+```
+
+上传参数顺序是本地在前、远端在后；下载相反。显式指定路径更容易审查。默认不要假定会覆盖已有文件，需要替换时明确使用 `--overwrite`。命令等待传输校验结果，脚本应检查返回状态。
+
+`mkdir`、`copy`、`move`、`rename`、`remove` 操作目标设备文件系统，具体参数先查对应 `--help`。
+
+## 捕获远端终端输出
+
+```sh
+anytty terminal capture workstation:TERMINAL_ID --lines 300 --json
+```
+
+适合获取远端近期输出。想保存长任务的完整结果，建议程序写入明确的产物文件，再下载。
+
+## 本机历史搜索
+
+```sh
+anytty history search TERMINAL_ID ERROR -C 2
+```
+
+当前 `history search` 使用本机 daemon 的 terminal ID，不接受远端 endpoint 目标；不要把 `workstation:ID` 当成本地 ID 传入。远端可使用 capture，或在拥有终端的机器执行历史搜索。
+
+搜索没有匹配时退出码为 1，脚本需要区分“没有命中”和操作错误。支持纯文本、glob、RE2 正则与上下文参数，见 `anytty history search --help`。

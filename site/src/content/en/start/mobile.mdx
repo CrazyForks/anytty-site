@@ -1,0 +1,44 @@
+---
+title: "Your first mobile connection"
+description: "Open a terminal already running on your computer from your phone. First run anytty on the computer and create a recognizable terminal, then install the App on your phone."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Your first mobile connection
+
+Open a terminal already running on your computer from your phone. First run `anytty` on the computer and create a recognizable terminal, then install the App on your phone.
+
+<Diagram id="handoff" locale="en" />
+
+## 1. Choose a network route
+
+For a reachable LAN address, prepare a listener and invitation using the <DocLink locale="en" path="connections/direct">Direct guide</DocLink>. Use the <DocLink locale="en" path="connections/ssh">SSH guide</DocLink> if SSH access is available. Consider <DocLink locale="en" path="cloud/overview">Cloud</DocLink> for cross-network access.
+
+Opening AnyTTY locally does not prove phone reachability. `127.0.0.1` on a phone points to the phone, not your computer.
+
+## 2. Create an invitation on the computer
+
+Follow the route guide to run `anytty pair create` with reachable route information, producing a one-time QR code or text invitation. Invitation expiration and redeemed authorization lifetime are separate settings. Keep the complete invitation private.
+
+## 3. Redeem it in the App
+
+Open the device page and choose the pairing scanner, or use the pairing page’s text input. Check the target label and prompts, then complete pairing.
+
+<ScreenshotSlot id="app-pair" locale="en" />
+
+Generate a new invitation if the previous one expired or was used. A new invitation alone will not fix an unreachable route.
+
+## 4. Open the existing terminal
+
+Select the paired device, open its terminal list and choose the terminal from your computer. In an idle shell, run a harmless check such as `pwd` and compare both views.
+
+If the terminal is busy with a build or editor, inspect first. Do not send a shell command into an unrelated running program.
+
+## 5. Check sizing and disconnection
+
+On a narrow phone display, start as a follower and take size ownership only when needed. Closing the App leaves the computer’s daemon responsible for its tasks; phone background connectivity is subject to OS limits.
+
+Continue with <DocLink locale="en" path="clients/app/devices">App devices</DocLink>, <DocLink locale="en" path="clients/tui/size">terminal sizing</DocLink> and <DocLink locale="en" path="connections/pairing">revoking access</DocLink>.

@@ -1,0 +1,52 @@
+---
+title: "安装 AnyTTY"
+description: "在运行任务的电脑上安装 anytty，即可获得 TUI、CLI 和 daemon。手机和平板使用独立 App，再与这台电脑配对。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 安装 AnyTTY
+
+在运行任务的电脑上安装 `anytty`，即可获得 TUI、CLI 和 daemon。手机和平板使用独立 App，再与这台电脑配对。
+
+## 桌面安装
+
+macOS 或 Linux：
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/anytty/anytty/main/install.sh | sh
+```
+
+Windows PowerShell：
+
+```powershell
+Invoke-WebRequest https://raw.githubusercontent.com/anytty/anytty/main/install.ps1 -OutFile install.ps1
+.\install.ps1
+```
+
+也可以从 [GitHub Releases](https://github.com/anytty/anytty/releases) 下载与操作系统、架构匹配的压缩包，核对发布的校验和，再把可执行文件放进 `PATH`。具体可用平台以该版本的附件为准。
+
+安装器会在配置不存在时写入推荐 TUI 配置；已有配置不会因为重新安装而自动改成新版本的推荐键位。
+
+## 检查并进入工作台
+
+```sh
+anytty --version
+anytty
+```
+
+直接运行 `anytty` 会在需要时自动启动本机 daemon。第一次使用不需要先执行 `daemon start`。如果命令找不到，重新打开终端，并确认安装目录已加入 `PATH`。
+
+下一步在 <DocLink locale="zh-CN" path="start/quick-start">TUI 中创建第一个终端</DocLink>。不要把启动工作台的终端窗口当作已经创建好的任务；进入工作台后还需要选择或创建 terminal。
+
+## 手机与平板
+
+Android 安装包见发布页；iOS / iPadOS 使用 [TestFlight 入口](https://testflight.apple.com/join/rfcgFyJh)。渠道是否开放、构建是否过期和系统要求以分发页面为准。
+
+安装 App 后按<DocLink locale="zh-CN" path="start/mobile">首次连接</DocLink>配对。安装本身不授予任何电脑的访问权限。
+
+## 后续维护
+
+用 `anytty update --check` 检查更新。升级前阅读<DocLink locale="zh-CN" path="maintenance/updates">更新与兼容</DocLink>，尤其注意二进制更新与 daemon 重启是两件事。需要后台启动、日志和诊断时，再查<DocLink locale="zh-CN" path="maintenance/daemon">daemon 管理</DocLink>。

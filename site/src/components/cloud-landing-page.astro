@@ -16,6 +16,7 @@ import {
 
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
+import { cloudPlans } from '@/lib/cloud-plans'
 import { localizedPath, sitePath, type Locale } from '@/lib/site'
 import { cn } from '@/lib/utils'
 
@@ -126,12 +127,6 @@ const copy = {
     cta: '进入 Cloud 控制台', ctaDocs: '查看安全模型',
   },
 } as const
-
-const plans = [
-  { name: 'Cloud Free', monthly: 0, daemons: 2, relay: 1, data: '200 MB', featured: false },
-  { name: 'Lite', monthly: 9.9, daemons: 10, relay: 3, data: '20 GB', featured: true },
-  { name: 'PRO', monthly: 19.9, daemons: 30, relay: 8, data: '100 GB', featured: false },
-] as const
 
 const t = copy[locale]
 const docsPath = sitePath(localizedPath(locale, '/docs/cloud'))
@@ -259,7 +254,7 @@ const consoleUrl = 'https://cloud.anytty.com/app'
       </div>
 
       <div class="mt-12 grid gap-4 lg:grid-cols-3">
-        {plans.map((plan) => (
+        {cloudPlans.map((plan) => (
           <article class={cn('flex min-w-0 flex-col rounded-lg border bg-card p-6', plan.featured ? 'border-sky-400/60 shadow-[0_0_0_1px_rgba(56,189,248,0.16)]' : 'border-[var(--line)]')}>
             <div class="flex min-h-7 items-start justify-between gap-3">
               <h3 class="text-lg font-medium">{plan.name}</h3>

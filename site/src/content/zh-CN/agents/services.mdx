@@ -1,0 +1,46 @@
+---
+title: "构建、测试与常驻服务"
+description: "一次性命令和常驻服务需要不同的完成条件。构建与测试通常等待退出；服务通常等待可用，再持续运行。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 构建、测试与常驻服务
+
+一次性命令和常驻服务需要不同的完成条件。构建与测试通常等待退出；服务通常等待可用，再持续运行。
+
+## 构建和测试
+
+在正确 cwd 创建任务，直接执行项目真实命令。例如目标项目确实使用 npm 时：
+
+```sh
+anytty terminal create --endpoint workstation --json \
+  --name web-tests --cwd /srv/project --tag role=test \
+  -- npm test
+```
+
+记录返回 target，等待 exited，读取 exit_code，再收集测试报告。不要把终端仍开着的交互 shell 退出码当作内部某条测试命令的退出码。需要多步骤时用明确脚本，并让脚本正确传播失败。
+
+## 常驻服务
+
+```sh
+anytty terminal create --endpoint workstation --json \
+  --name dev-server --cwd /srv/project --tag role=service \
+  -- npm run dev
+```
+
+running 只说明进程存在。接下来检查实际监听端口和服务健康入口；健康检查应从目标或可达客户端发起。启动命令的日志可以辅助判断，但一条旧 ready 文本不能证明当前服务可用。
+
+服务一般不会自动退出，因此不要把 `wait --state exited` 当作启动成功检查。为就绪探测设定有限超时；超时后获取输出并报告仍在运行还是已退出。
+
+## 重启与停止
+
+重启前确认是否允许中断现有请求。优先使用程序自己的正常退出机制；发送 Ctrl+C 是输入操作，其效果由程序决定。必要时明确 kill，然后验证状态。
+
+不要为重启单个项目服务而重启整个 AnyTTY daemon，那会影响该 daemon 管理的其他任务。
+
+## 交付给用户
+
+报告服务 target、就绪证据、可访问地址及仍在运行的状态。地址必须结合网络和绑定接口解释，目标机器的 localhost 并不是用户电脑的 localhost。接管方式见<DocLink locale="zh-CN" path="agents/handoff">多任务与人工接管</DocLink>。

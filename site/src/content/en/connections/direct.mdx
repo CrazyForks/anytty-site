@@ -1,0 +1,48 @@
+---
+title: "Connect over Direct"
+description: "Direct uses an explicit target listener, suitable for LANs and controlled networks. These examples use 192.168.1.20; replace it with an address reachable from the receiving client."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Connect over Direct
+
+Direct uses an explicit target listener, suitable for LANs and controlled networks. These examples use `192.168.1.20`; replace it with an address reachable from the receiving client.
+
+## 1. Prepare the listener
+
+The default loopback address cannot be used directly by a phone. If the target daemon is not running:
+
+```sh
+anytty daemon start --route 192.168.1.20:41120
+```
+
+**Starting an already-running daemon does not reconfigure its listener.** Save or finish tasks before deliberately running:
+
+```sh
+anytty daemon restart --route 192.168.1.20:41120
+```
+
+Restart affects that daemon’s running tasks. This is listener maintenance, not an everyday TUI prerequisite. Bind an available local interface. Wildcard hosts broaden listening and enable paired-device LAN discovery.
+
+## 2. Create an invitation
+
+```sh
+anytty pair create --route direct \
+  --direct-address 192.168.1.20:41120 \
+  --qr-file ./direct-pair.png --out ./direct-claim.txt
+```
+
+`--direct-address` publishes an address for Direct setup and ICE-TCP. For separately published addresses, use the paired `--signaling-address` and `--ice-tcp-address` options consistently.
+
+## 3. Pair and verify
+
+Scan the QR code in the App, or run `anytty pair import ./direct-claim.txt --id workstation` on another computer. The invitation is a one-time secret.
+
+Check target firewall rules and network isolation. Inspect routes with endpoint show and test using `endpoint test workstation --route ROUTE_ID`.
+
+## 4. Daily use
+
+Open the paired endpoint in the TUI or App. IP changes, cellular networks or target sleep can make the address unreachable; update the route or choose another path. Reachability still requires valid authorization.

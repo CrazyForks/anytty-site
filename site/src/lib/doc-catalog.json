@@ -1,0 +1,461 @@
+[
+  {
+    "path": "overview",
+    "zh": "文档首页",
+    "en": "Documentation home"
+  },
+  {
+    "zh": "认识 AnyTTY",
+    "en": "Understand AnyTTY",
+    "children": [
+      {
+        "path": "product/features",
+        "zh": "核心功能与使用场景",
+        "en": "Features and use cases"
+      },
+      {
+        "path": "product/concepts",
+        "zh": "产品组成与工作原理",
+        "en": "How AnyTTY works",
+        "aliases": [
+          "concepts"
+        ]
+      },
+      {
+        "path": "product/clients",
+        "zh": "客户端与能力选择",
+        "en": "Choose a client",
+        "aliases": [
+          "platform-support"
+        ]
+      }
+    ]
+  },
+  {
+    "zh": "开始使用",
+    "en": "Get started",
+    "children": [
+      {
+        "path": "start/install",
+        "zh": "安装 AnyTTY",
+        "en": "Install AnyTTY",
+        "aliases": [
+          "install-upgrade"
+        ]
+      },
+      {
+        "path": "start/quick-start",
+        "zh": "在 TUI 中完成第一个任务",
+        "en": "Your first task in the TUI",
+        "aliases": [
+          "quick-start"
+        ]
+      },
+      {
+        "path": "start/mobile",
+        "zh": "第一次跨设备连接",
+        "en": "Your first mobile connection",
+        "aliases": [
+          "handoff"
+        ]
+      }
+    ]
+  },
+  {
+    "zh": "客户端",
+    "en": "Clients",
+    "children": [
+      {
+        "zh": "TUI",
+        "en": "TUI",
+        "children": [
+          {
+            "path": "clients/tui/overview",
+            "zh": "认识工作台与默认操作",
+            "en": "Workbench and default controls",
+            "aliases": [
+              "tui"
+            ]
+          },
+          {
+            "path": "clients/tui/terminals",
+            "zh": "创建和管理终端",
+            "en": "Create and manage terminals"
+          },
+          {
+            "path": "clients/tui/picker",
+            "zh": "终端选择器与管理器",
+            "en": "Terminal picker and manager"
+          },
+          {
+            "path": "clients/tui/layouts",
+            "zh": "工作区、标签页与分屏",
+            "en": "Workspaces, tabs and splits",
+            "aliases": [
+              "tui-layouts"
+            ]
+          },
+          {
+            "path": "clients/tui/floating",
+            "zh": "浮动窗口",
+            "en": "Floating panels"
+          },
+          {
+            "path": "clients/tui/history",
+            "zh": "历史、复制与粘贴",
+            "en": "History, copy and paste"
+          },
+          {
+            "path": "clients/tui/connections",
+            "zh": "远端设备管理",
+            "en": "Remote devices"
+          },
+          {
+            "path": "clients/tui/size",
+            "zh": "多端查看与终端尺寸",
+            "en": "Multiple clients and sizing"
+          },
+          {
+            "zh": "配置",
+            "en": "Configuration",
+            "children": [
+              {
+                "path": "clients/tui/config/overview",
+                "zh": "配置入门与加载规则",
+                "en": "Configuration and loading"
+              },
+              {
+                "path": "clients/tui/config/appearance",
+                "zh": "主题、颜色与界面外观",
+                "en": "Themes and appearance"
+              },
+              {
+                "path": "clients/tui/config/shortcuts",
+                "zh": "快捷键、模式与透传",
+                "en": "Keybindings and passthrough"
+              },
+              {
+                "path": "clients/tui/config/interaction",
+                "zh": "交互与选择器设置",
+                "en": "Interaction and pickers"
+              },
+              {
+                "path": "clients/tui/config/examples",
+                "zh": "完整示例与常用方案",
+                "en": "Complete examples"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "zh": "App · 手机与平板",
+        "en": "App · phones and tablets",
+        "children": [
+          {
+            "path": "clients/app/overview",
+            "zh": "安装与首次连接",
+            "en": "Install and connect",
+            "aliases": [
+              "mobile"
+            ]
+          },
+          {
+            "path": "clients/app/devices",
+            "zh": "设备与连接管理",
+            "en": "Devices and connections"
+          },
+          {
+            "path": "clients/app/terminals",
+            "zh": "终端查看与操作",
+            "en": "Terminal tasks"
+          },
+          {
+            "path": "clients/app/input",
+            "zh": "触控、键盘与花瓣菜单",
+            "en": "Touch, keyboard and petal menu",
+            "aliases": [
+              "mobile-input"
+            ]
+          },
+          {
+            "path": "clients/app/appearance",
+            "zh": "显示、主题与尺寸",
+            "en": "Display, themes and sizing"
+          },
+          {
+            "path": "clients/app/files",
+            "zh": "文件浏览、传输与预览",
+            "en": "Browse and transfer files"
+          },
+          {
+            "path": "clients/app/background",
+            "zh": "后台、通知与平板使用",
+            "en": "Background, notifications and tablets"
+          }
+        ]
+      },
+      {
+        "zh": "CLI",
+        "en": "CLI",
+        "children": [
+          {
+            "path": "clients/cli/overview",
+            "zh": "命令入门与目标选择",
+            "en": "Commands and targets",
+            "aliases": [
+              "cli"
+            ]
+          },
+          {
+            "path": "clients/cli/terminals",
+            "zh": "终端与任务命令",
+            "en": "Terminal commands"
+          },
+          {
+            "path": "clients/cli/connections",
+            "zh": "设备与配对命令",
+            "en": "Device and pairing commands"
+          },
+          {
+            "path": "clients/cli/files",
+            "zh": "文件与历史命令",
+            "en": "File and history commands"
+          },
+          {
+            "path": "clients/cli/automation",
+            "zh": "脚本集成与结果处理",
+            "en": "Scripting and results",
+            "aliases": [
+              "automation"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "zh": "连接与授权",
+    "en": "Connections and access",
+    "children": [
+      {
+        "path": "connections/overview",
+        "zh": "选择连接方式",
+        "en": "Choose a route",
+        "aliases": [
+          "connections"
+        ]
+      },
+      {
+        "path": "connections/ssh",
+        "zh": "通过 SSH 连接",
+        "en": "Connect over SSH"
+      },
+      {
+        "path": "connections/direct",
+        "zh": "通过 Direct 连接",
+        "en": "Connect over Direct"
+      },
+      {
+        "path": "connections/pairing",
+        "zh": "配对、权限与撤销",
+        "en": "Pairing, scope and revocation",
+        "aliases": [
+          "pairing"
+        ]
+      },
+      {
+        "path": "connections/routes",
+        "zh": "多路径与连接诊断",
+        "en": "Route policy and diagnosis"
+      }
+    ]
+  },
+  {
+    "zh": "终端与文件",
+    "en": "Terminals and files",
+    "children": [
+      {
+        "path": "concepts/lifecycle",
+        "zh": "任务生命周期与持久化",
+        "en": "Task lifecycle and persistence",
+        "aliases": [
+          "terminals"
+        ]
+      },
+      {
+        "path": "concepts/history",
+        "zh": "实时画面与历史",
+        "en": "Live screens and history",
+        "aliases": [
+          "history"
+        ]
+      },
+      {
+        "path": "files/permissions",
+        "zh": "文件目录、权限与路径",
+        "en": "File paths and permissions",
+        "aliases": [
+          "files"
+        ]
+      },
+      {
+        "path": "files/transfers",
+        "zh": "传输、预览与限制",
+        "en": "Transfers and preview limits"
+      }
+    ]
+  },
+  {
+    "zh": "Agent 与远端自动化",
+    "en": "Agents and remote automation",
+    "children": [
+      {
+        "path": "agents/overview",
+        "zh": "让 Agent 使用 AnyTTY",
+        "en": "Connect an agent to AnyTTY",
+        "aliases": [
+          "agent-workflows",
+          "workflows"
+        ]
+      },
+      {
+        "path": "agents/remote-task",
+        "zh": "完成一个远端任务",
+        "en": "Complete a remote task"
+      },
+      {
+        "path": "agents/services",
+        "zh": "构建、测试与常驻服务",
+        "en": "Builds, tests and services"
+      },
+      {
+        "path": "agents/handoff",
+        "zh": "多任务组织与人工接管",
+        "en": "Organize tasks and hand over"
+      },
+      {
+        "path": "agents/files",
+        "zh": "远端文件与结果交付",
+        "en": "Remote files and delivery"
+      }
+    ]
+  },
+  {
+    "zh": "AnyTTY Cloud",
+    "en": "AnyTTY Cloud",
+    "children": [
+      {
+        "path": "cloud/overview",
+        "zh": "作用与适用场景",
+        "en": "When to use Cloud",
+        "aliases": [
+          "cloud"
+        ]
+      },
+      {
+        "path": "cloud/connect",
+        "zh": "接入、配对与检查",
+        "en": "Enroll, pair and verify"
+      },
+      {
+        "path": "cloud/paths",
+        "zh": "P2P、Relay 与服务限制",
+        "en": "P2P, Relay and limits"
+      }
+    ]
+  },
+  {
+    "zh": "配置与日常维护",
+    "en": "Maintenance",
+    "children": [
+      {
+        "path": "maintenance/daemon",
+        "zh": "自动启动与手动管理",
+        "en": "Automatic startup and lifecycle",
+        "aliases": [
+          "operations"
+        ]
+      },
+      {
+        "path": "maintenance/config",
+        "zh": "daemon 配置与历史保留",
+        "en": "Daemon settings and retention"
+      },
+      {
+        "path": "maintenance/updates",
+        "zh": "更新、兼容与迁移",
+        "en": "Updates and compatibility"
+      },
+      {
+        "path": "maintenance/data",
+        "zh": "数据、日志与备份",
+        "en": "Data, logs and backups"
+      }
+    ]
+  },
+  {
+    "zh": "帮助与参考",
+    "en": "Help and reference",
+    "children": [
+      {
+        "path": "help/troubleshooting",
+        "zh": "按现象查找故障",
+        "en": "Troubleshooting",
+        "aliases": [
+          "troubleshooting"
+        ]
+      },
+      {
+        "path": "help/faq",
+        "zh": "常见问题",
+        "en": "Frequently asked questions",
+        "aliases": [
+          "faq"
+        ]
+      },
+      {
+        "path": "reference/commands",
+        "zh": "CLI 命令与参数",
+        "en": "CLI command reference",
+        "aliases": [
+          "reference"
+        ]
+      },
+      {
+        "path": "reference/configuration",
+        "zh": "配置字段参考",
+        "en": "Configuration reference"
+      },
+      {
+        "path": "reference/shortcuts",
+        "zh": "默认快捷键与动作",
+        "en": "Default bindings and actions"
+      },
+      {
+        "path": "help/security",
+        "zh": "安全与隐私",
+        "en": "Security and privacy",
+        "aliases": [
+          "security"
+        ]
+      },
+      {
+        "path": "help/releases",
+        "zh": "版本与支持",
+        "en": "Releases and support",
+        "aliases": [
+          "releases-support"
+        ]
+      },
+      {
+        "path": "help/contributing",
+        "zh": "构建与贡献",
+        "en": "Build and contribute",
+        "aliases": [
+          "build-contribute"
+        ]
+      }
+    ]
+  }
+]

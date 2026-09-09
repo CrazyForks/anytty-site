@@ -1,0 +1,38 @@
+---
+title: "安全与隐私"
+description: "目标 daemon 是终端、文件、历史和客户端授权的最终管理者。网络路线负责可达性，不能扩大授权或跳过身份校验。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 安全与隐私
+
+目标 daemon 是终端、文件、历史和客户端授权的最终管理者。网络路线负责可达性，不能扩大授权或跳过身份校验。
+
+## 身份与传输
+
+远端连接需要验证 daemon 身份和客户端凭据，SSH 还需要核对主机密钥。指纹不符时先查设备是否重装或连接错误，不能把关闭验证作为正常修复方式。
+
+远端终端和文件流量在传输中受到保护。这里不把传输保护扩展成未经验证的匿名、零知识或覆盖所有服务数据的承诺。
+
+## 配对材料
+
+邀请是短期一次性秘密，兑换后形成客户端绑定授权。分别管理邀请有效期与 grant 有效期。设备遗失后，在每个相关目标 daemon 撤销授权；仅删除客户端记录不够。
+
+## 文件与 shell
+
+文件工具受能力、路径策略和 OS 权限约束。shell 权限属于运行它的操作系统用户；文件工具的限制不自动把 shell 隔离成沙箱。详见<DocLink locale="zh-CN" path="files/permissions">文件权限</DocLink>。
+
+## 本地数据
+
+终端历史、日志、剪贴板和截图可能包含命令、路径、业务内容及意外输出的秘密。保留策略需要结合使用场景设置。私钥和访问凭据使用受保护存储，不应作为普通配置发布。
+
+## Cloud 元数据
+
+Cloud / Relay 不签发终端操作权限，但服务会处理账号、设备、网络、诊断和用量等运行所需信息。具体数据处理以站点隐私政策为准；本机与独立 SSH / Direct 路线不要求把终端内容经过 Cloud。
+
+## 报告漏洞
+
+使用 [GitHub 私密漏洞报告](https://github.com/anytty/anytty/security/advisories/new)，提供受影响版本、前置条件、使用测试数据的最小复现和影响。不要在公开 issue 中放真实密钥、邀请或生产数据。

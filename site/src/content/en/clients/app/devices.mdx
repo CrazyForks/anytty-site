@@ -1,0 +1,39 @@
+---
+title: "Devices and connections"
+description: "The device page stores paired targets and connection information. One device can have multiple routes. Display labels, default selection and route policy are separate settings."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Devices and connections
+
+The device page stores paired targets and connection information. One device can have multiple routes. Display labels, default selection and route policy are separate settings.
+
+## Add and identify devices
+
+Use the pairing entry, then set a recognizable label in the device menu, such as “Home workstation.” A label helps identification but does not replace checking device identity.
+
+<ScreenshotSlot id="app-devices" locale="en" />
+
+## Device menu
+
+| Action | Purpose |
+| --- | --- |
+| Edit and save display name | Identify the device in lists |
+| Set default | Select the default target |
+| Network connections | Inspect routes, latency and policy |
+| Authorize device | Follow the re-pairing flow for access |
+| Disconnect | Close the current shared connection |
+| Remove device | Remove this App’s saved routes and credentials |
+
+Removing a device locally does not revoke its host-issued grant. For a lost phone or permanent removal, <DocLink locale="en" path="connections/pairing">revoke access on the target</DocLink>.
+
+## Inspect multiple routes
+
+Open network connections and inspect the actual current route, then candidate status and latency. Reconnect after saving a policy and verify the resulting path. A route label alone does not prove Direct, P2P or Relay was used.
+
+## Connection failures
+
+Check target wakefulness and daemon status, then phone network, addressing and grants. A LAN address may stop working after switching to cellular. See <DocLink locale="en" path="connections/routes">route diagnosis</DocLink>.

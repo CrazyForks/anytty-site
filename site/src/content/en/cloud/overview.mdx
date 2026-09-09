@@ -1,0 +1,32 @@
+---
+title: "When to use AnyTTY Cloud"
+description: "AnyTTY Cloud optionally provides device enrollment, discovery and cross-network connectivity. Tasks remain in the target daemon. Cloud does not replace terminal management or autom"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# When to use AnyTTY Cloud
+
+AnyTTY Cloud optionally provides device enrollment, discovery and cross-network connectivity. Tasks remain in the target daemon. Cloud does not replace terminal management or automatically grant client access.
+
+## When it helps
+
+Local use needs only `anytty`. Reachable SSH or LAN Direct can work independently. Cloud helps with changing networks, discovery and Relay fallback.
+
+## Separate relationships
+
+| Relationship | Purpose |
+| --- | --- |
+| Cloud account and enrollment | Register daemon identity for service discovery |
+| Client and daemon pairing | Grant terminal/file scope to a client |
+| Current network path | Carry the connection through P2P, Relay or another route |
+
+Signing in is not pairing. Enrollment does not prove every route works. Relay does not expand a grant.
+
+## Workflow
+
+Verify a local task, <DocLink locale="en" path="cloud/connect">enroll and inspect</DocLink>, pair the client, then verify the actual route. Read <DocLink locale="en" path="cloud/paths">P2P and Relay</DocLink> for policies and limits.
+
+This edition covers Cloud’s product role and client-side operations; Web tutorials are deferred. Current service and purchase pages define pricing, quotas and availability rather than a duplicated table here.

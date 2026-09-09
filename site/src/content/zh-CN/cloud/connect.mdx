@@ -1,0 +1,49 @@
+---
+title: "Cloud 接入、配对与检查"
+description: "Cloud 接入在运行任务的电脑上完成。开始前确认 daemon 正常运行，并准备当前 Cloud 账号生成的设备接入码。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Cloud 接入、配对与检查
+
+Cloud 接入在运行任务的电脑上完成。开始前确认 daemon 正常运行，并准备当前 Cloud 账号生成的设备接入码。
+
+## 1. 接入 daemon
+
+使用服务入口给出的完整接入命令，基本形式为：
+
+```sh
+anytty cloud enroll ENROLLMENT_CODE
+anytty cloud status
+```
+
+接入码是账号相关材料，使用你自己的实际值，不要复制他人的示例码或贴进公开问题。status 用于检查本机 Cloud 运行状态，而不是证明某个 App 已有访问权。
+
+## 2. 配对客户端
+
+按<DocLink locale="zh-CN" path="connections/pairing">配对说明</DocLink>在目标签发邀请，由 App 或另一台电脑兑换。接入、配对的先后准备应以当前服务流程为准，但两者职责不能混淆。
+
+## 3. 验证路线
+
+在客户端查看 endpoint 的 Cloud route ID，再运行：
+
+```sh
+anytty endpoint test ENDPOINT --route ROUTE_ID --json
+```
+
+App 可在设备的网络连接页查看实际路线。能连接后再打开已有终端，确认任务属于预期目标。
+
+## 4. 检查 Edge 与暂停使用
+
+```sh
+anytty cloud edge list
+anytty cloud disable
+anytty cloud enable
+```
+
+`edge list` 探测并排序可用 Edge；`edge reselect` 可重新选择而不重启 daemon。`disable` 暂停 Cloud 运行但保留接入信息，`enable` 恢复。它们不是撤销 daemon 客户端授权的命令。
+
+问题排查依次看目标 daemon、Cloud status、客户端授权和具体路线；不要为了诊断 Cloud 而先重启所有终端任务。

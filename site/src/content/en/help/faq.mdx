@@ -1,0 +1,56 @@
+---
+title: "Frequently asked questions"
+description: "These answers clarify common behavior and link to detailed guides."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Frequently asked questions
+
+These answers clarify common behavior and link to detailed guides.
+
+## Must I start the daemon every time?
+
+No. `anytty` starts it when the TUI needs it. Manual commands serve maintenance and unattended setup.
+
+## Do tasks survive leaving the TUI or App?
+
+They continue while the target machine and daemon run. Shutdown and daemon restart are different; see <DocLink locale="en" path="concepts/lifecycle">lifecycle</DocLink>.
+
+## Is Cloud required?
+
+No. Local, SSH and Direct work independently. Cloud optionally provides cross-network discovery and connectivity.
+
+## Why pair after Cloud sign-in?
+
+Accounts/enrollment and client authorization are separate. The target daemon issues grants to specific clients.
+
+## Are phone and desktop terminals independent?
+
+Opening the same target means one shared process. Input and resizing can affect others. Create another terminal for independent work.
+
+## Is a follower read-only?
+
+No. The role coordinates size, not complete input/file permissions. See <DocLink locale="en" path="clients/tui/size">sizing</DocLink>.
+
+## Why are my copy keys different?
+
+Built-in, recommended and custom configurations differ. Check current help and <DocLink locale="en" path="clients/tui/config/shortcuts">binding configuration</DocLink>.
+
+## Does TUI YAML configure the phone?
+
+No. App fonts, themes and the petal menu use App settings. Workbench layouts are also separate from theme YAML.
+
+## Why did a task fail after wait succeeded?
+
+Wait success means the requested state was reached. Inspect the program’s `exit_code`.
+
+## Can the App preview every format?
+
+Native preview focuses on size-limited text and images. Download other formats for an appropriate application. See <DocLink locale="en" path="files/transfers">preview limits</DocLink>.
+
+## Where are Web tutorials?
+
+This edition covers TUI, App and CLI. Web remains in product diagrams; tutorials follow its interaction improvements.

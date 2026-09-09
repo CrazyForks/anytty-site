@@ -1,0 +1,47 @@
+---
+title: "配对、权限与撤销"
+description: "配对把某个客户端身份与目标 daemon 签发的访问授权绑定。它不是简单保存地址，也不是把电脑登录密码复制到手机。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 配对、权限与撤销
+
+配对把某个客户端身份与目标 daemon 签发的访问授权绑定。它不是简单保存地址，也不是把电脑登录密码复制到手机。
+
+<Diagram id="pairing" locale="zh-CN" />
+
+## 邀请与授权是两个阶段
+
+目标电脑生成短期一次性邀请，客户端兑换后保存与自身身份绑定的凭据。邀请的 `--ttl` 默认 10 分钟，限制的是兑换时间；`--grant-ttl` 限制兑换后授权的寿命，默认 0 不按时过期。
+
+一次邀请使用后不能当作长期二维码继续给多台设备扫描。每个客户端分别生成并兑换，更便于命名和撤销。
+
+## 选择范围
+
+`pair create --terminal TERMINAL_ID` 可以把授权限定到一个终端；省略终端限制时应认真确认 daemon 范围访问是否符合目的。终端访问、文件能力和尺寸所有权不是同一个概念。
+
+文件操作还受授权和 daemon 文件策略约束；如果客户端拥有交互式 shell，它可能通过 shell 执行该操作系统用户能执行的文件操作，不能把文件工具的路径限制当作 shell 沙箱。
+
+## 检查授权
+
+在目标电脑执行：
+
+```sh
+anytty access identity
+anytty access list
+```
+
+核对客户端标签、范围和有效期。名称用于管理，真正授权依赖身份和凭据，不应只看显示名是否熟悉。
+
+## 撤销
+
+```sh
+anytty access revoke GRANT_ID
+```
+
+把 ID 替换为 list 中确实需要撤销的授权。客户端遗失、退役或不再需要访问时，在它曾获授权的目标设备分别撤销。之后测试客户端已无法以该授权建立访问。
+
+从 App 移除设备或 CLI 删除 endpoint 仅清理客户端信息。Cloud 账号和设备接入也不等同于 daemon 的客户端授权。

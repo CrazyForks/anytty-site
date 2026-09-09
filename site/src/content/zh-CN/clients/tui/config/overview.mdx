@@ -1,0 +1,65 @@
+---
+title: "配置入门与加载规则"
+description: "TUI 的主题、按钮、快捷键和交互偏好由本机 YAML 配置控制。先找到实际加载的文件，再做一个小改动并验证，避免修改了未使用的文件。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 配置入门与加载规则
+
+TUI 的主题、按钮、快捷键和交互偏好由本机 YAML 配置控制。先找到实际加载的文件，再做一个小改动并验证，避免修改了未使用的文件。
+
+<Diagram id="config" locale="zh-CN" />
+
+## 找到配置
+
+```sh
+anytty config paths
+anytty config show
+anytty config show --effective
+```
+
+默认位置是 `$XDG_CONFIG_HOME/anytty/tui-v3.yaml`，未设置 XDG 配置目录时通常为 `~/.config/anytty/tui-v3.yaml`。实际位置以 `config paths` 为准，尤其在不同操作系统或自定义环境下。
+
+`show` 用于检查源配置，`show --effective` 用于检查合并默认值和环境覆盖后的配置。输出可能包含你自定义的文本，分享前检查内容。
+
+## 加载顺序
+
+1. 建立内置默认配置。
+2. 读取默认路径，或 `--config FILE` 指定的文件。
+3. 应用程序明确支持的环境变量覆盖。
+4. 校验字段和值，再启动客户端。
+
+默认文件不存在时可以使用内置值；显式指定的文件不存在则报错。不是任意字段加上 `ANYTTY_` 前缀都能覆盖，支持项见<DocLink locale="zh-CN" path="reference/configuration">字段参考</DocLink>。
+
+## 第一个修改
+
+```sh
+anytty config set tui.chrome.panel_presentation card
+anytty config validate
+```
+
+退出并重新运行 TUI 后，面板改用独立卡片边框。也可以在文件中写：
+
+```yaml
+version: 1
+tui:
+  chrome:
+    panel_presentation: card
+```
+
+当前解析器支持的是 YAML 子集：使用两空格缩进和键值映射，不使用列表、锚点或复杂 YAML 语法。颜色字符串必须加引号。当前配置版本为 `1`。
+
+## 生效边界
+
+TUI 偏好在启动时读取，修改后重新打开 TUI；不需要为换主题重启 daemon。`daemon:` 下的参数在后台服务启动时读取，生效方式另见<DocLink locale="zh-CN" path="maintenance/config">后台配置</DocLink>。
+
+配置不保存工作区布局、终端进程或设备授权。`tui.profile` 当前只是预留名称，不会自动加载另一套 profile 或做多文件合并。
+
+## 回退
+
+使用 `anytty config unset tui.chrome.panel_presentation` 去掉显式覆盖，再验证并重开 TUI。修改前备份原文件；需要隔离试验时用 `anytty --config ./trial.yaml`。
+
+下一步分别阅读<DocLink locale="zh-CN" path="clients/tui/config/appearance">外观</DocLink>、<DocLink locale="zh-CN" path="clients/tui/config/shortcuts">快捷键</DocLink>、<DocLink locale="zh-CN" path="clients/tui/config/interaction">交互</DocLink>及<DocLink locale="zh-CN" path="clients/tui/config/examples">完整示例</DocLink>。

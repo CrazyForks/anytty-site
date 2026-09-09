@@ -1,0 +1,34 @@
+---
+title: "Background, notifications and tablets"
+description: "Task persistence depends on the target computer. How long the App stays connected in the background depends on the mobile OS and preferences. Diagnose these separately."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Background, notifications and tablets
+
+Task persistence depends on the target computer. How long the App stays connected in the background depends on the mobile OS and preferences. Diagnose these separately.
+
+## Background connectivity
+
+Settings include a background connection preference. Power saving, memory pressure and network changes may still suspend the App; the setting is not a permanent-online guarantee.
+
+On return, check connection status and reopen the existing terminal before creating another task.
+
+## Notifications
+
+Terminal notifications require both App settings and OS permission. Verify behavior with a recognizable test task on your device. Notifications are not the sole source of truth; inspect task state, exit code or artifacts.
+
+<ScreenshotSlot id="app-background" locale="en" />
+
+## Tablet layouts
+
+**Split below** provides in-app workspace splitting. Combine multiple areas and a hardware keyboard for longer sessions. Two views of the same terminal still operate one process.
+
+Check conflicts among OS shortcuts, App input and remote program bindings using the <DocLink locale="en" path="clients/app/input">input guide</DocLink>.
+
+## Before leaving
+
+For builds, tests and services, confirm the task exists on the target daemon and record its name. Save results to explicit paths. Reopen by name when returning, and end the process only when you intend to stop it.

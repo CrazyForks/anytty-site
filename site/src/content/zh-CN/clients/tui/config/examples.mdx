@@ -1,0 +1,76 @@
+---
+title: "完整示例与常用方案"
+description: "下面是一份可以独立保存的 TUI 配置。它保留内置快捷键，只修改外观、交互和自动尺寸接管，适合作为个人配置的起点。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 完整示例与常用方案
+
+下面是一份可以独立保存的 TUI 配置。它保留内置快捷键，只修改外观、交互和自动尺寸接管，适合作为个人配置的起点。
+
+## 桌面工作台方案
+
+保存为 `trial.yaml`：
+
+```yaml
+version: 1
+tui:
+  profile: default
+  theme:
+    mode: dark
+    palette: builtin
+    primary: "#a970ff"
+    background: "#101018"
+    foreground: "#eeeeef"
+  chrome:
+    header: true
+    footer: true
+    panel_presentation: card
+    pane_title_template: "{{terminal}}@{{endpoint}}"
+    picker:
+      presentation: card
+      width: wide
+      density: comfortable
+      endpoint_tabs: underline
+  interaction:
+    mouse: true
+    confirm_destructive: true
+    sticky_prefix_timeout_ms: 5000
+    shortcut_passthrough_interval_ms: 1000
+    picker:
+      fuzzy_match: subsequence
+      highlight_matches: true
+  terminal:
+    auto_take_owner: true
+  shortcuts:
+    actions:
+      panel.close:
+        label: close view
+        style: danger
+```
+
+```sh
+anytty --config ./trial.yaml config validate
+anytty --config ./trial.yaml
+```
+
+未写出的字段使用内置默认值。这里没有声明任何快捷键 scene，因此保留内置绑定；这并不等于安装器推荐配置的绑定。
+
+## 按场景调整
+
+| 场景 | 修改 |
+| --- | --- |
+| 小窗口、更多内容 | `panel_presentation: split-line`，`density: compact` |
+| 经常从手机共同查看 | `auto_take_owner: false`，需要时手动接管 |
+| 只用键盘 | `mouse: false`，保留 footer 便于查键 |
+| 宿主配色已调整好 | `palette: host`，移除不需要的显式颜色 |
+| 学习模式操作 | 增大 `sticky_prefix_timeout_ms`，保留确认提示 |
+
+## 完整模板与推荐键位
+
+[完整字段模板](https://github.com/anytty/anytty/blob/main/tui/docs/tui-v3.example.yaml)解释配置字段；[推荐配置](https://github.com/anytty/anytty/blob/main/tui/docs/tui-v3.recommended.yaml)包含完整场景绑定。它们来自公开客户端仓库，请选择与你安装版本匹配的版本。
+
+如果要自定义快捷键，从完整推荐文件开始编辑，不要只复制一个 scene。先保存原配置，再校验新文件，最后替换实际路径；随时可用 `--config` 指向备份恢复。

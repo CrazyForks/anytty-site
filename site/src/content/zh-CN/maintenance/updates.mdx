@@ -1,0 +1,37 @@
+---
+title: "更新、兼容与迁移"
+description: "更新可执行文件、重启 daemon 和迁移数据是三个步骤。先阅读对应版本说明，再决定什么时候应用后台变更。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 更新、兼容与迁移
+
+更新可执行文件、重启 daemon 和迁移数据是三个步骤。先阅读对应版本说明，再决定什么时候应用后台变更。
+
+## 检查与下载
+
+```sh
+anytty update --check
+anytty update
+```
+
+支持 update 的版本会下载匹配发布资产并校验后替换磁盘上的程序。特别早期、尚无 update 命令的版本，可重新运行安装器升级。具体目标版本与可用资产查看[发布页](https://github.com/anytty/anytty/releases)。
+
+## 已运行的 daemon
+
+更新命令不会自动停止或重启 daemon。新的 CLI / TUI 使用新二进制，旧后台进程可能仍运行旧版本。协议不兼容时需要在保存任务后更新并重启相关组件，而不是无条件反复重连。
+
+## 配置与历史迁移
+
+安装器保留已有 TUI 配置，所以新推荐键位不会自动覆盖你的设置。比较新版本模板，逐项迁移后运行 config validate。
+
+Beta 版本可能改变协议、配置和存储格式。当前源代码明确存在旧历史格式不迁移、首次启动清理旧文件的行为；涉及跨格式升级前先检查发布说明并保存重要结果，不保证旧历史总能导入。
+
+## 回退
+
+旧版本不一定能够读取新版本生成的数据和配置。回退前备份可恢复的配置和产物，优先重新安装目标版本并重新配对；不要把私钥或受保护凭据当作普通设置文件跨设备复制。
+
+升级后核对版本、daemon 状态、目标连接和一个小型任务。App 也需使用兼容版本，发布渠道限制见<DocLink locale="zh-CN" path="help/releases">版本与支持</DocLink>。

@@ -1,0 +1,38 @@
+---
+title: "Workspaces, tabs and splits"
+description: "Use workspaces for projects, tabs for related views and splits for simultaneous observation. Group tasks first, then arrange their views."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Workspaces, tabs and splits
+
+Use workspaces for projects, tabs for related views and splits for simultaneous observation. Group tasks first, then arrange their views.
+
+<Diagram id="layout" locale="en" />
+
+## Example project layout
+
+Create a `demo` workspace with `develop` and `checks` tabs. Place an editor beside service logs in `develop`, and tests in `checks`. Names such as `demo-editor`, `demo-server` and `demo-tests` remain recognizable from mobile and CLI clients.
+
+## Workspaces and tabs
+
+Built-in workspace mode starts with `Ctrl+W`: `c` create, `n` / `p` switch, `r` rename, `x` delete. Tab mode starts with `Ctrl+T`: `c` create, `n` / `p` switch, number keys jump, `r` rename, `x` close. Follow your footer for loaded bindings.
+
+Open the workbench tree with `Ctrl+G → w`. Built-in tree actions are `Enter` open, `Ctrl+N` create, `Ctrl+R` rename, `Ctrl+X` delete, `Ctrl+D` detach and `Ctrl+Z` zoom.
+
+## Splits and focus
+
+In panel mode (`Ctrl+P`), built-in `%` or `Ctrl+D` splits right; `"` or `Ctrl+E` splits down. The picker also opens a selected task in a split with `Tab`.
+
+Use panel direction actions to change focus, `z` to zoom temporarily and `b` to balance. Enter `Ctrl+R` resize mode to adjust dividers according to the current hints.
+
+<ScreenshotSlot id="tui-layout" locale="en" />
+
+## Persistence
+
+AnyTTY saves layouts through workbench storage, not theme YAML. `tui.chrome.panel_presentation` changes the visual treatment between `split-line` and `card`; it does not recreate tasks or change their identities.
+
+Read confirmations when removing workspaces or tabs. Distinguish layout cleanup from ending tasks, and check the <DocLink locale="en" path="clients/tui/picker">manager</DocLink> for remaining processes afterward.

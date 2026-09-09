@@ -1,0 +1,14 @@
+---
+import diagrams from '@/lib/doc-diagrams.json';
+import { sitePath, type Locale } from '@/lib/site';
+interface Props { id: keyof typeof diagrams; locale: Locale }
+const { id, locale } = Astro.props;
+const meta = diagrams[id];
+const title = meta[locale === 'en' ? 'en' : 'zh'];
+---
+<figure class="not-prose my-8">
+  <div class="overflow-x-auto rounded-xl border border-border">
+    <img src={sitePath(`/assets/docs/diagrams/${id}-${locale}.svg`)} alt={title} width={meta.width} height={meta.height} loading="lazy" class="m-0 block h-auto w-full min-w-[36rem]" />
+  </div>
+  <figcaption class="mt-2 text-sm leading-6 text-muted-foreground">{title} · {locale === 'en' ? 'Scroll the diagram horizontally on a narrow screen.' : '小屏幕上可横向滚动查看。'}</figcaption>
+</figure>

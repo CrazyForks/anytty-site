@@ -1,0 +1,55 @@
+---
+title: "Daemon settings and retention"
+description: "daemon: settings control output buffers, history and resource sampling. They share the configuration system with tui: preferences but load when the background service starts."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Daemon settings and retention
+
+`daemon:` settings control output buffers, history and resource sampling. They share the configuration system with `tui:` preferences but load when the background service starts.
+
+## Example retention policy
+
+```yaml
+version: 1
+daemon:
+  output_buffer:
+    capacity_bytes: 33554432
+    resident_budget_bytes: 536870912
+    overflow: block
+  history:
+    max_size_mb: 256
+    max_age_days: 14
+    compression: zstd
+    compression_level: fast
+  resource_sampling:
+    interval_ms: 500
+    max_samples: 512
+```
+
+This example uses 256 MiB per terminal and 14-day retention. Defaults are 512 MiB and age 0, meaning no age-based deletion.
+
+## Output buffering
+
+`capacity_bytes` defaults to 32 MiB per terminal generation. `resident_budget_bytes` defaults to a shared 512 MiB daemon budget.
+
+`block` applies backpressure and may slow output reading. `drop` removes old payload and reports gaps. Choose based on continuity and resource needs.
+
+## History and sampling
+
+Size 0 means no size limit; age 0 means no age deletion, not disabled history. Compression supports zstd, s2 and none; levels are fast, balanced and best, ignored for none.
+
+Resource sampling controls CPU/memory observation interval and retained points. Start with defaults before increasing sampling costs.
+
+## Apply changes
+
+```sh
+anytty config validate
+```
+
+Validation does not reconfigure a running daemon. Schedule an interruptible window and restart; for an explicit file use `anytty --config ./daemon.yaml daemon restart`. Reopening the TUI does not reload daemon settings.
+
+See <DocLink locale="en" path="reference/configuration">configuration reference</DocLink> for ranges and environment overrides. Preserve needed history before tightening retention; raising limits cannot restore deleted data.

@@ -1,0 +1,60 @@
+---
+title: "完成一个远端任务"
+description: "这个例子在已配对的远端设备生成一份小报告，再把报告下载回来。它演示目标确认、任务创建、退出检查和结果交付，不依赖某个特定 Agent 产品。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 完成一个远端任务
+
+这个例子在已配对的远端设备生成一份小报告，再把报告下载回来。它演示目标确认、任务创建、退出检查和结果交付，不依赖某个特定 Agent 产品。
+
+## 1. 确认环境
+
+假设 endpoint 为 `workstation`，目标已有可写目录 `/srv/anytty-demo`，目标支持 `sh`，本机有 `jq`。先替换成你的真实值：
+
+```sh
+anytty endpoint show workstation
+anytty file stat workstation /srv/anytty-demo --json
+```
+
+目录不存在时先按项目约定准备，权限不够时修正授权或路径。
+
+## 2. 创建有名字的任务
+
+```sh
+endpoint=workstation
+task_name="agent-report-$(date +%s)"
+created=$(anytty terminal create --endpoint "$endpoint" --json \
+  --name "$task_name" --cwd /srv/anytty-demo \
+  --tag role=agent,task=report \
+  -- sh -lc 'pwd > report.txt; printf "report complete\n"')
+target=$(printf '%s' "$created" | jq -er '.target')
+printf '%s\n' "$target"
+```
+
+`report.txt` 会写入示例目录；该示例应在专用演示目录中运行，避免覆盖现有报告。真实并行任务建议使用独立产物目录。
+
+## 3. 等待并判断
+
+```sh
+anytty terminal wait "$target" --state exited --timeout 2m --json > wait.json
+anytty terminal capture "$target" --lines 100 --json > capture.json
+jq -e '.exit_code == 0' wait.json
+```
+
+逐步检查每条命令的退出状态。wait 调用失败时先停止后续成功判断，检查任务是否仍在运行；任务 exit_code 非 0 时收集错误，不应继续报告成功。
+
+## 4. 下载产物
+
+```sh
+anytty file download "$endpoint" /srv/anytty-demo/report.txt ./report.txt --json
+```
+
+检查传输成功和文件内容。对真实构建，报告文件本身还要通过项目所需的格式或内容校验。
+
+## 5. 给人一个可审查的结果
+
+报告 endpoint、target、运行目录、实际命令、退出码、关键输出和下载路径。用户可以在 TUI 管理器或 App 终端列表按任务名打开同一记录。审核结束前保留任务，清理时再明确删除。

@@ -1,0 +1,59 @@
+---
+title: "Interaction and pickers"
+description: "Interaction settings control the mouse, confirmations, search and picker density. They do not store terminal state or change device grants."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Interaction and pickers
+
+Interaction settings control the mouse, confirmations, search and picker density. They do not store terminal state or change device grants.
+
+## A starting configuration
+
+```yaml
+version: 1
+tui:
+  interaction:
+    mouse: true
+    confirm_destructive: true
+    sticky_prefix_timeout_ms: 5000
+    shortcut_passthrough_interval_ms: 1000
+    picker:
+      fuzzy_match: subsequence
+      highlight_matches: true
+  chrome:
+    picker:
+      presentation: card
+      width: adaptive
+      density: comfortable
+      endpoint_tabs: underline
+```
+
+`mouse: false` disables TUI mouse interaction while preserving keyboard controls. Destructive-action confirmations reduce accidental operations; still inspect the target task and device.
+
+## Picker appearance and search
+
+`tui.chrome.picker` accepts `presentation: card/flat`, `width: adaptive/wide`, `density: compact/comfortable` and `endpoint_tabs: underline/plain`.
+
+Search lives under `tui.interaction.picker`. Currently only `fuzzy_match: subsequence` is supported. Disabling match highlighting removes color, not filtering. Customize device status glyphs and styles under `chrome.picker.endpoint_status`.
+
+## Clipboard history layout
+
+```yaml
+version: 1
+tui:
+  interaction:
+    clipboard_history:
+      max_items: 200
+      name_width: 34
+      preview_width_ratio: 0.68
+```
+
+`name_width` uses terminal cells. Preview ratio also depends on available width and minimum columns. Do not treat `max_items` as a guarantee that sensitive entries are automatically erased; explicitly delete entries when required.
+
+## Verify changes
+
+Validate, reopen the TUI, and check pane clicks, picker density, search highlighting and deletion prompts separately. Automatic size ownership is configured independently under `tui.terminal.auto_take_owner`; see <DocLink locale="en" path="clients/tui/size">sizing</DocLink>.

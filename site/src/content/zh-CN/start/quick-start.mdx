@@ -1,0 +1,56 @@
+---
+title: "在 TUI 中完成第一个任务"
+description: "这篇教程在工作台内完成“创建终端 → 运行命令 → 离开 → 再次打开”。只需先安装 AnyTTY(doc:start/install)，然后在普通终端里运行 anytty。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 在 TUI 中完成第一个任务
+
+这篇教程在工作台内完成“创建终端 → 运行命令 → 离开 → 再次打开”。只需先<DocLink locale="zh-CN" path="start/install">安装 AnyTTY</DocLink>，然后在普通终端里运行 `anytty`。
+
+## 1. 打开工作台
+
+```sh
+anytty
+```
+
+本机 daemon 会按需自动启动。已有工作台或终端时，可能看到恢复的视图；新环境可能是空工作台。二者都可以继续下一步。
+
+## 2. 创建本机终端
+
+以下 `Ctrl+F` 是内置配置和安装器推荐配置共有的绑定；自定义过键位时，以底部提示为准。
+
+1. 按 `Ctrl+F` 打开 Terminal Picker。
+2. 选择本机 `local` endpoint；必要时用左右方向键切换设备。
+3. 选中 **New Terminal**，按 `Enter`。
+4. 在 **Create Terminal** 中把 `name` 填为 `first-session`。`command` 留空，使用默认 shell；确认 `server` 是本机，`workdir` 是实际存在的目录，`tags` 可以留空。
+5. 用 `Tab` 切换字段，按 `Enter` 提交。
+
+创建成功后，终端会附加到当前目标面板，出现 shell 提示符。若失败，检查名称、目标设备与工作目录；不要重复提交大量同名任务。
+
+<ScreenshotSlot id="tui-first" locale="zh-CN" />
+
+## 3. 运行一个能确认结果的命令
+
+在新 shell 中执行：
+
+```sh
+pwd
+```
+
+输出应是创建时的工作目录。Windows PowerShell 也支持 `pwd`。这条命令在选中的目标机器上执行，并非由 TUI 自己模拟。
+
+## 4. 离开视图，再打开同一任务
+
+使用共有绑定 `Ctrl+P` 后按 `d`，解除当前面板的附加。随后按 `Ctrl+F`，找到 `first-session`，按 `Enter` 打开。
+
+你看到的是同一个 shell，而不是又创建了一个。也可以用 `Ctrl+G` 后按 `q` 退出 TUI，再运行 `anytty` 重新进入；目标 daemon 和机器继续运行时，任务不会因为客户端退出而自动结束。
+
+## 5. 正确结束
+
+在 shell 中执行 `exit` 会让 shell 正常退出。此时终端记录仍可用于查看结果，需要时再从管理器删除。不要用“关闭面板”代替对任务是否结束的判断。
+
+下一步阅读<DocLink locale="zh-CN" path="clients/tui/overview">认识工作台</DocLink>和<DocLink locale="zh-CN" path="clients/tui/layouts">工作区与分屏</DocLink>。想从手机接着看，进入<DocLink locale="zh-CN" path="start/mobile">第一次跨设备连接</DocLink>。

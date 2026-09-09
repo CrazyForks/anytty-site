@@ -1,0 +1,21 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+import { docPages } from '@/lib/documentation';
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+interface DocModule { getHeadings: () => { depth: number; slug: string; text: string }[]; default: AstroComponentFactory; frontmatter: { title: string; description: string } }
+export function getStaticPaths() {
+  const modules = import.meta.glob<DocModule>('../../../content/zh-CN/**/*.mdx', { eager: true });
+  return docPages.flatMap(page => {
+    const entry = modules[`../../../content/zh-CN/${page.path}.mdx`];
+    if (!entry) throw new Error(`Missing zh-CN document: ${page.path}`);
+    return [page.path!, ...(page.aliases ?? [])].map(route => ({
+      params: { slug: route },
+      props: { Content: entry.default, frontmatter: entry.frontmatter, canonicalSlug: page.path!, headings: entry.getHeadings() },
+    }));
+  });
+}
+const { Content, frontmatter, canonicalSlug, headings } = Astro.props;
+---
+<DocsLayout locale="zh-CN" slug={canonicalSlug} title={frontmatter.title} description={frontmatter.description} headings={headings}>
+  <Content />
+</DocsLayout>

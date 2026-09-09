@@ -1,0 +1,60 @@
+---
+title: "Complete a remote task"
+description: "This example creates a small report on an already paired device and downloads it. It covers target verification, task creation, exit checking and artifact delivery without dependin"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Complete a remote task
+
+This example creates a small report on an already paired device and downloads it. It covers target verification, task creation, exit checking and artifact delivery without depending on a particular agent product.
+
+## 1. Verify prerequisites
+
+Assume endpoint `workstation`, an existing writable `/srv/anytty-demo` directory, `sh` on the target and `jq` locally. Replace these values:
+
+```sh
+anytty endpoint show workstation
+anytty file stat workstation /srv/anytty-demo --json
+```
+
+Prepare missing directories according to your project and resolve permissions first.
+
+## 2. Create a named task
+
+```sh
+endpoint=workstation
+task_name="agent-report-$(date +%s)"
+created=$(anytty terminal create --endpoint "$endpoint" --json \
+  --name "$task_name" --cwd /srv/anytty-demo \
+  --tag role=agent,task=report \
+  -- sh -lc 'pwd > report.txt; printf "report complete\n"')
+target=$(printf '%s' "$created" | jq -er '.target')
+printf '%s\n' "$target"
+```
+
+The command writes `report.txt`; use a dedicated demo directory to avoid overwriting an existing report. Real parallel tasks should use separate output directories.
+
+## 3. Wait and inspect
+
+```sh
+anytty terminal wait "$target" --state exited --timeout 2m --json > wait.json
+anytty terminal capture "$target" --lines 100 --json > capture.json
+jq -e '.exit_code == 0' wait.json
+```
+
+Check each command’s status. If wait fails, stop the success path and inspect whether the task is still running. A nonzero task exit code requires error reporting.
+
+## 4. Download
+
+```sh
+anytty file download "$endpoint" /srv/anytty-demo/report.txt ./report.txt --json
+```
+
+Verify transfer success and file content. Real build artifacts may also need project-specific format or content validation.
+
+## 5. Deliver reviewable evidence
+
+Report endpoint, target, working directory, command, exit code, relevant output and local artifact path. A person can open the same task by name in the TUI manager or App. Keep the record until review is complete, then clean up deliberately.

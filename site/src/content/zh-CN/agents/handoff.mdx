@@ -1,0 +1,37 @@
+---
+title: "多任务组织与人工接管"
+description: "让人能找到、理解并继续操作 Agent 的任务，是远端自动化的一部分。命名和交接信息应在任务创建时就准备好。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 多任务组织与人工接管
+
+让人能找到、理解并继续操作 Agent 的任务，是远端自动化的一部分。命名和交接信息应在任务创建时就准备好。
+
+## 组织并行任务
+
+名称体现项目与用途，例如 `demo-build`、`demo-tests`、`demo-server`；标签记录 `project=demo`、`role=test` 等信息。每个独立执行单元保留自己的 target 和结果文件，不要把多个并行结果都写进同一个 `wait.json`。
+
+在同一仓库并行修改文件前，先解决工作目录隔离与文件冲突。多个终端只是多项执行入口，不会自动为 Git 工作区提供隔离。
+
+## 人工观察
+
+TUI 用 `Ctrl+G → p` 打开管理器，按任务名找到终端并预览；App 从目标设备终端列表进入。观察不要求 Agent 停止读取，但共同输入同一 PTY 可能互相干扰。
+
+<Diagram id="handoff" locale="zh-CN" />
+
+## 交接协议
+
+1. Agent 报告 endpoint、target、当前命令、工作目录和等待事项。
+2. 需要用户输入时，Agent 停止向该 PTY 发送输入。
+3. 用户打开同一任务，检查当前程序，再完成操作。
+4. 用户告知完成后，Agent 重新读取状态和画面，再继续。
+
+尺寸 owner 只协调 resize，不能替代这个输入交接约定。不要把“当前是 follower”当作无法输入的保证。
+
+## 结束与清理
+
+记录哪些任务成功退出、哪些失败、哪些服务仍保留。用户不再需要复查后再删除记录；不要在报告之前自动清空失败历史。文件结果单独归档，见<DocLink locale="zh-CN" path="agents/files">结果交付</DocLink>。

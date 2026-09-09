@@ -1,0 +1,39 @@
+---
+title: "设备与连接管理"
+description: "设备页保存你已配对的目标及其连接信息。一台设备可以具有多条路线；展示名、默认设备和网络策略是不同设置。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 设备与连接管理
+
+设备页保存你已配对的目标及其连接信息。一台设备可以具有多条路线；展示名、默认设备和网络策略是不同设置。
+
+## 添加与辨认设备
+
+使用设备页配对入口添加目标。完成后打开设备操作菜单，设置易辨认的展示名，例如“家中工作站”或“测试服务器”。名称只是客户端的展示信息，不能代替核对目标身份。
+
+<ScreenshotSlot id="app-devices" locale="zh-CN" />
+
+## 操作菜单
+
+| 操作 | 用途 |
+| --- | --- |
+| 修改展示名并保存 | 在列表中辨认设备 |
+| 设为默认 | 选择默认访问目标 |
+| 网络连接 | 查看路线、延迟和选择策略 |
+| 授权设备 | 根据界面提示重新配对，取得相应访问授权 |
+| 断开连接 | 断开当前共享连接 |
+| 移除设备 | 清理本 App 保存的设备、路线和凭据 |
+
+“移除设备”不等于在电脑上撤销已签发授权。如果手机遗失或要永久取消访问，在目标电脑执行<DocLink locale="zh-CN" path="connections/pairing">授权撤销</DocLink>。
+
+## 多路径检查
+
+进入“网络连接”，看当前实际采用的路线，再检查候选路线的状态和延迟。保存策略后重新建立会话，确认实际路线符合预期。不能仅凭路线名称判断连接已经走 Direct、P2P 或 Relay。
+
+## 连接失败时
+
+先确认目标机器没有休眠、daemon 正在运行，再检查手机所处网络、目标地址和授权。切换 Wi-Fi 与蜂窝网络后，原先可用的局域网地址可能不再可达，见<DocLink locale="zh-CN" path="connections/routes">多路径诊断</DocLink>。

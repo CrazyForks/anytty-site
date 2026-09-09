@@ -1,0 +1,39 @@
+---
+title: "Live screens and history"
+description: "The live screen answers “what is visible now?” History answers “what was output before?” Full-screen programs move cursors, erase and redraw, so neither is simply an append-only te"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Live screens and history
+
+The live screen answers “what is visible now?” History answers “what was output before?” Full-screen programs move cursors, erase and redraw, so neither is simply an append-only text log.
+
+## Choose the right source
+
+| Need | Use |
+| --- | --- |
+| Current editor display | Live terminal or `capture --live` |
+| Earlier output | TUI history or default capture |
+| Search local retained history | `history search TERMINAL_ID PATTERN` |
+| Complete build report | Program-written file, then transfer |
+
+Capture’s `--cols` sets projection width and `--lines` limits returned rows. They do not resize the remote PTY. Projection width can change wrapping.
+
+## Retention and gaps
+
+Daemon size, age and compression policies govern history. Old data may be evicted. A drop output-buffer policy can produce explicit gaps; do not interpret surrounding text as an uninterrupted record.
+
+Compression affects storage, not program success. Changing retention cannot recover deleted data.
+
+## Search boundaries
+
+CLI history search currently targets the local daemon and supports text, glob and RE2 expressions. For remote tasks, use endpoint-aware capture or search on the owning host.
+
+No matches may mean absent text, expired history, formatting differences or an incorrect target. Important reports should not rely solely on a search result.
+
+## Sensitive content
+
+History can contain commands, paths, business output or accidentally printed secrets. Redact shared captures. See <DocLink locale="en" path="maintenance/config">daemon configuration</DocLink> and <DocLink locale="en" path="clients/tui/history">TUI history</DocLink>.

@@ -1,0 +1,114 @@
+---
+title: "Configuration reference"
+description: "This page centralizes values, validation ranges and supported environment overrides. Locate files with config paths, inspect final values with config show --effective, validate edi"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Configuration reference
+
+This page centralizes values, validation ranges and supported environment overrides. Locate files with config paths, inspect final values with config show --effective, validate edits, then apply them at the relevant TUI or daemon startup.
+
+Defaults below are runtime defaults, not the installer’s recommended profile. MiB is 1024² bytes; ms is milliseconds. Advanced templates are documented in the complete annotated file.
+
+## daemon
+
+| Field | Default | Range / values |
+| --- | --- | --- |
+| `daemon.output_buffer.capacity_bytes` | 33554432 | 65536–268435456 bytes |
+| `daemon.output_buffer.resident_budget_bytes` | 536870912 | 65536–2147483648 bytes |
+| `daemon.output_buffer.overflow` | block | block / drop |
+| `daemon.history.max_size_mb` | 512 | 0–8388608 MiB; 0 = unlimited size |
+| `daemon.history.max_age_days` | 0 | 0–36500 days; 0 = no age deletion |
+| `daemon.history.compression` | zstd | zstd / s2 / none |
+| `daemon.history.compression_level` | fast | fast / balanced / best |
+| `daemon.resource_sampling.interval_ms` | 500 | 100–60000 ms |
+| `daemon.resource_sampling.max_samples` | 512 | 512–65536 |
+
+## TUI
+
+| Field | Default | Range / values |
+| --- | --- | --- |
+| `version` | 1 | 1 |
+| `tui.profile` | default | Nonempty reserved name |
+| `tui.theme.mode` | dark | dark / light / system |
+| `tui.theme.palette` | host | host / builtin |
+| `tui.chrome.header`, `tui.chrome.footer` | true | true / false |
+| `tui.chrome.panel_presentation` | split-line | split-line / card |
+| `tui.chrome.picker.presentation` | card | card / flat |
+| `tui.chrome.picker.width` | adaptive | adaptive / wide |
+| `tui.chrome.picker.density` | compact | compact / comfortable |
+| `tui.chrome.picker.endpoint_tabs` | underline | underline / plain |
+| `tui.chrome.tab_create_icon` | + | Nonempty glyph/text |
+| `tui.interaction.mouse` | true | true / false |
+| `tui.interaction.confirm_destructive` | true | true / false |
+| `tui.interaction.sticky_prefix_timeout_ms` | 3000 | ≥ 0 ms |
+| `tui.interaction.shortcut_passthrough_interval_ms` | 1000 | > 0 ms |
+| `tui.interaction.clipboard_history.max_items` | 200 | > 0 |
+| `tui.interaction.clipboard_history.name_width` | 34 | > 0 cells |
+| `tui.interaction.clipboard_history.preview_width_ratio` | 0.68 | > 0 and < 1 |
+| `tui.interaction.picker.fuzzy_match` | subsequence | subsequence |
+| `tui.interaction.picker.highlight_matches` | true | true / false |
+| `tui.terminal.auto_take_owner` | true | true / false |
+
+## Color fields
+
+`tui.theme` fields `primary`, `secondary`, `foreground`, `background`, `muted`, `success`, `warning`, `danger` and `info` accept empty strings or `"#RRGGBB"`. So do `border.panel/active/inactive/muted` and `surface.chrome_bg/status_bg/overlay_bg/toast_bg`.
+
+Empty colors use built-in, host-derived or calculated values. Currently system mode is not automatic OS theme synchronization, profile does not merge profiles, and clipboard max_items is not a sensitive-data erasure guarantee.
+
+## Templates and action presentation
+
+- Chrome workspace, tab, create-tab and pane-title templates are single-line display templates.
+- `chrome.pane_glyphs` controls icons, decorations, owner and clipping indicators. Explicit empty decorations can hide content, unlike omission.
+- `chrome.picker.endpoint_status` defines glyph/style per device state.
+- `footer.templates` formats mode, key, action and summaries; `footer.modes` formats badges.
+- `shortcuts.actions` changes presentation; any explicit scene replaces the default binding catalog.
+
+See the [English annotated template](https://github.com/anytty/anytty/blob/main/tui/docs/tui-v3.example.en.yaml) and [recommended file](https://github.com/anytty/anytty/blob/main/tui/docs/tui-v3.recommended.yaml) for variables, style spans and actions. Templates do not store terminal/layout state.
+
+## Environment override mapping
+
+These are explicitly supported runtime mappings. Do not infer additional names. Runtime path variables for XDG directories, sockets and logs are a separate concern; inspect config paths and command help.
+
+| Environment variable | Field |
+| --- | --- |
+| `ANYTTY_OUTPUT_BUFFER_CAPACITY_BYTES` | `daemon.output_buffer.capacity_bytes` |
+| `ANYTTY_OUTPUT_BUFFER_OVERFLOW` | `daemon.output_buffer.overflow` |
+| `ANYTTY_OUTPUT_RESIDENT_BUDGET_BYTES` | `daemon.output_buffer.resident_budget_bytes` |
+| `ANYTTY_HISTORY_MAX_SIZE_MB` | `daemon.history.max_size_mb` |
+| `ANYTTY_HISTORY_MAX_AGE_DAYS` | `daemon.history.max_age_days` |
+| `ANYTTY_HISTORY_COMPRESSION` | `daemon.history.compression` |
+| `ANYTTY_HISTORY_COMPRESSION_LEVEL` | `daemon.history.compression_level` |
+| `ANYTTY_RESOURCE_SAMPLING_INTERVAL_MS` | `daemon.resource_sampling.interval_ms` |
+| `ANYTTY_RESOURCE_SAMPLING_MAX_SAMPLES` | `daemon.resource_sampling.max_samples` |
+| `ANYTTY_TUI_THEME_MODE` | `tui.theme.mode` |
+| `ANYTTY_TUI_THEME_PALETTE` | `tui.theme.palette` |
+| `ANYTTY_TUI_THEME_PRIMARY` | `tui.theme.primary` |
+| `ANYTTY_TUI_THEME_SECONDARY` | `tui.theme.secondary` |
+| `ANYTTY_TUI_THEME_FOREGROUND` | `tui.theme.foreground` |
+| `ANYTTY_TUI_THEME_BACKGROUND` | `tui.theme.background` |
+| `ANYTTY_TUI_THEME_MUTED` | `tui.theme.muted` |
+| `ANYTTY_TUI_THEME_SUCCESS` | `tui.theme.success` |
+| `ANYTTY_TUI_THEME_WARNING` | `tui.theme.warning` |
+| `ANYTTY_TUI_THEME_DANGER` | `tui.theme.danger` |
+| `ANYTTY_TUI_THEME_INFO` | `tui.theme.info` |
+| `ANYTTY_TUI_CHROME_HEADER` | `tui.chrome.header` |
+| `ANYTTY_TUI_CHROME_FOOTER` | `tui.chrome.footer` |
+| `ANYTTY_TUI_CHROME_PANEL_PRESENTATION` | `tui.chrome.panel_presentation` |
+| `ANYTTY_TUI_CHROME_PICKER_PRESENTATION` | `tui.chrome.picker.presentation` |
+| `ANYTTY_TUI_CHROME_PICKER_WIDTH` | `tui.chrome.picker.width` |
+| `ANYTTY_TUI_CHROME_PICKER_DENSITY` | `tui.chrome.picker.density` |
+| `ANYTTY_TUI_CHROME_PICKER_ENDPOINT_TABS` | `tui.chrome.picker.endpoint_tabs` |
+| `ANYTTY_TUI_CHROME_TAB_CREATE_TEMPLATE` | `tui.chrome.tab_create_template` |
+| `ANYTTY_TUI_CHROME_PANE_TITLE_TEMPLATE` | `tui.chrome.pane_title_template` |
+| `ANYTTY_TUI_INTERACTION_MOUSE` | `tui.interaction.mouse` |
+| `ANYTTY_TUI_STICKY_PREFIX_TIMEOUT_MS` | `tui.interaction.sticky_prefix_timeout_ms` |
+| `ANYTTY_TUI_SHORTCUT_PASSTHROUGH_INTERVAL_MS` | `tui.interaction.shortcut_passthrough_interval_ms` |
+| `ANYTTY_TUI_CONFIRM_DESTRUCTIVE` | `tui.interaction.confirm_destructive` |
+| `ANYTTY_TUI_CLIPBOARD_HISTORY_MAX_ITEMS` | `tui.interaction.clipboard_history.max_items` |
+| `ANYTTY_TUI_CLIPBOARD_HISTORY_NAME_WIDTH` | `tui.interaction.clipboard_history.name_width` |
+| `ANYTTY_TUI_CLIPBOARD_HISTORY_PREVIEW_RATIO` | `tui.interaction.clipboard_history.preview_width_ratio` |
+| `ANYTTY_TUI_TERMINAL_AUTO_TAKE_OWNER` | `tui.terminal.auto_take_owner` |

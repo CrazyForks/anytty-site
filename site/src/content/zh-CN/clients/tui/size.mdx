@@ -1,0 +1,44 @@
+---
+title: "多端查看与终端尺寸"
+description: "同一个 terminal 只有一套 PTY 行列数。电脑、手机和平板同时查看时，需要协调谁可以改变它，避免每个窗口尺寸变化都让程序重新排版。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 多端查看与终端尺寸
+
+同一个 terminal 只有一套 PTY 行列数。电脑、手机和平板同时查看时，需要协调谁可以改变它，避免每个窗口尺寸变化都让程序重新排版。
+
+## owner、follower 与尺寸锁
+
+owner 是当前可请求调整终端尺寸的客户端角色；follower 跟随现有尺寸显示。尺寸锁用于保持终端行列数稳定。这些规则由 owning daemon 仲裁，不是客户端自己改一个标记就一定成功。
+
+所有权讨论的是终端尺寸，不应把 follower 理解成完整的只读授权。如果需要限制访问范围，应单独使用<DocLink locale="zh-CN" path="connections/pairing">配对授权</DocLink>。
+
+<ScreenshotSlot id="tui-size" locale="zh-CN" />
+
+## 桌面与手机一起用
+
+1. 先在桌面把任务调整到合适行列数。
+2. 手机打开同一任务时先跟随，观察是否需要横向移动或改变显示。
+3. 确实要按手机尺寸重排时，再请求接管；桌面上的编辑器或全屏程序也会受到影响。
+4. 回到桌面后，重新接管并调整到桌面所需尺寸。
+
+TUI 面板模式内置 `a` 请求接管尺寸、`s` 切换尺寸锁。当前状态和最终结果以界面反馈为准。
+
+## 自动接管配置
+
+```yaml
+version: 1
+tui:
+  terminal:
+    auto_take_owner: false
+```
+
+设为 `false` 时，TUI 保持跟随，直到你主动请求。默认 `true` 只在 daemon 明确报告当前没有 owner 时自动申请，不会无条件抢占其他客户端。
+
+## 显示异常的排查顺序
+
+先看 owner / 锁定状态，再看是否存在多个客户端，最后判断是远端 PTY 行列数还是本机字体、窗口宽度的问题。CLI capture 的 `--cols` 是捕获文本的格式选项，不是改变运行中终端尺寸的命令。

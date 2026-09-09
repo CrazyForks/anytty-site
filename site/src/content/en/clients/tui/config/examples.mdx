@@ -1,0 +1,76 @@
+---
+title: "Complete examples"
+description: "This standalone configuration keeps built-in keybindings while changing appearance, interaction and automatic size ownership. Use it as a starting point for personal preferences."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Complete examples
+
+This standalone configuration keeps built-in keybindings while changing appearance, interaction and automatic size ownership. Use it as a starting point for personal preferences.
+
+## Desktop workbench example
+
+Save as `trial.yaml`:
+
+```yaml
+version: 1
+tui:
+  profile: default
+  theme:
+    mode: dark
+    palette: builtin
+    primary: "#a970ff"
+    background: "#101018"
+    foreground: "#eeeeef"
+  chrome:
+    header: true
+    footer: true
+    panel_presentation: card
+    pane_title_template: "{{terminal}}@{{endpoint}}"
+    picker:
+      presentation: card
+      width: wide
+      density: comfortable
+      endpoint_tabs: underline
+  interaction:
+    mouse: true
+    confirm_destructive: true
+    sticky_prefix_timeout_ms: 5000
+    shortcut_passthrough_interval_ms: 1000
+    picker:
+      fuzzy_match: subsequence
+      highlight_matches: true
+  terminal:
+    auto_take_owner: true
+  shortcuts:
+    actions:
+      panel.close:
+        label: close view
+        style: danger
+```
+
+```sh
+anytty --config ./trial.yaml config validate
+anytty --config ./trial.yaml
+```
+
+Omitted fields inherit defaults. No shortcut scene is declared, so built-in bindings remain. These differ from the installer-recommended bindings.
+
+## Adapt it to your workflow
+
+| Workflow | Change |
+| --- | --- |
+| Small windows | `panel_presentation: split-line`, `density: compact` |
+| Frequent mobile co-viewing | `auto_take_owner: false`, then take ownership manually |
+| Keyboard only | `mouse: false`; retain the footer |
+| Existing host palette | `palette: host`; remove unwanted explicit colors |
+| Learning modes | Increase `sticky_prefix_timeout_ms`; retain confirmations |
+
+## Full templates
+
+The [field template](https://github.com/anytty/anytty/blob/main/tui/docs/tui-v3.example.yaml) explains all settings. The [recommended configuration](https://github.com/anytty/anytty/blob/main/tui/docs/tui-v3.recommended.yaml) includes complete binding scenes. Select the version matching your installed public client.
+
+For custom bindings, edit a complete recommended file rather than copying one scene. Back up, validate and then replace the selected configuration. Use `--config` to return to a backup.

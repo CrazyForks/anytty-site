@@ -1,0 +1,53 @@
+---
+title: "自动启动与手动管理"
+description: "日常使用直接运行 anytty，TUI 会按需启动本机 daemon。本章的手动命令用于后台部署、监听变更、诊断和维护。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 自动启动与手动管理
+
+日常使用直接运行 `anytty`，TUI 会按需启动本机 daemon。本章的手动命令用于后台部署、监听变更、诊断和维护。
+
+## 检查运行状态
+
+```sh
+anytty daemon status
+anytty daemon doctor
+```
+
+status 查看服务状态，doctor 检查运行路径、socket 和所有权等条件。运行边界通常是当前操作系统用户；换用户或使用不同 socket 可能看到另一个实例环境。
+
+## 无人值守启动
+
+```sh
+anytty daemon start
+```
+
+适合先准备后台服务、稍后由 CLI 或远端客户端使用。已运行时 start 不等于重新加载配置。Direct 监听变更见<DocLink locale="zh-CN" path="connections/direct">Direct 教程</DocLink>。
+
+## 日志
+
+```sh
+anytty daemon logs --lines 100
+anytty daemon logs --follow
+```
+
+先看失败发生时间附近的信息。分享前删除凭据、配对文本和实际终端业务内容。路径由 `anytty config paths` 查询。
+
+## 停止和重启
+
+```sh
+anytty daemon stop
+anytty daemon restart
+```
+
+这两项会影响后台管理的运行任务。先列出任务、保存结果并确认可中断，再执行。重启 daemon 不是恢复进程内存，也不是只重开 TUI 界面。
+
+前台诊断可以使用 `daemon run`，但不要与占用同一 socket / 数据目录的后台实例并行启动。需要隔离测试时为配置、socket 和状态目录建立独立环境。
+
+## 变更后的验证
+
+检查 status、必要的 endpoint route，再创建一个小型测试任务。主题改动只需重开 TUI；后台参数变动才按<DocLink locale="zh-CN" path="maintenance/config">daemon 配置</DocLink>安排重启。

@@ -1,0 +1,44 @@
+---
+title: "按现象查找故障"
+description: "先确定问题发生在哪一层：客户端界面、网络路线、授权、daemon，还是终端内的程序。这样能避免用重启整个后台服务处理一个键位或字体问题。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 按现象查找故障
+
+先确定问题发生在哪一层：客户端界面、网络路线、授权、daemon，还是终端内的程序。这样能避免用重启整个后台服务处理一个键位或字体问题。
+
+## `anytty` 无法进入工作台
+
+确认命令存在且当前窗口是可交互终端，运行 `anytty --version`、`anytty config validate`。如果提示嵌套 TUI，回到外层普通终端启动。后台问题再用 `daemon status`、`daemon doctor` 和失败时间附近的日志检查。
+
+## 按键与教程不一致
+
+查看底部提示和 `Ctrl+G → ?` 帮助，确认使用内置还是推荐 / 自定义配置。历史入口差异尤其常见。若自定义 scene 后其他键全部失效，检查是否无意替换了整套默认绑定，见<DocLink locale="zh-CN" path="clients/tui/config/shortcuts">快捷键配置</DocLink>。
+
+## 配置修改没有生效
+
+用 `config paths` 确认文件，用 `config show --effective` 检查环境覆盖。TUI 设置重开客户端；daemon 设置安排后台重启。`profile` 当前不是自动切换配置方案的功能。
+
+## 手机或远端连接不上
+
+检查目标是否休眠、daemon 是否运行，再检查地址和网络。手机不能用电脑的 `127.0.0.1` 地址。邀请过期重建邀请，授权失败检查 grant，路线失败逐条 endpoint test，详见<DocLink locale="zh-CN" path="connections/routes">连接诊断</DocLink>。
+
+## 连接上了但看不到任务
+
+核对 endpoint、terminal ID、选择器设备和状态筛选。退出的任务可能在不同筛选中；删除记录与关闭视图不同。不要马上创建同名任务覆盖诊断线索。
+
+## 画面裁切或反复重排
+
+检查 owner / follower、尺寸锁和其他客户端，再检查本机字号与窗口。详见<DocLink locale="zh-CN" path="clients/tui/size">尺寸规则</DocLink>。
+
+## 历史、任务或文件结果异常
+
+wait 超时不代表任务停止；exited 不代表成功。capture 行数有限，历史可能被保留策略淘汰。文件预览可能截断或不支持格式；需要完整产物时下载并验证。
+
+## 提交可复现问题
+
+提供版本、操作系统、客户端类型、步骤、预期与实际结果、路线类型和脱敏错误。配置仅附相关片段，截图避免邀请码、凭据和真实业务输出。支持入口见<DocLink locale="zh-CN" path="help/releases">版本与支持</DocLink>。

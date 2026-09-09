@@ -1,0 +1,329 @@
+---
+title: "默认快捷键与动作"
+description: "本页按 scene 汇总公开客户端源码中的内置绑定。大小写敏感，例如 r 与 R 不同。动作 ID 可用于配置；普通操作说明请先阅读对应客户端教程。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 默认快捷键与动作
+
+本页按 scene 汇总公开客户端源码中的内置绑定。大小写敏感，例如 `r` 与 `R` 不同。动作 ID 可用于配置；普通操作说明请先阅读对应客户端教程。
+
+## 内置与推荐配置
+
+| 操作 | 无显式 scene 时的内置键 | 安装器推荐配置 |
+| --- | --- | --- |
+| 历史 / 复制 | Ctrl+V、PageUp | Ctrl+Shift+C |
+| 剪贴板历史全局入口 | 无独立全局绑定，可从 copy 内 H 进入 | Ctrl+Shift+H |
+| 系统粘贴全局入口 | copy 内 P | Ctrl+Shift+V |
+| 终端选择器 | Ctrl+F | Ctrl+F |
+| 系统模式 | Ctrl+G | Ctrl+G |
+| 系统 prompt | 系统模式内 : | 系统模式内 o |
+| 面板重启 | 面板模式内 R | 面板模式内 t |
+| 面板结束任务 | 面板模式内 X | 面板模式内 k |
+| 结束并关闭面板 | 无对应内置绑定 | 面板模式内 q |
+
+完整推荐配置可能还有其他差异，见[公开推荐文件](https://github.com/anytty/anytty/blob/main/tui/docs/tui-v3.recommended.yaml)。安装器不会覆盖已有配置，当前底部与帮助才反映你的实际绑定。
+
+未修饰 Esc 是保留返回键，不列入下表。省略 shortcuts 保留内置绑定；actions-only 只改显示；任何显式 scene 都替换整套默认 scene catalog。详见<DocLink locale="zh-CN" path="clients/tui/config/shortcuts">快捷键配置</DocLink>。
+
+面板 close、detach、kill、kill_and_close 是不同动作，不要根据显示标签猜测。下表直接保留动作 ID，便于与完整配置核对。
+
+## `global`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `ctrl-p` | `menu.panel` |
+| `ctrl-r` | `menu.resize` |
+| `ctrl-g` | `menu.system` |
+| `ctrl-o` | `menu.floating` |
+| `ctrl-t` | `menu.tab` |
+| `ctrl-w` | `menu.workspace` |
+| `ctrl-f` | `terminal_picker.open` |
+| `ctrl-v`, `page-up` | `copy.enter` |
+
+
+## `panel`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `x`, `w` | `panel.close` |
+| `d` | `panel.detach` |
+| `r` | `panel.reconnect` |
+| `R` | `panel.restart` |
+| `a` | `panel.take_owner` |
+| `s` | `panel.size_lock` |
+| `%`, `ctrl-d` | `panel.split_right` |
+| `"`, `ctrl-e` | `panel.split_down` |
+| `X` | `panel.kill` |
+| `z` | `panel.toggle_zoom` |
+| `b` | `panel.balance` |
+| `c` | `panel.presentation_card` |
+| `p` | `panel.presentation_split_line` |
+| `n`, `l`, `j`, `right`, `down` | `panel.focus_next` |
+| `N`, `h`, `k`, `left`, `up` | `panel.focus_prev` |
+
+
+## `resize`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `left`, `h` | `resize.left` |
+| `right`, `l` | `resize.right` |
+| `up`, `k` | `resize.up` |
+| `down`, `j` | `resize.down` |
+| `a` | `panel.take_owner` |
+| `s` | `panel.size_lock` |
+| `space` | `resize.layout_toggle` |
+| `A`, `shift-left` | `resize.pan_left` |
+| `S`, `shift-down` | `resize.pan_down` |
+| `W`, `shift-up` | `resize.pan_up` |
+| `D`, `shift-right` | `resize.pan_right` |
+| `0` | `resize.align_left` |
+| `$` | `resize.align_right` |
+| `^` | `resize.align_top` |
+| `B` | `resize.align_bottom` |
+| `m` | `resize.center` |
+| `&#124;` | `resize.center_x` |
+| `_` | `resize.center_y` |
+| `r` | `resize.layout_reset` |
+| `H` | `resize.left_large` |
+| `L` | `resize.right_large` |
+| `K` | `resize.up_large` |
+| `J` | `resize.down_large` |
+| `b`, `=` | `panel.balance` |
+
+
+## `system`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `h` | `system.toggle_header` |
+| `f` | `system.toggle_footer` |
+| `c` | `system.clear_toasts` |
+| `T` | `system.close_toast` |
+| `p`, `m`, `t` | `system.open_terminal_pool` |
+| `w` | `system.open_workbench_tree` |
+| `e` | `system.open_connections` |
+| `l` | `system.toggle_shortcut_lock` |
+| `:` | `system.open_prompt` |
+| `?` | `system.open_help` |
+| `q` | `system.quit` |
+
+
+## `floating`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `n` | `floating.new` |
+| `o` | `floating.overview` |
+| `1` | `floating.summon.1` |
+| `2` | `floating.summon.2` |
+| `3` | `floating.summon.3` |
+| `4` | `floating.summon.4` |
+| `5` | `floating.summon.5` |
+| `6` | `floating.summon.6` |
+| `7` | `floating.summon.7` |
+| `8` | `floating.summon.8` |
+| `9` | `floating.summon.9` |
+| `f` | `system.open_terminal_picker` |
+| `a` | `floating.take_owner` |
+| `x` | `floating.close` |
+| `z`, `m` | `floating.collapse` |
+| `c` | `floating.center` |
+| `v` | `floating.toggle_all` |
+| `=` | `floating.fit` |
+| `s` | `floating.auto_fit` |
+| `h`, `left` | `floating.move_left` |
+| `l`, `right` | `floating.move_right` |
+| `k`, `up` | `floating.move_up` |
+| `j`, `down` | `floating.move_down` |
+| `H` | `floating.narrow` |
+| `L` | `floating.wide` |
+| `K` | `floating.short` |
+| `J` | `floating.tall` |
+
+
+## `tab`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `c` | `tab.create` |
+| `n`, `l`, `]` | `tab.next` |
+| `p`, `h`, `[` | `tab.previous` |
+| `1` | `tab.jump.1` |
+| `2` | `tab.jump.2` |
+| `3` | `tab.jump.3` |
+| `4` | `tab.jump.4` |
+| `5` | `tab.jump.5` |
+| `6` | `tab.jump.6` |
+| `7` | `tab.jump.7` |
+| `8` | `tab.jump.8` |
+| `9` | `tab.jump.9` |
+| `r` | `tab.rename` |
+| `x` | `tab.close` |
+| `X` | `tab.kill` |
+
+
+## `workspace`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `c` | `workspace.create` |
+| `n`, `l`, `]` | `workspace.next` |
+| `p`, `h`, `[` | `workspace.previous` |
+| `r` | `workspace.rename` |
+| `x` | `workspace.delete` |
+| `t`, `f`, `s` | `system.open_workbench_tree` |
+
+
+## `copy`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `page-up` | `copy.request_older` |
+| `page-down` | `copy.request_newer` |
+| `home` | `copy.line_start` |
+| `end` | `copy.line_end` |
+| `left`, `h` | `copy.cursor_left` |
+| `right`, `l` | `copy.cursor_right` |
+| `down`, `j` | `copy.cursor_down` |
+| `up`, `k` | `copy.cursor_up` |
+| `enter` | `copy.accept` |
+| `g` | `copy.oldest` |
+| `G` | `copy.newest` |
+| `u` | `copy.half_page_older` |
+| `d` | `copy.half_page_newer` |
+| `space` | `copy.mark` |
+| `y` | `copy.copy_selection` |
+| `/` | `copy.search_start` |
+| `tab` | `copy.search_mode` |
+| `n` | `copy.search_next` |
+| `N` | `copy.search_previous` |
+| `H` | `menu.clipboard_history` |
+| `p` | `clipboard.paste_latest` |
+| `P` | `clipboard.paste_system` |
+
+
+## `terminal_picker`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `left` | `terminal_picker.endpoint_previous` |
+| `right` | `terminal_picker.endpoint_next` |
+| `shift-left` | `terminal_picker.status_previous` |
+| `shift-right` | `terminal_picker.status_next` |
+| `up` | `terminal_picker.select_previous` |
+| `down` | `terminal_picker.select_next` |
+| `ctrl-o` | `terminal_picker.endpoints` |
+| `ctrl-t` | `terminal_picker.tags` |
+| `enter` | `terminal_picker.attach` |
+| `tab` | `terminal_picker.split` |
+| `ctrl-e` | `terminal_picker.edit` |
+| `ctrl-k` | `terminal_picker.kill` |
+| `ctrl-x` | `terminal_picker.delete` |
+
+
+## `terminal_picker_endpoints`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `up` | `terminal_picker.select_previous` |
+| `down` | `terminal_picker.select_next` |
+| `enter` | `terminal_picker.endpoint_choose` |
+| `ctrl-o` | `terminal_picker.endpoints` |
+
+
+## `terminal_picker_tags`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `up` | `terminal_picker.select_previous` |
+| `down` | `terminal_picker.select_next` |
+| `space` | `terminal_picker.tag_toggle` |
+| `ctrl-t` | `terminal_picker.tags` |
+
+
+## `terminal_pool`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `enter` | `terminal_pool.attach` |
+| `ctrl-t` | `terminal_pool.attach_tab` |
+| `ctrl-o` | `terminal_pool.attach_float` |
+| `ctrl-r` | `terminal_pool.restart` |
+| `ctrl-e` | `terminal_pool.edit` |
+| `ctrl-k` | `terminal_pool.kill` |
+| `ctrl-x` | `terminal_pool.delete` |
+
+
+## `connections`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `enter` | `connections.edit` |
+| `space` | `connections.toggle` |
+| `r` | `connections.refresh` |
+
+
+## `workbench_tree`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `enter` | `workbench_tree.open` |
+| `ctrl-n` | `workbench_tree.new` |
+| `ctrl-r` | `workbench_tree.rename` |
+| `ctrl-x` | `workbench_tree.delete` |
+| `ctrl-d` | `workbench_tree.detach` |
+| `ctrl-z` | `workbench_tree.zoom` |
+
+
+## `clipboard_history`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `enter` | `clipboard_history.paste` |
+| `ctrl-n` | `clipboard_history.new` |
+| `ctrl-e` | `clipboard_history.edit` |
+| `ctrl-x` | `clipboard_history.delete` |
+
+
+## `floating_overview`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `enter` | `floating_overview.open` |
+| `1` | `floating.summon.1` |
+| `2` | `floating.summon.2` |
+| `3` | `floating.summon.3` |
+| `4` | `floating.summon.4` |
+| `5` | `floating.summon.5` |
+| `6` | `floating.summon.6` |
+| `7` | `floating.summon.7` |
+| `8` | `floating.summon.8` |
+| `9` | `floating.summon.9` |
+| `s` | `floating_overview.show_all` |
+| `c` | `floating_overview.collapse_all` |
+| `x` | `floating.close` |
+
+
+## `prompt`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `enter` | `prompt.submit` |
+
+
+## `help`
+
+| 按键 | 动作 ID |
+| --- | --- |
+| `up` | `help.previous` |
+| `down` | `help.next` |
+| `page-up` | `help.page_up` |
+| `page-down` | `help.page_down` |
+| `home` | `help.first` |
+| `end` | `help.last` |
+| `enter` | `help.close` |

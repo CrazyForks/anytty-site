@@ -1,0 +1,36 @@
+---
+title: "Choose a client"
+description: "Choose a client for the task in front of you. TUI, App and CLI access the same target devices and terminals, while their layouts, input methods and preferences differ."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Choose a client
+
+Choose a client for the task in front of you. TUI, App and CLI access the same target devices and terminals, while their layouts, input methods and preferences differ.
+
+| Task | TUI | App | CLI |
+| --- | --- | --- | --- |
+| Interactive shell or editor | Workspaces, tabs and splits | Touch, software or hardware keyboard | Create, attach and send input |
+| Monitor multiple tasks | Picker, manager and floating panels | Terminal list and in-app splits | List, inspect and capture |
+| Work with files | Use OS tools inside a terminal | File manager and text/image previews | Scriptable file commands |
+| Customize the client | Local YAML, themes and bindings | App settings, fonts and petal menu | Configuration helper commands |
+| Automate work | Observe and take over | Check and take over on mobile | JSON, waits, events and scripts |
+
+## A useful combination
+
+Use the TUI for desktop development, grouping projects into workspaces and watching editors and tests in splits. Open the App to inspect the same computer while away. Use CLI-created named tasks for repeatable work or agents, then find them in an interactive client.
+
+## Local and remote requirements
+
+The TUI and CLI ship in the `anytty` binary. A computer serving terminals needs an AnyTTY daemon. Installing the phone App does not install a service on your computer; network reachability and pairing are also required.
+
+Check the current release channel for supported installation platforms. Source build requirements are not a promise of store availability. See <DocLink locale="en" path="start/install">installation</DocLink>.
+
+## What is shared
+
+A terminal’s process and output are shared. Themes, fonts, bindings and mobile input preferences are separate client settings. Terminal dimensions also require coordination: viewers do not each get an independent PTY size.
+
+Web tutorials will follow its interaction improvements. Continue with the <DocLink locale="en" path="clients/tui/overview">TUI</DocLink>, <DocLink locale="en" path="clients/app/overview">App</DocLink> or <DocLink locale="en" path="clients/cli/overview">CLI</DocLink>.

@@ -1,0 +1,36 @@
+---
+title: "Remote devices"
+description: "The TUI displays configured remote devices as endpoints. Prepare connectivity and pairing first, then choose devices and open or create tasks in the workbench."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Remote devices
+
+The TUI displays configured remote devices as endpoints. Prepare connectivity and pairing first, then choose devices and open or create tasks in the workbench.
+
+## Prepare an endpoint
+
+Choose <DocLink locale="en" path="connections/overview">SSH, Direct or Cloud</DocLink>, then register the device through pairing or supported CLI configuration. The TUI Connections page primarily edits, enables/disables and refreshes existing endpoints; it is not a complete pairing wizard.
+
+## Inspect Connections
+
+Press `Ctrl+G → e`. Check the device label, enabled state, routes and connection status.
+
+<ScreenshotSlot id="tui-connections" locale="en" />
+
+Built-in actions are `Enter` edit, Space enable/disable and `r` refresh. After changing routes or selection policy, establish a new connection to evaluate the new configuration.
+
+A saved endpoint is not necessarily reachable; a connected device does not prove a task succeeded.
+
+## Open remote terminals
+
+Press `Ctrl+F`, switch device with left/right, then open an existing task or select New Terminal. Verify `server` and `workdir`: remote directories can differ from local ones.
+
+Use descriptive task names and consider including the endpoint in pane titles with `tui.chrome.pane_title_template`. See <DocLink locale="en" path="clients/tui/config/appearance">appearance</DocLink>.
+
+## Diagnose offline devices
+
+Check that the target machine and daemon are running, then examine addressing, network and authorization. Use `anytty endpoint test ENDPOINT` for protocol reachability; see <DocLink locale="en" path="clients/cli/connections">CLI device commands</DocLink>. Disabling or removing a local endpoint does not revoke its target-side grant.

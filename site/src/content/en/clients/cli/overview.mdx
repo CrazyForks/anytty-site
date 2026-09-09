@@ -1,0 +1,49 @@
+---
+title: "Commands and targets"
+description: "The CLI suits scripts, agents and operations requiring explicit targets. Running anytty opens the TUI; subcommands perform individual operations."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Commands and targets
+
+The CLI suits scripts, agents and operations requiring explicit targets. Running `anytty` opens the TUI; subcommands perform individual operations.
+
+## Inspect the target first
+
+```sh
+anytty --version
+anytty endpoint list
+anytty terminal list --endpoint local --json
+```
+
+Listing endpoints reads configuration, not reachability. Terminal commands operate through the selected endpoint’s owning daemon. In automation, specify the endpoint rather than relying on a mutable default.
+
+## Target syntax
+
+Creation uses `--endpoint ENDPOINT`. Existing tasks generally use `ENDPOINT:TERMINAL_ID`:
+
+```sh
+anytty terminal show local:first-session --json
+anytty terminal capture local:first-session --lines 80
+```
+
+These examples assume that ID exists. Scripts should retain the create response’s `target` or obtain IDs from list output. Display names can change; do not derive stable IDs from pane titles.
+
+## Help and output
+
+```sh
+anytty --help
+anytty terminal --help
+anytty terminal create --help
+```
+
+Use `--json` where supported and NDJSON for event streams. Captured terminal text is untrusted program data, not a shell command to execute.
+
+## Daemon preparation
+
+Interactive users can let `anytty` start the local daemon. Unattended scripts must ensure their target daemon is ready. See <DocLink locale="en" path="maintenance/daemon">maintenance</DocLink>; manual startup is not a prerequisite for everyday TUI use.
+
+Continue with <DocLink locale="en" path="clients/cli/terminals">terminals</DocLink>, <DocLink locale="en" path="clients/cli/connections">devices</DocLink>, <DocLink locale="en" path="clients/cli/files">files/history</DocLink> and <DocLink locale="en" path="clients/cli/automation">script results</DocLink>.

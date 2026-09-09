@@ -1,0 +1,39 @@
+---
+title: "实时画面与历史"
+description: "实时画面回答“终端现在显示什么”，历史回答“之前输出过什么”。全屏程序会移动光标、擦除和重绘，因此它们不能简单等同为一份不断追加的文本日志。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 实时画面与历史
+
+实时画面回答“终端现在显示什么”，历史回答“之前输出过什么”。全屏程序会移动光标、擦除和重绘，因此它们不能简单等同为一份不断追加的文本日志。
+
+## 选择正确的数据
+
+| 需求 | 使用 |
+| --- | --- |
+| 查看编辑器当前画面 | 实时终端或 `capture --live` |
+| 回看滚出屏幕的输出 | TUI 历史、默认 capture |
+| 在本机已有历史中搜索 | `history search TERMINAL_ID PATTERN` |
+| 保存完整构建报告 | 程序写文件，再传输文件 |
+
+capture 的 `--cols` 控制历史投影宽度，`--lines` 控制最多返回行数；它们不是远端 resize 操作。不同投影宽度可能导致换行位置不同。
+
+## 保留与缺口
+
+历史按 daemon 的大小、年龄和压缩策略保存。超出保留范围的数据可能被淘汰。输出缓冲使用 drop 策略时可能产生明确 gap；不要把缺口前后的文本当作连续完整记录。
+
+压缩方式影响存储成本，不改变程序是否执行成功。调整保留策略也不会恢复已经删除的数据。
+
+## 搜索的边界
+
+当前 CLI `history search` 查询本机 daemon，支持文本、glob 和 RE2 正则。远端任务应使用带 endpoint 的 capture 或在 owning host 上执行历史搜索。
+
+搜索没有命中可能是确实没有文本，也可能是数据已被清理、格式不同或查询范围不对。重要审计与报告不要只依赖一次搜索结果。
+
+## 数据内容
+
+历史可能包含命令、路径、业务输出和意外打印的秘密。分享截图或诊断前先脱敏。保留参数见<DocLink locale="zh-CN" path="maintenance/config">daemon 配置</DocLink>，界面操作见<DocLink locale="zh-CN" path="clients/tui/history">TUI 历史</DocLink>。

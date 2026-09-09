@@ -1,0 +1,38 @@
+---
+title: "工作区、标签页与分屏"
+description: "用工作区分隔项目，用标签页组织一组相关视图，用分屏同时观察多个终端。先决定任务如何分组，再决定窗口怎么摆。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 工作区、标签页与分屏
+
+用工作区分隔项目，用标签页组织一组相关视图，用分屏同时观察多个终端。先决定任务如何分组，再决定窗口怎么摆。
+
+<Diagram id="layout" locale="zh-CN" />
+
+## 一个项目的布局示例
+
+例如建立 `demo` 工作区，创建 `develop` 和 `checks` 两个标签页。在 `develop` 中左右显示编辑器与服务日志，在 `checks` 中放测试终端。任务名称使用 `demo-editor`、`demo-server`、`demo-tests`，方便从手机或 CLI 找到。
+
+## 工作区和标签页
+
+内置工作区模式由 `Ctrl+W` 进入：`c` 创建、`n` / `p` 切换、`r` 重命名、`x` 删除。内置标签页模式由 `Ctrl+T` 进入：`c` 创建、`n` / `p` 切换、数字键跳转、`r` 重命名、`x` 关闭。当前配置的完整操作看底部提示。
+
+`Ctrl+G → w` 打开工作台树，查看层级。树中内置 `Enter` 打开、`Ctrl+N` 新建、`Ctrl+R` 重命名、`Ctrl+X` 删除、`Ctrl+D` 解除附加、`Ctrl+Z` 缩放。
+
+## 分屏与焦点
+
+使用面板模式 `Ctrl+P` 后的分屏动作；内置 `%` 或 `Ctrl+D` 向右分屏，`"` 或 `Ctrl+E` 向下分屏。也可在终端选择器选中任务后按 `Tab` 分屏打开。
+
+用面板模式的方向动作切换焦点，`z` 临时缩放当前面板，`b` 平衡布局。调整分割位置进入 `Ctrl+R` 模式并按实际提示操作。
+
+<ScreenshotSlot id="tui-layout" locale="zh-CN" />
+
+## 布局如何保存
+
+工作台布局通过 AnyTTY 的 workbench 存储保存，不写入主题配置 YAML。`tui.chrome.panel_presentation` 只是 `split-line` 与 `card` 的视觉选择，不会重建终端任务或改变它们的身份。
+
+删除工作区或关闭标签页前，阅读确认提示，区分布局清理和任务结束。清理后从<DocLink locale="zh-CN" path="clients/tui/picker">管理器</DocLink>确认仍在运行的任务；重要任务不要只依靠当前布局定位。

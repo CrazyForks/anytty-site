@@ -1,0 +1,36 @@
+---
+title: "Terminal tasks"
+description: "The terminal list shows tasks on the selected device. Opening an existing terminal returns to the same process; New terminal creates a separate task."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Terminal tasks
+
+The terminal list shows tasks on the selected device. Opening an existing terminal returns to the same process; **New terminal** creates a separate task.
+
+## Inspect an existing task
+
+Find it by name and state. Resource samples indicate activity but zero CPU does not necessarily mean completion. Inspect the current program and prompt before typing.
+
+<ScreenshotSlot id="app-terminals" locale="en" />
+
+## Create a terminal
+
+Choose New terminal and enter a name, command and working directory. An empty command uses the default shell. Browse to select the directory. The environment section supports adding and pasting variables for the new task.
+
+Choose a sizing policy: resizable, ask before resizing, or locked. Consider desktop co-viewers before allowing the phone to resize a task.
+
+After submitting, check device, task name, directory and output. Resolve missing directories or programs on the target before retrying.
+
+## End and delete
+
+Actions distinguish ending a process from deleting its terminal record. Review every selected task before batch operations. If a batch partially fails, inspect remaining entries rather than assuming all succeeded.
+
+Closing a view, switching devices or quitting the App does not end a process. Use state, exit code and artifacts to judge results.
+
+## View multiple areas
+
+The workspace supports **Split below** as an in-app layout feature, useful on tablets independently of OS split-screen. Multiple viewers of one task still share its PTY dimensions. See <DocLink locale="en" path="clients/app/appearance">display and sizing</DocLink>.

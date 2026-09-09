@@ -1,0 +1,46 @@
+---
+title: "Builds, tests and services"
+description: "One-shot jobs and persistent services have different completion conditions. Builds/tests normally finish by exiting; services become ready and keep running."
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# Builds, tests and services
+
+One-shot jobs and persistent services have different completion conditions. Builds/tests normally finish by exiting; services become ready and keep running.
+
+## Builds and tests
+
+Create the actual project command in the correct directory. For a project that uses npm:
+
+```sh
+anytty terminal create --endpoint workstation --json \
+  --name web-tests --cwd /srv/project --tag role=test \
+  -- npm test
+```
+
+Retain target, wait for exited, inspect exit_code and collect reports. An interactive shell’s lifetime is not the exit status of one command inside it. Multi-step scripts must propagate failures correctly.
+
+## Services
+
+```sh
+anytty terminal create --endpoint workstation --json \
+  --name dev-server --cwd /srv/project --tag role=service \
+  -- npm run dev
+```
+
+Running only establishes process existence. Check the actual listener and health endpoint from a reachable location. Logs help, but an old ready message is not current health evidence.
+
+Do not use waiting for exit as a startup-success check. Bound readiness probes with a timeout, then inspect output and report whether the process still runs.
+
+## Restart and stop
+
+Consider active requests before restarting. Prefer the program’s graceful shutdown mechanism. Ctrl+C is input interpreted by the program; explicitly kill when appropriate and verify state afterward.
+
+Do not restart the entire AnyTTY daemon to restart one project service, because other tasks would also be affected.
+
+## Handoff
+
+Report service target, readiness evidence, reachable address and running state. The target’s localhost is not the user computer’s localhost. See <DocLink locale="en" path="agents/handoff">task organization and handoff</DocLink>.

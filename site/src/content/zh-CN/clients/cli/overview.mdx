@@ -1,0 +1,49 @@
+---
+title: "命令入门与目标选择"
+description: "CLI 适合脚本、Agent 和需要精确目标的操作。直接运行 anytty 打开 TUI；带子命令运行则执行对应操作并返回结果。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 命令入门与目标选择
+
+CLI 适合脚本、Agent 和需要精确目标的操作。直接运行 `anytty` 打开 TUI；带子命令运行则执行对应操作并返回结果。
+
+## 先看目标，再执行
+
+```sh
+anytty --version
+anytty endpoint list
+anytty terminal list --endpoint local --json
+```
+
+`endpoint list` 读取配置，不会因为列出一条记录就证明它可达。终端命令由目标 endpoint 决定 owning daemon。自动化中建议显式指定 endpoint，不依赖可能被用户修改的默认值。
+
+## 目标格式
+
+创建任务时使用 `--endpoint ENDPOINT`。已有任务通常使用 `ENDPOINT:TERMINAL_ID`：
+
+```sh
+anytty terminal show local:first-session --json
+anytty terminal capture local:first-session --lines 80
+```
+
+示例假定 `first-session` 是你已有的终端 ID。实际脚本应保存 create 返回的 `target`，或从 list 获取 ID；显示名可变，不要从界面标题反推稳定 ID。
+
+## 帮助与输出
+
+```sh
+anytty --help
+anytty terminal --help
+anytty terminal create --help
+```
+
+支持 `--json` 的命令可用于机器解析；事件流使用相应的 NDJSON 输出。终端捕获文字可能包含任意程序输出，应作为数据处理，而不是直接拼成下一条 shell 命令。
+
+## 本机后台服务
+
+日常交互从 `anytty` 自动启动即可。无人值守脚本需要确保本机或远端 daemon 已准备好；相关启动检查放在<DocLink locale="zh-CN" path="maintenance/daemon">维护章节</DocLink>，不要把它当成每个 TUI 用户的前置步骤。
+
+下一步：<DocLink locale="zh-CN" path="clients/cli/terminals">终端命令</DocLink>、<DocLink locale="zh-CN" path="clients/cli/connections">设备命令</DocLink>、<DocLink locale="zh-CN" path="clients/cli/files">文件与历史</DocLink>、<DocLink locale="zh-CN" path="clients/cli/automation">脚本结果处理</DocLink>。

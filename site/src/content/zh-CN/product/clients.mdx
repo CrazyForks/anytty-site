@@ -1,0 +1,36 @@
+---
+title: "客户端与能力选择"
+description: "根据正在做的事选择客户端。TUI、App 和 CLI 访问同一套目标设备与终端能力，但布局、输入方式和设置不必完全相同。"
+---
+
+import DocLink from '@/components/docs/DocLink.astro'
+import ScreenshotSlot from '@/components/docs/ScreenshotSlot.astro'
+import Diagram from '@/components/docs/Diagram.astro'
+
+# 客户端与能力选择
+
+根据正在做的事选择客户端。TUI、App 和 CLI 访问同一套目标设备与终端能力，但布局、输入方式和设置不必完全相同。
+
+| 任务 | TUI | App | CLI |
+| --- | --- | --- | --- |
+| 日常交互 shell / 编辑器 | 工作区、标签页、分屏 | 触控、软键盘、外接键盘 | 创建、附加与发送输入 |
+| 查看多个任务 | 选择器、管理器、浮动窗口 | 终端列表、应用内分屏 | 列表、状态、捕获输出 |
+| 文件操作 | 可在终端内使用系统工具 | 文件管理器、文本和图片预览 | 文件命令，适合自动化 |
+| 配置界面 | 本机 YAML、快捷键和主题 | App 设置、花瓣菜单、字体 | `config` 命令辅助配置 |
+| 自动化 | 人工观察和接管 | 移动检查和接管 | JSON、等待、事件和脚本 |
+
+## 推荐组合
+
+桌面开发以 TUI 为主：按项目组织工作区，在分屏中运行编辑器和测试。离开电脑时，用 App 连接同一台设备查看任务。需要重复执行或交给 Agent 时，用 CLI 创建带名称的独立任务，再从图形化的列表中打开。
+
+## 本机与远端
+
+TUI 和 CLI 随 `anytty` 命令一起安装。要让一台电脑提供终端，该电脑必须有 AnyTTY daemon；仅在手机安装 App 不会自动在电脑上创建服务。手机连接前还需网络可达和配对授权。
+
+App 的可安装系统版本与发布渠道以当前发布页为准；源代码的构建要求不等于商店分发承诺。参见<DocLink locale="zh-CN" path="start/install">安装</DocLink>。
+
+## 哪些内容不共享
+
+同一 terminal 的进程和输出共享。客户端主题、字体、键位、手机输入偏好不是跨端同步的一套设置。终端尺寸需要单独协调，不能认为每个查看者都拥有独立的 PTY 行列数。
+
+Web 教程将在交互优化后补充；当前先从<DocLink locale="zh-CN" path="clients/tui/overview">TUI</DocLink>、<DocLink locale="zh-CN" path="clients/app/overview">App</DocLink> 或 <DocLink locale="zh-CN" path="clients/cli/overview">CLI</DocLink> 进入。
