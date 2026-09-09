@@ -1,0 +1,231 @@
+# AnyTTY llm.txt — 供本地 Agent 阅读的使用指南
+
+用户把这个 URL 发给你，是希望直接提问，由你查文档、解释操作或协助本地排障。先阅读本指南。它覆盖产品关系、上手、常用操作、配置、连接与排障；只有需要精确实现或版本差异时，再查看末尾的公开来源。请使用用户的语言回答。
+
+## 如何帮助用户
+
+- 先回答用户正在问的问题，给出最短可行步骤和完成后的判断方法；需要时再补解释。
+- 分清使用的是 TUI、CLI 还是手机/平板 App，以及任务在本机还是远端。已有上下文足够时不要重复询问。
+- 用户询问 TUI 或 App 操作时，优先说明界面里的入口，不强迫用户改用 CLI。
+- 用户要求本地检查时，先查看版本、有效配置和实际状态。本文描述产品行为，不代表用户授权你重启服务、结束任务、覆盖文件或扩大访问权限。
+- 按已安装版本核对命令帮助。文档与本地行为不一致时说明差异，不编造参数、按钮或配置字段。
+- 需要补充事实时读取末尾的公开配置模板和版本说明；若能访问用户环境，命令参数以安装版本的 --help 为准。不要假装已经检查本地环境。
+
+## 产品关系
+
+TUI、CLI、原生 App 和 Web 是访问入口；Web 使用教程当前暂缓。endpoint 标识目标设备，route 是抵达该设备的连接路径。目标机器上的 daemon 管理终端进程、状态、历史和经授权的文件请求。
+
+工作区 → 标签页 → 面板是 TUI 的视图组织。terminal 是任务；面板不是进程。多个客户端打开同一 terminal，就是查看和操作同一个进程。
+
+Cloud 是可选的设备接入、发现与跨网络连接服务，不把终端任务迁移到云端，也不自动赋予客户端访问权。本机、SSH 和 Direct 可以独立使用。
+
+## 第一次使用：直接进入 TUI
+
+已安装 AnyTTY 后运行：
+
+```sh
+anytty
+```
+
+TUI 会按需自动启动本机 daemon。不要把 `daemon start` 和 `daemon status` 当成每个新用户的必做前置步骤。
+
+内置配置和安装器推荐配置均可这样创建任务：
+1. Ctrl+F 打开 Terminal Picker，选择 local。
+2. 选中 New Terminal，Enter 打开 Create Terminal。
+3. name 填任务名称；command 留空使用默认 shell；核对 server 和目标机器上存在的 workdir；tags 可选。
+4. Tab 切换字段，Enter 提交。出现 shell 后执行 pwd，确认目录。
+5. Ctrl+P 后按 d 解除附加；Ctrl+F 再次选择原任务即可继续。
+
+退出 TUI 或关闭 App 不等于结束进程。持续运行依赖目标电脑和 daemon；daemon 停止、重启或电脑关机不保证进程继续。restart 是新一轮运行，不是恢复进程内存。
+
+## 配置：先检查，再修改
+
+```sh
+anytty --version
+anytty config paths
+anytty config show --effective
+anytty config validate
+```
+
+默认配置通常是 ~/.config/anytty/tui-v3.yaml，实际以 config paths 为准。加载顺序：内置默认值 → 选中的 YAML → 明确支持的环境变量覆盖 → 校验。显式 --config 指定的文件必须存在。
+
+配置使用 version: 1 和两空格缩进的 YAML 映射子集。TUI 偏好启动时读取，换主题只需重开 TUI；daemon 参数在后台服务启动时读取。布局、终端状态和授权不保存在主题 YAML 中；profile 当前不是自动多配置切换。
+
+一个保留内置快捷键的配置例子：
+
+```yaml
+version: 1
+tui:
+  theme:
+    mode: dark
+    palette: builtin
+    primary: "#a970ff"
+  chrome:
+    panel_presentation: card
+    pane_title_template: "{{terminal}}@{{endpoint}}"
+  interaction:
+    confirm_destructive: true
+```
+
+关键规则：省略 shortcuts 或 shortcuts: {} 使用内置绑定；只写 shortcuts.actions 保留绑定、仅改显示。声明任何快捷键 scene（即使 global: {}）都会替换整套默认 scene catalog，不是合并一个按键。修改键位前读取完整配置说明和参考。
+
+内置历史入口是 Ctrl+V / PageUp；安装器推荐配置是 Ctrl+Shift+C，另有 Ctrl+Shift+H 剪贴板历史与 Ctrl+Shift+V 系统粘贴。已有配置不会被安装器自动覆盖，当前帮助和底部提示反映实际绑定。不要把 Ctrl+C 默认解释成复制终端内容。
+
+## 手机与远端连接
+
+网络可达、目标身份正确和客户端有授权，是三个独立条件。手机上的 127.0.0.1 指手机自己。Direct 的发布地址必须可达；已运行的 daemon 不会因为再次 daemon start 而改变监听。
+
+配对邀请是短期一次性材料，兑换后得到客户端绑定的 grant。Cloud 接入不等于配对；在客户端移除 endpoint 不等于在目标签发端撤销 grant。需要访问配置时先读对应连接教程，不索取或公开完整凭据。
+
+原生 App 的字体、主题、键盘 Auto/Resize/Shift、花瓣菜单和后台设置在 App 内配置，不受 TUI YAML 控制。App 支持自己的 Split below 分屏。后台连接仍受手机系统限制。
+
+同一 terminal 只有一套 PTY 行列数。owner/follower 协调尺寸，follower 不等于只读。TUI auto_take_owner 默认仅在没有 owner 时申请，不应描述为抢占其他客户端。
+
+## CLI 与 Agent 任务结果
+
+- 自动化显式指定 endpoint，保存 create JSON 返回的 target。已有任务通常用 ENDPOINT:TERMINAL_ID 定位。
+- terminal list 的条目在 items，show 的任务在 item；wait 的程序退出码在顶层 exit_code。
+- wait 成功只表示等到了状态，不表示程序成功。超时不杀任务。running 不表示服务就绪，服务需要独立健康检查。
+- terminal send 向当前 PTY 程序发送输入，不是独立远端执行接口。不要把 shell 命令发进正在运行的编辑器或其他交互程序。
+- capture 默认读取历史，--live 读取当前屏幕；--cols 是捕获投影宽度，不是 resize。
+- history search 当前查本机 daemon 的 terminal ID，没有远端 --endpoint；远端使用 capture 或在 owning host 搜索。未命中退出码为 1。
+- file upload ENDPOINT LOCAL REMOTE；file download ENDPOINT REMOTE LOCAL。检查传输结果；下载成功不代表产生该文件的构建成功。
+- 用户接管同一终端时停止并发输入。报告任务 target、运行目录、结果和产物位置，保留需要复查的记录。
+
+## 文件和历史限制
+
+原生 App 预览主要支持文本和图片；当前预览源文件上限 64 MiB、载荷上限 4 MiB、图片尺寸约束 2048 像素。不要承诺 Office、PDF、音视频或 3D 的原生预览。预览限制不等于传输上限，截断内容不能作为全文证据。
+
+历史受到大小和年龄保留规则约束，不能作为无限日志备份。文件工具受授权、daemon 策略和 OS 权限约束，但文件路径限制不是交互式 shell 沙箱。
+
+## TUI 常用操作与配置边界
+
+日常入口（内置和安装器推荐配置共有）：Ctrl+F 终端选择器，Ctrl+P 面板模式，Ctrl+R 尺寸模式，Ctrl+T 标签页模式，Ctrl+W 工作区模式，Ctrl+O 浮动模式，Ctrl+G 系统模式。先按入口组合键，再按模式内的键；Esc 返回。普通前缀模式默认空闲 3 秒退出，选择器和历史等明确页面不会因此关闭。
+
+系统模式内 p 打开终端管理器，e 打开 Connections，w 打开工作台树，? 帮助，q 退出 TUI。Connections 主要编辑、启停、刷新已有 endpoint，不应描述为完整配对向导。
+
+终端选择器内 Enter 附加已有任务，Tab 分屏打开，左右键切换设备，上下键选择，Ctrl+O 设备筛选，Ctrl+T 标签筛选，Ctrl+E 编辑，Ctrl+K 结束，Ctrl+X 删除。找不到任务先检查设备和状态筛选。
+
+管理器内 Enter 附加，Ctrl+T 标签页打开，Ctrl+O 浮动打开，Ctrl+R 重启，Ctrl+E 编辑，Ctrl+K 结束，Ctrl+X 删除。不要把 kill 和 delete 混为一谈。
+
+面板共有常用操作：d 解除附加，r 重连，a 请求尺寸接管，s 尺寸锁，z 临时缩放，Ctrl+D 右分屏，Ctrl+E 下分屏。重启/结束的键有配置差异：内置 R 重启、X 结束；推荐 t 重启、k 结束、q 结束并关闭。以当前帮助为准。
+
+内置标签页模式：c 创建、n/p 切换、1–9 跳转、r 重命名、x 关闭。内置工作区模式：c 创建、n/p 切换、r 重命名、x 删除。推荐或自定义配置可能有差异。
+
+内置浮动模式：n 新建、o 总览、f 选终端、1–9 召回、c 居中、z/m 折叠、v 切换全部显示、h/j/k/l 移动、H/L 调宽、K/J 调高。隐藏和折叠不会暂停任务。
+
+历史视图中 / 搜索，n/N 上下一个命中，Space 标记选择，y 复制；PageUp/PageDown 翻页，g/G 最早/最新，Esc 返回。粘贴送入当前程序，多行文本的换行也会被发送。
+
+配置相关约束：
+- theme.mode: dark / light / system；当前 system 是 host-aware dark，不能承诺自动 OS 明暗同步。
+- theme.palette: host / builtin；显式颜色最后覆盖，颜色写成带引号的 "#RRGGBB"。
+- TUI theme 只控制外框与界面，不重映射子程序 ANSI 颜色；字体通常由宿主终端设置。
+- chrome.panel_presentation: split-line / card；header/footer 为布尔值。
+- chrome.picker: presentation=card/flat，width=adaptive/wide，density=compact/comfortable，endpoint_tabs=underline/plain。
+- interaction.mouse 和 confirm_destructive 默认 true。
+- interaction.sticky_prefix_timeout_ms 默认 3000；shortcut_passthrough_interval_ms 默认 1000 且必须大于 0。窗口内重复入口键可透传该键给终端。
+- interaction.picker.fuzzy_match 当前只支持 subsequence；highlight_matches 控制着色。
+- shortcuts.actions 用于文案与样式，footer/templates 和 chrome/templates 只改变显示，不保存任务和布局。
+
+需要改配置时先备份用户文件，展示或解释具体改动，再按用户授权范围写入、validate。主题改动不要重启 daemon。不要为了改一个快捷键生成只含一个 scene 的残缺配置。
+
+## App 常见问题
+
+设备页配对后选择目标，终端列表能打开已有任务或新建。新建表单包含名称、命令、工作目录、环境变量及尺寸策略；空命令使用默认 shell。终端正在运行程序时先观察，不把测试命令随意输入进去。
+
+设备菜单中的展示名、默认设备、网络连接、断开和移除有不同作用。“网络连接”用于查看实际路线与策略；移除设备清理 App 本地登记，不撤销目标签发的 grant。
+
+花瓣菜单可启停、配置槽位与触觉反馈、恢复默认；App 主题与终端主题分开，字体、字号、光标闪烁和滚动惯性在终端设置里。键盘模式应按设备实际可见效果选择。
+
+文件管理器在目标设备上浏览，支持路径输入、书签、隐藏文件、排序、新建目录、上传、下载、复制/剪切、重命名、删除及支持格式的预览。复制路径不下载内容。传输列表的最终结果比文件名是否出现在列表更有判断价值。
+
+后台保持连接开关不保证永久在线；通知同时需要 App 设置和 OS 权限。回到前台先检查连接并打开原任务，不因短暂无输出就创建重复任务。
+
+## 连接准备与排障
+
+Local 适合同机，SSH 适合已有可信 SSH 访问，Direct 适合可达的受控网络，Cloud 适合跨网络发现与 P2P/Relay。
+
+排查顺序：
+1. 目标电脑是否开机/休眠，daemon 是否运行。
+2. 实际访问的是哪个 endpoint、哪个 route；保存的记录不代表可达。
+3. 地址、端口、SSH 认证和防火墙是否满足路线要求。
+4. daemon 身份与 SSH 主机指纹是否匹配；不通过取消验证绕过错误。
+5. grant 是否已兑换、过期、撤销，范围是否包含所需操作。
+6. 连接成功后再核对 terminal ID、设备/状态筛选和任务自身结果。
+
+只读诊断命令（替换占位符）：
+
+```sh
+anytty endpoint list
+anytty endpoint show ENDPOINT
+anytty endpoint policy show ENDPOINT
+anytty endpoint test ENDPOINT --route ROUTE_ID --json
+anytty daemon status
+anytty daemon doctor
+anytty daemon logs --lines 100
+```
+
+Direct 监听变更是维护操作。目标 daemon 未启动时可用 daemon start --route HOST:PORT；已经运行时 start 不会改变监听。需要重启时先处理运行任务，再按用户授权执行 daemon restart --route HOST:PORT。不要把这个维护步骤推荐给只想打开本机 TUI 的人。
+
+在目标机器签发 Direct 邀请的形式：
+
+```sh
+anytty pair create --route direct --direct-address HOST:PORT --out ./claim.txt
+```
+
+HOST:PORT 必须是客户端可达的实际发布地址。App 可使用 --qr-file 生成的二维码；电脑客户端使用 pair import。SSH 邀请使用 --route ssh、--ssh-host、--ssh-user 和经过可信渠道核实的 --ssh-host-key。SSH 认证仍需客户端自己的准备，不会因为邀请存在而自动拥有私钥。
+
+```sh
+anytty pair inspect ./claim.txt
+anytty pair import ./claim.txt --id workstation --client-label laptop
+```
+
+邀请 --ttl 默认 10 分钟、最多 168 小时；--grant-ttl 默认 0 表示不按时间过期。--terminal ID 可限于一个终端；不要无意扩大范围。在目标上用 access list 检查，access revoke GRANT_ID 撤销。配对文本和二维码是秘密，不放进聊天、日志或公开 issue。
+
+Cloud 使用目标机器的 cloud enroll CODE 和 cloud status，客户端仍需配对。cloud edge list / reselect 检查与重选 Edge，disable / enable 暂停与恢复 Cloud，不能代替授权撤销。价格、额度和路径能力以服务当前信息为准。
+
+## 创建一个可审查的 CLI 任务
+
+目标已有 daemon，已配置 endpoint，本机支持 POSIX shell 和 jq，目标有 sh。所有目录和名称都应先按用户任务确认。下面是一项不修改项目文件的小检查：
+
+```sh
+endpoint=local
+name="agent-check-$(date +%s)"
+created=$(anytty terminal create --endpoint "$endpoint" --name "$name" --json -- sh -lc 'printf "check complete\n"; exit 0')
+target=$(printf '%s' "$created" | jq -er '.target')
+printf '%s\n' "$target"
+anytty terminal wait "$target" --state exited --timeout 2m --json
+anytty terminal capture "$target" --lines 100 --json
+```
+
+逐条检查调用结果。创建失败时不要继续解析空输出；等待失败时查询 show/capture，任务可能仍在运行。wait 的 exit_code 才是程序结果。不要把脚本最后一条 capture 成功视为整个任务成功。
+
+真实构建/测试使用 --cwd 指向目标项目，-- 后执行实际命令，并让失败正确传播。常驻服务要另查健康入口；远端 localhost 不是用户电脑的 localhost。需要人工接管时报告 target 和等待事项，停止同时输入。
+
+产物使用明确、最好每次任务独立的目录；检查任务结果后再下载，校验文件格式与内容。未获用户清理授权前保留需要审查的失败记录。
+
+## 维护与数据
+
+daemon output_buffer.capacity_bytes 默认 33554432（32 MiB），resident_budget_bytes 默认 536870912（512 MiB）；overflow=block 施加背压，drop 丢弃旧输出并产生 gap。
+
+history.max_size_mb 默认每终端 512，0 表示不设大小上限；max_age_days 默认 0 表示不按年龄清理。compression 支持 zstd/s2/none，compression_level 支持 fast/balanced/best，none 下级别不生效。这些字段位于 daemon 下。
+
+配置验证不应用到已运行的 daemon。update --check 检查版本，update 替换磁盘二进制但不会自动重启旧 daemon。Beta 的配置、协议和历史格式可能变化，跨版本前核对说明；不要承诺旧历史必定迁移。
+
+config paths 查询配置、socket、日志、历史与剪贴板位置。凭据和私钥不是普通可移植配置；新设备通常重新配对。分享诊断只保留相关脱敏片段。
+
+## 公开来源与进一步核对
+
+- 项目与安装说明：https://github.com/anytty/anytty
+- 中文 README 原文：https://raw.githubusercontent.com/anytty/anytty/main/README.zh-CN.md
+- 英文 README 原文：https://raw.githubusercontent.com/anytty/anytty/main/README.md
+- 完整配置字段模板：https://raw.githubusercontent.com/anytty/anytty/main/tui/docs/tui-v3.example.yaml
+- 英文注释配置模板：https://raw.githubusercontent.com/anytty/anytty/main/tui/docs/tui-v3.example.en.yaml
+- 完整推荐配置（包含整套 scene）：https://raw.githubusercontent.com/anytty/anytty/main/tui/docs/tui-v3.recommended.yaml
+- 内置快捷键源码：https://raw.githubusercontent.com/anytty/anytty/main/tui/shortcut/defaults.go
+- 配置解析与环境映射：https://raw.githubusercontent.com/anytty/anytty/main/tui/config/config.go
+- 发布与兼容说明：https://github.com/anytty/anytty/releases
+- 普通问题：https://github.com/anytty/anytty/issues
+- 私密漏洞报告：https://github.com/anytty/anytty/security/advisories/new
+
+精确命令以本机 anytty --help、anytty GROUP --help 和 anytty GROUP COMMAND --help 为准。没有本地访问时，明确说明哪些信息尚未核实。
