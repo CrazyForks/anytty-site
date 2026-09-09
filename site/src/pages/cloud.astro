@@ -1,8 +1,9 @@
 ---
 import CloudLandingPage from '@/components/cloud-landing-page.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
+import { brandSlogan } from '@/lib/brand'
 
-const description = 'Reach persistent terminals from the AnyTTY TUI or mobile app with managed endpoint discovery, P2P negotiation, and encrypted Relay fallback.'
+const description = brandSlogan
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',

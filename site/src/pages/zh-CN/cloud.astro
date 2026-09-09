@@ -1,8 +1,9 @@
 ---
 import CloudLandingPage from '@/components/cloud-landing-page.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
+import { brandSlogan } from '@/lib/brand'
 
-const description = '从 AnyTTY TUI 或手机 App 连接位于 NAT、内网中的持久终端，并使用托管发现、P2P 协商和加密 Relay 兜底。'
+const description = brandSlogan
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',

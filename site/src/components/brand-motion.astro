@@ -1,0 +1,51 @@
+---
+import { sitePath } from '@/lib/site'
+---
+<anytty-brand-motion class="relative inline-block h-20 w-20 shrink-0 align-middle" aria-hidden="true" data-src={sitePath('/assets/brand/motion/anytty-mascot.riv')}>
+  <img src={sitePath('/assets/brand/motion/anytty-mascot.webp')} alt="" width="513" height="546" class="absolute inset-0 h-full w-full object-contain" />
+  <canvas hidden class="absolute inset-0 h-full w-full"></canvas>
+</anytty-brand-motion>
+<script>
+  import type { Rive } from '@rive-app/webgl2'
+  import wasmUrl from '@rive-app/webgl2/rive.wasm?url'
+
+  class BrandMotion extends HTMLElement {
+    private disposeMotion?: () => void
+    connectedCallback() {
+      const canvas = this.querySelector('canvas')!
+      const poster = this.querySelector('img')!
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)')
+      let player: Rive | undefined
+      let disposed = false, visible = false, ready = false, finished = false
+      const update = () => {
+        if (!ready || disposed) return
+        canvas.hidden = reduce.matches; poster.hidden = !reduce.matches
+        if (!reduce.matches) player?.resizeDrawingSurfaceToCanvas()
+        if (!reduce.matches && visible && !document.hidden && !finished) player?.play('connecting')
+        else player?.pause()
+      }
+      const intersection = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; update() })
+      const resize = new ResizeObserver(() => player?.resizeDrawingSurfaceToCanvas())
+      intersection.observe(this); resize.observe(this)
+      reduce.addEventListener('change', update)
+      document.addEventListener('visibilitychange', update)
+      void import('@rive-app/webgl2').then(({ Rive, RuntimeLoader }) => {
+        if (disposed) return
+        RuntimeLoader.setWasmUrl(wasmUrl); RuntimeLoader.setWasmFallbackUrl(null)
+        player = new Rive({ canvas, src: this.dataset.src!, animations: 'connecting', autoplay: false,
+          shouldDisableRiveListeners: true,
+          onLoad: () => { ready = true; player?.resizeDrawingSurfaceToCanvas(); update() },
+          onLoop: () => { finished = true; update() },
+          onLoadError: () => { canvas.hidden = true; poster.hidden = false },
+        })
+      }).catch(() => { /* Static artwork remains usable offline or without WebGL. */ })
+      this.disposeMotion = () => {
+        disposed = true; intersection.disconnect(); resize.disconnect(); player?.cleanup()
+        reduce.removeEventListener('change', update)
+        document.removeEventListener('visibilitychange', update)
+      }
+    }
+    disconnectedCallback() { this.disposeMotion?.() }
+  }
+  if (!customElements.get('anytty-brand-motion')) customElements.define('anytty-brand-motion', BrandMotion)
+</script>
